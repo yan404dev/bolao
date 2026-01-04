@@ -63,8 +63,14 @@ public class RoundService {
   }
 
   @Transactional(readOnly = true)
-  public List<Round> findAll() {
-    List<Round> rounds = roundRepository.findAll();
+  public List<Round> findAll(Round.Status status) {
+    if (status == null) {
+      return loadMatchesForAll(roundRepository.findAll());
+    }
+    return loadMatchesForAll(roundRepository.findByStatus(status));
+  }
+
+  private List<Round> loadMatchesForAll(List<Round> rounds) {
     rounds.forEach(this::loadMatches);
     return rounds;
   }

@@ -101,4 +101,12 @@ public class RoundRepositoryImpl implements RoundRepository {
   public Optional<Round> findByExternalRoundId(String externalRoundId) {
     return jpaRepository.findByExternalRoundId(externalRoundId).map(mapper::toDomain);
   }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<Round> findByStatus(Round.Status status) {
+    return jpaRepository.findByStatus(status).stream()
+        .map(mapper::toDomain)
+        .toList();
+  }
 }

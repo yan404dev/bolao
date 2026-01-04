@@ -8,9 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Base repository interface with common CRUD and pagination operations.
- * All module repositories should extend this interface.
- *
  * @param <T>  the domain entity type
  * @param <ID> the type of the entity's identifier
  */

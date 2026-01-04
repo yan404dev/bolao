@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.Optional;
 
 @Service
@@ -74,8 +75,8 @@ public class BetService {
   }
 
   private String generateTicketCode(Long roundId) {
-    long count = betRepository.countByRoundId(roundId);
-    return String.format("%d-%03d", roundId, count + 1);
+    String uuid = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    return String.format("%d-%s", roundId, uuid);
   }
 
   private Map<Long, Prediction> mapPredictions(List<PredictionDto> dtos) {

@@ -2,7 +2,9 @@ package com.bolao.fixture;
 
 import com.bolao.fixture.dtos.JogoDto;
 import com.bolao.round.entities.Match;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -16,19 +18,15 @@ import java.util.Set;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class MatchApiClient {
 
-  private static final String BASE_URL = "https://server-api.top/api";
-  private static final String HOSTNAME = "https://www.bolaojogadacerta.top";
   private static final Set<String> LIVE_STATUSES = Set.of("1T", "2T", "LIVE", "INT");
 
-  private final RestClient restClient;
+  private final RestClient footballApiClient;
 
-  public MatchApiClient() {
-    this.restClient = RestClient.builder()
-        .baseUrl(BASE_URL)
-        .build();
-  }
+  @Value("${football.api.hostname:https://www.bolaojogadacerta.top}")
+  private String hostname;
 
   public List<Match> fetchByRoundId(String roundId) {
     log.info("Fetching matches for round: {}", roundId);
@@ -40,15 +38,15 @@ public class MatchApiClient {
 
   private Optional<List<JogoDto>> fetchFromApi(String roundId) {
     try {
-      var response = restClient.get()
-          .uri("/jogos/{roundId}?_type=get&hostname={host}", roundId, HOSTNAME)
+      var response = footballApiClient.get()
+          .uri("/jogos/{roundId}?_type=get&hostname={host}", roundId, hostname)
           .retrieve()
           .body(new ParameterizedTypeReference<List<JogoDto>>() {
           });
 
       return Optional.ofNullable(response).filter(list -> !list.isEmpty());
     } catch (Exception e) {
-      log.error("Failed to fetch matches: {}", e.getMessage());
+      log.error("Failed to fetch matches for round {}: {}", roundId, e.getMessage());
       return Optional.empty();
     }
   }
@@ -79,8 +77,9 @@ public class MatchApiClient {
   }
 
   private LocalDateTime parseDateTime(String dateTime) {
-    if (dateTime == null)
+    if (dateTime == null) {
       return null;
+    }
 
     try {
       return OffsetDateTime.parse(dateTime).toLocalDateTime();
@@ -91,10 +90,12 @@ public class MatchApiClient {
   }
 
   private Match.Status mapStatus(JogoDto jogo) {
-    if (jogo.isEncerrado())
+    if (jogo.isEncerrado()) {
       return Match.Status.FINISHED;
-    if (isLive(jogo.getStatus()))
+    }
+    if (isLive(jogo.getStatus())) {
       return Match.Status.LIVE;
+    }
     return Match.Status.SCHEDULED;
   }
 

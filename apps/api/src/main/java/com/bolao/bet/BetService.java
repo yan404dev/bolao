@@ -75,7 +75,7 @@ public class BetService {
   }
 
   private String generateTicketCode(Long roundId) {
-    String uuid = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    String uuid = UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     return String.format("%d-%s", roundId, uuid);
   }
 

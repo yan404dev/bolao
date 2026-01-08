@@ -1,6 +1,7 @@
 "use client";
 
 import { useRoundQueries } from "@/app/rodada/[id]/hooks";
+import { formatCurrency } from "@/shared/lib/utils";
 import { Trophy } from "lucide-react";
 import Link from "next/link";
 
@@ -36,13 +37,6 @@ export function RoundRanking({ roundId }: RoundRankingProps) {
   const isClosed = round?.status === "CLOSED";
   const winner = ranking?.[0];
   const topRanking = ranking?.slice(0, 5) || [];
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "BRL",
-    }).format(value / 100);
-  };
 
   return (
     <div className="space-y-4">

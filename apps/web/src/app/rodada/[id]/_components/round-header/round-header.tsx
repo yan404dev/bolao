@@ -1,7 +1,7 @@
 "use client";
 
 import { useRoundQueries } from "@/app/rodada/[id]/hooks";
-import { Loader2 } from "lucide-react";
+import { formatCurrency } from "@/shared/lib/utils";
 import dayjs from "dayjs";
 
 interface RoundHeaderProps {
@@ -33,13 +33,6 @@ export function RoundHeader({ roundId }: RoundHeaderProps) {
     OPEN: "Open",
     LIVE: "🔴 Live",
     CLOSED: "Closed",
-  };
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "BRL",
-    }).format(value / 100);
   };
 
   return (

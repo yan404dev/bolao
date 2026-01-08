@@ -1,13 +1,13 @@
 "use client";
 
-import { useRoundQueries } from "@/app/rodada/[id]/hooks";
+import { useRoundKpis } from "./hooks";
 
 interface RoundKpisProps {
   roundId: number;
 }
 
 export function RoundKpis({ roundId }: RoundKpisProps) {
-  const { round, ranking, isLoading, isLoadingRanking } = useRoundQueries(roundId);
+  const { kpis, isLoading } = useRoundKpis(roundId);
 
   if (isLoading) {
     return (
@@ -23,20 +23,7 @@ export function RoundKpis({ roundId }: RoundKpisProps) {
     );
   }
 
-  if (!round) return null;
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "BRL",
-    }).format(value / 100);
-  };
-
-  const kpis = [
-    { label: "Tickets", value: String(round.totalTickets || 0), icon: "🎫" },
-    { label: "Prize Pool", value: formatCurrency(round.prizePool || 0), icon: "💰" },
-    { label: "Matches", value: String(round.matches?.length || 0), icon: "⚽" },
-  ];
+  if (kpis.length === 0) return null;
 
   return (
     <div className="grid grid-cols-3 gap-3">

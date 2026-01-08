@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { rankingService } from "../../ranking.service";
 import { bettingService } from "../../../apostar/_components/betting-flow/betting.service";
-import { Apostador, RodadaInfo } from "./ranking-table.types";
+import { RodadaInfo } from "../_components/ranking-table-round-header";
+import { Apostador } from "../_components/ranking-table-row";
 
-export function useRankingTableModel(roundId?: number) {
+export function useRankingTable(roundId?: number) {
   // 1. Get Active Round if roundId is not provided
   const { data: activeRound, isLoading: isLoadingActive } = useQuery({
     queryKey: ["activeRound"],
@@ -35,7 +36,6 @@ export function useRankingTableModel(roundId?: number) {
   } : null;
 
   const rankingList: Apostador[] = (rankingData || []).map(item => ({
-    id: item.position, // position as id is fine for mapping
     posicao: item.position,
     nome: item.name,
     numeroBilhete: item.ticketCode,

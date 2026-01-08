@@ -1,9 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { rankingService } from "../../ranking.service";
 import { bettingService } from "../../../apostar/_components/betting-flow/betting.service";
-import { KpiItem } from "./ranking-kpis.types";
 
-export function useRankingKpisModel(roundId?: number) {
+export interface KpiItem {
+  label: string;
+  value: string;
+  icon: string;
+}
+
+export function useRankingKpis(roundId?: number) {
   const { data: activeRound } = useQuery({
     queryKey: ["activeRound"],
     queryFn: bettingService.getActiveRound,

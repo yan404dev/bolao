@@ -1,4 +1,4 @@
-export * from "./rodada-header";
-export * from "./rodada-kpis";
-export * from "./rodada-jogos";
-export * from "./rodada-ranking";
+export { RoundHeader } from "./round-header/round-header";
+export { RoundKpis } from "./round-kpis/round-kpis";
+export { RoundMatches } from "./round-matches/round-matches";
+export { RoundRanking } from "./round-ranking/round-ranking";

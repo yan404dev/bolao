@@ -1,4 +1,4 @@
-import { RodadaHeader, RodadaKpis, RodadaJogos, RodadaRanking } from "./_components";
+import { RoundHeader, RoundKpis, RoundMatches, RoundRanking } from "./_components";
 import { TickerBanner } from "@/shared/components/ticker-banner";
 import { Footer } from "@/shared/components/footer";
 import { ChevronLeft } from "lucide-react";
@@ -10,6 +10,7 @@ interface RoundPageProps {
 
 export default async function RoundPage({ params }: RoundPageProps) {
   const { id } = await params;
+  const roundId = parseInt(id);
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -26,12 +27,12 @@ export default async function RoundPage({ params }: RoundPageProps) {
       </header>
 
       <div className="container mx-auto px-4 py-6 space-y-6">
-        <RodadaHeader />
-        <RodadaKpis />
+        <RoundHeader roundId={roundId} />
+        <RoundKpis roundId={roundId} />
 
         <div className="grid md:grid-cols-2 gap-6">
-          <RodadaJogos />
-          <RodadaRanking rodadaId={id} />
+          <RoundMatches roundId={roundId} />
+          <RoundRanking roundId={roundId} />
         </div>
       </div>
 

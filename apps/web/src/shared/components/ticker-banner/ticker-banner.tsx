@@ -1,12 +1,31 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { TickerBannerProps } from "./ticker-banner.types";
+import { useTickerBanner } from "./hooks";
 
-export function TickerBanner({
-  ticketsSold = 127,
-  prizePool = "R$ 1,250.00"
-}: TickerBannerProps) {
+export function TickerBanner() {
+  const { ticketsSold, prizePool, hasActiveRound, isLoading } = useTickerBanner();
+
+  if (isLoading) {
+    return (
+      <div className="w-full bg-green-600 text-white py-2 overflow-hidden">
+        <div className="flex justify-center">
+          <span className="text-sm font-medium animate-pulse">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!hasActiveRound) {
+    return (
+      <div className="w-full bg-gray-600 text-white py-2 overflow-hidden">
+        <div className="flex justify-center">
+          <span className="text-sm font-medium">⚽ No active round at the moment</span>
+        </div>
+      </div>
+    );
+  }
+
   const text = `🎯 ${ticketsSold} tickets sold • 💰 Prize: ${prizePool} • ⚽ Round open • `;
 
   return (

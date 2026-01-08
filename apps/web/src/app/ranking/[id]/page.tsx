@@ -14,7 +14,7 @@ export default async function RankingRoundPage({ params }: RankingRoundPageProps
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <TickerBanner ticketsSold={127} prizePool="R$ 1,250.00" />
+      <TickerBanner />
 
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="container mx-auto px-4 h-14 flex items-center">

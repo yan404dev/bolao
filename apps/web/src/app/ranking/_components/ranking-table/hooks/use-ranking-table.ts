@@ -1,6 +1,7 @@
-import { useRankingTableQueries } from "./use-ranking-table-queries";
-import { RodadaInfo } from "../_components/ranking-table-round-header";
-import { Apostador } from "../_components/ranking-table-row";
+import { useRankingTableQueries } from "@/app/ranking/_components/ranking-table/hooks/use-ranking-table-queries";
+import { RoundInfo } from "@/app/ranking/_components/ranking-table/_components/ranking-table-round-header";
+import { Bettor } from "@/app/ranking/_components/ranking-table/_components/ranking-table-row";
+import dayjs from "dayjs";
 
 export function useRankingTable(roundId?: number) {
   const {
@@ -11,24 +12,24 @@ export function useRankingTable(roundId?: number) {
     targetRoundId
   } = useRankingTableQueries(roundId);
 
-  const rodada: RodadaInfo | null = roundDetails ? {
+  const round: RoundInfo | null = roundDetails ? {
     id: roundDetails.id,
-    titulo: roundDetails.title,
-    status: roundDetails.status === "OPEN" ? "aberta" : "encerrada",
-    dataEncerramento: new Date(roundDetails.startDate).toLocaleString("pt-BR"),
+    title: roundDetails.title,
+    status: roundDetails.status === "OPEN" ? "open" : "closed",
+    startTime: dayjs(roundDetails.startDate).format("DD/MM/YYYY [at] HH:mm"),
   } : null;
 
-  const rankingList: Apostador[] = (rankingData || []).map(item => ({
-    posicao: item.position,
-    nome: item.name,
-    numeroBilhete: item.ticketCode,
-    pontos: item.points,
-    acertosExatos: item.exactScores,
-    acertosVencedor: item.winnerScores,
+  const rankingList: Bettor[] = (rankingData || []).map(item => ({
+    position: item.position,
+    name: item.name,
+    ticketCode: item.ticketCode,
+    points: item.points,
+    exactScores: item.exactScores,
+    winnerScores: item.winnerScores,
   }));
 
   return {
-    rodada,
+    round,
     ranking: rankingList,
     isLoading,
     hasNoRound: !isLoadingActive && !targetRoundId

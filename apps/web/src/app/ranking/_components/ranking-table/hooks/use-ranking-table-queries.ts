@@ -1,9 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { rankingService } from "../../ranking.service";
-import { bettingService } from "../../../apostar/_components/betting-flow/betting.service";
+import { rankingService } from "@/app/ranking/ranking.service";
+import { bettingService } from "@/app/apostar/_components/betting-flow/betting.service";
 
 export function useRankingTableQueries(roundId?: number) {
-  // 1. Get Active Round if roundId is not provided
   const activeRoundQuery = useQuery({
     queryKey: ["activeRound"],
     queryFn: bettingService.getActiveRound,
@@ -12,14 +11,12 @@ export function useRankingTableQueries(roundId?: number) {
 
   const targetRoundId = roundId || activeRoundQuery.data?.id;
 
-  // 2. Get Round Details
   const roundDetailsQuery = useQuery({
     queryKey: ["round", targetRoundId],
     queryFn: () => rankingService.getRoundDetails(targetRoundId!),
     enabled: !!targetRoundId,
   });
 
-  // 3. Get Ranking
   const rankingQuery = useQuery({
     queryKey: ["ranking", targetRoundId],
     queryFn: () => rankingService.getRanking(targetRoundId!),

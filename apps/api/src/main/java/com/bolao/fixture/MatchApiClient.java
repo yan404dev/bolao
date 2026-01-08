@@ -1,6 +1,6 @@
 package com.bolao.fixture;
 
-import com.bolao.fixture.dtos.JogoDto;
+import com.bolao.fixture.dtos.MatchDto;
 import com.bolao.round.entities.Match;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,12 +36,12 @@ public class MatchApiClient {
         .orElse(Collections.emptyList());
   }
 
-  private Optional<List<JogoDto>> fetchFromApi(String roundId) {
+  private Optional<List<MatchDto>> fetchFromApi(String roundId) {
     try {
       var response = footballApiClient.get()
           .uri("/jogos/{roundId}?_type=get&hostname={host}", roundId, hostname)
           .retrieve()
-          .body(new ParameterizedTypeReference<List<JogoDto>>() {
+          .body(new ParameterizedTypeReference<List<MatchDto>>() {
           });
 
       return Optional.ofNullable(response).filter(list -> !list.isEmpty());
@@ -51,22 +51,22 @@ public class MatchApiClient {
     }
   }
 
-  private List<Match> mapToMatches(List<JogoDto> jogos) {
-    log.info("Mapping {} matches", jogos.size());
-    return jogos.stream().map(this::toMatch).toList();
+  private List<Match> mapToMatches(List<MatchDto> matches) {
+    log.info("Mapping {} matches", matches.size());
+    return matches.stream().map(this::toMatch).toList();
   }
 
-  private Match toMatch(JogoDto jogo) {
+  private Match toMatch(MatchDto match) {
     return Match.builder()
-        .id(generateId(jogo.getExternalId()))
-        .homeTeam(jogo.getNomeCasa())
-        .homeTeamLogo(jogo.getEscudoCasa())
-        .homeScore(jogo.getGolsCasa())
-        .awayTeam(jogo.getNomeVisitante())
-        .awayTeamLogo(jogo.getEscudoVisitante())
-        .awayScore(jogo.getGolsVisitante())
-        .kickoffTime(parseDateTime(jogo.getDataHora()))
-        .status(mapStatus(jogo))
+        .id(generateId(match.getExternalId()))
+        .homeTeam(match.getHomeTeamName())
+        .homeTeamLogo(match.getHomeTeamLogo())
+        .homeScore(match.getHomeGoals())
+        .awayTeam(match.getAwayTeamName())
+        .awayTeamLogo(match.getAwayTeamLogo())
+        .awayScore(match.getAwayGoals())
+        .kickoffTime(parseDateTime(match.getDateTime()))
+        .status(mapStatus(match))
         .build();
   }
 
@@ -89,11 +89,11 @@ public class MatchApiClient {
     }
   }
 
-  private Match.Status mapStatus(JogoDto jogo) {
-    if (jogo.isEncerrado()) {
+  private Match.Status mapStatus(MatchDto match) {
+    if (match.isFinished()) {
       return Match.Status.FINISHED;
     }
-    if (isLive(jogo.getStatus())) {
+    if (isLive(match.getStatus())) {
       return Match.Status.LIVE;
     }
     return Match.Status.SCHEDULED;

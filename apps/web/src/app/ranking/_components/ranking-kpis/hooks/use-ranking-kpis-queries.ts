@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { rankingService } from "../../ranking.service";
-import { bettingService } from "../../../apostar/_components/betting-flow/betting.service";
+import { rankingService } from "@/app/ranking/ranking.service";
+import { bettingService } from "@/app/apostar/_components/betting-flow/betting.service";
 
 export function useRankingKpisQueries(roundId?: number) {
   const { data: activeRound } = useQuery({

@@ -1,31 +1,26 @@
 "use client";
 
-import { useRankingTable } from "./hooks";
-import {
-  RankingTableLoader,
-  RankingTableEmpty,
-  RankingTableRoundHeader,
-  RankingTableRow
-} from "./_components";
+import { useRankingTable } from "@/app/ranking/_components/ranking-table/hooks";
+import { RankingTableRoundHeader, RankingTableRow, RankingTableEmpty, RankingTableLoader } from "./_components";
 
 interface RankingTableProps {
   roundId?: number;
 }
 
 export function RankingTable({ roundId }: RankingTableProps) {
-  const { rodada, ranking, isLoading, hasNoRound } = useRankingTable(roundId);
+  const { round, ranking, isLoading, hasNoRound } = useRankingTable(roundId);
 
   if (isLoading) return <RankingTableLoader />;
-  if (hasNoRound || !rodada) return <RankingTableEmpty />;
+  if (hasNoRound || !round) return <RankingTableEmpty />;
 
   return (
     <div>
-      <RankingTableRoundHeader rodada={rodada} />
+      <RankingTableRoundHeader round={round} />
 
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         {ranking.length === 0 ? (
           <div className="p-12 text-center text-gray-500">
-            Nenhuma aposta registrada nesta rodada.
+            No bets registered in this round.
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -36,25 +31,25 @@ export function RankingTable({ roundId }: RankingTableProps) {
                     #
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Apostador
+                    Bettor
                   </th>
                   <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Bilhete
+                    Ticket
                   </th>
                   <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Exatos
+                    Exact
                   </th>
                   <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Vencedor
+                    Winner
                   </th>
                   <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Pontos
+                    Points
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {ranking.map((apostador) => (
-                  <RankingTableRow key={apostador.numeroBilhete} apostador={apostador} />
+                {ranking.map((bettor) => (
+                  <RankingTableRow key={bettor.ticketCode} bettor={bettor} />
                 ))}
               </tbody>
             </table>
@@ -63,8 +58,8 @@ export function RankingTable({ roundId }: RankingTableProps) {
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-6 text-sm text-gray-500">
-        <span><strong className="text-green-600">Exatos:</strong> Acertou o placar (+3 pts)</span>
-        <span><strong className="text-gray-600">Vencedor:</strong> Acertou quem ganhou (+1 pt)</span>
+        <span><strong className="text-green-600">Exact:</strong> Correct score (+3 pts)</span>
+        <span><strong className="text-gray-600">Winner:</strong> Correct winner (+1 pt)</span>
       </div>
     </div>
   );

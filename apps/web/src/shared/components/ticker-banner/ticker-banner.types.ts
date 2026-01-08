@@ -1,4 +1,4 @@
 export interface TickerBannerProps {
-  bilhetesVendidos?: number;
-  premiacao?: string;
+  ticketsSold?: number;
+  prizePool?: string;
 }

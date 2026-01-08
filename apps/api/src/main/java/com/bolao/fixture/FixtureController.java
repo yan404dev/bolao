@@ -16,7 +16,7 @@ public class FixtureController {
   private final FixtureService fixtureService;
 
   @GetMapping
-  public ResponseEntity<ApiResponse<List<Match>>> getFixtures(@RequestParam String rodadaId) {
-    return ResponseEntity.ok(ApiResponse.ok(fixtureService.getFixtures(rodadaId)));
+  public ResponseEntity<ApiResponse<List<Match>>> getFixtures(@RequestParam String roundId) {
+    return ResponseEntity.ok(ApiResponse.ok(fixtureService.getFixtures(roundId)));
   }
 }

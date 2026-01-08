@@ -1,7 +1,7 @@
 "use client";
 
-import { useRankingKpis } from "./hooks";
-import { KpiCard } from "./_components/kpi-card";
+import { useRankingKpis } from "@/app/ranking/_components/ranking-kpis/hooks";
+import { KpiCard } from "@/app/ranking/_components/ranking-kpis/_components/kpi-card";
 
 interface RankingKpisProps {
   roundId?: number;

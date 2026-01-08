@@ -1,16 +1,9 @@
 "use client";
 
-export interface Bettor {
-  position: number;
-  name: string;
-  ticketCode: string;
-  points: number;
-  exactScores: number;
-  winnerScores: number;
-}
+import { BettorEntity } from "@/shared/entities";
 
 interface RankingTableRowProps {
-  bettor: Bettor;
+  bettor: BettorEntity;
 }
 
 export function RankingTableRow({ bettor }: RankingTableRowProps) {

@@ -1,6 +1,6 @@
 import { useRankingTableQueries } from "@/app/ranking/_components/ranking-table/hooks/use-ranking-table-queries";
 import { RoundInfo } from "@/app/ranking/_components/ranking-table/_components/ranking-table-round-header";
-import { Bettor } from "@/app/ranking/_components/ranking-table/_components/ranking-table-row";
+import { BettorEntity } from "@/shared/entities";
 import dayjs from "dayjs";
 
 export function useRankingTable(roundId?: number) {
@@ -19,7 +19,7 @@ export function useRankingTable(roundId?: number) {
     startTime: dayjs(roundDetails.startDate).format("DD/MM/YYYY [at] HH:mm"),
   } : null;
 
-  const rankingList: Bettor[] = (rankingData || []).map(item => ({
+  const rankingList: BettorEntity[] = (rankingData || []).map(item => ({
     position: item.position,
     name: item.name,
     ticketCode: item.ticketCode,

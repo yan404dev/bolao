@@ -1,12 +1,10 @@
-export interface RodadaInfo {
-  id: number;
-  titulo: string;
-  status: "aberta" | "encerrada";
-  dataEncerramento: string;
-}
-
 interface RankingTableRoundHeaderProps {
-  rodada: RodadaInfo;
+  rodada: {
+    id: number;
+    titulo: string;
+    status: "aberta" | "encerrada";
+    dataEncerramento: string;
+  }
 }
 
 export function RankingTableRoundHeader({ rodada }: RankingTableRoundHeaderProps) {

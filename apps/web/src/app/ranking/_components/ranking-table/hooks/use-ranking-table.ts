@@ -1,32 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
-import { rankingService } from "../../ranking.service";
-import { bettingService } from "../../../apostar/_components/betting-flow/betting.service";
+import { useRankingTableQueries } from "./use-ranking-table-queries";
 import { RodadaInfo } from "../_components/ranking-table-round-header";
 import { Apostador } from "../_components/ranking-table-row";
 
 export function useRankingTable(roundId?: number) {
-  // 1. Get Active Round if roundId is not provided
-  const { data: activeRound, isLoading: isLoadingActive } = useQuery({
-    queryKey: ["activeRound"],
-    queryFn: bettingService.getActiveRound,
-    enabled: !roundId,
-  });
-
-  const targetRoundId = roundId || activeRound?.id;
-
-  // 2. Get Round Details
-  const { data: roundDetails, isLoading: isLoadingRound } = useQuery({
-    queryKey: ["round", targetRoundId],
-    queryFn: () => rankingService.getRoundDetails(targetRoundId!),
-    enabled: !!targetRoundId,
-  });
-
-  // 3. Get Ranking
-  const { data: rankingData, isLoading: isLoadingRanking } = useQuery({
-    queryKey: ["ranking", targetRoundId],
-    queryFn: () => rankingService.getRanking(targetRoundId!),
-    enabled: !!targetRoundId,
-  });
+  const {
+    roundDetails,
+    rankingData,
+    isLoading,
+    isLoadingActive,
+    targetRoundId
+  } = useRankingTableQueries(roundId);
 
   const rodada: RodadaInfo | null = roundDetails ? {
     id: roundDetails.id,
@@ -47,7 +30,7 @@ export function useRankingTable(roundId?: number) {
   return {
     rodada,
     ranking: rankingList,
-    isLoading: isLoadingActive || isLoadingRound || isLoadingRanking,
+    isLoading,
     hasNoRound: !isLoadingActive && !targetRoundId
   };
 }

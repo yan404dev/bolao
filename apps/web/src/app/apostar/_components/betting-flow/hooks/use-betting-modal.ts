@@ -1,30 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { bettingService } from "../betting.service";
+import { useBettingQueries } from "./use-betting-queries";
 import { useBettingForm } from "./use-betting-form";
 import { BettingFormData } from "../betting-modal.schema";
 import { MatchEntity } from "@/shared/entities";
 
 export function useBettingModal(onClose: () => void) {
-  const queryClient = useQueryClient();
   const [copied, setCopied] = useState(false);
-
   const {
-    data: activeRound,
-    isLoading: isLoadingRound,
-  } = useQuery({
-    queryKey: ["activeRound"],
-    queryFn: bettingService.getActiveRound,
-  });
-
-  const createBetMutation = useMutation({
-    mutationFn: bettingService.createBet,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["activeRound"] });
-    },
-  });
+    activeRound,
+    isLoadingRound,
+    createBetMutation
+  } = useBettingQueries();
 
   const matches = activeRound?.matches ?? [];
 

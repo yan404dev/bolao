@@ -1,14 +1,14 @@
-export interface Apostador {
-  posicao: number;
-  nome: string;
-  numeroBilhete: string;
-  pontos: number;
-  acertosExatos: number;
-  acertosVencedor: number;
-}
+
 
 interface RankingTableRowProps {
-  apostador: Apostador;
+  apostador: {
+    posicao: number;
+    nome: string;
+    numeroBilhete: string;
+    pontos: number;
+    acertosExatos: number;
+    acertosVencedor: number;
+  }
 }
 
 export function RankingTableRow({ apostador }: RankingTableRowProps) {

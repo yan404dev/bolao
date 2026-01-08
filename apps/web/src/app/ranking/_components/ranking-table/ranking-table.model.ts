@@ -1,25 +1,53 @@
+import { useQuery } from "@tanstack/react-query";
+import { rankingService } from "../../ranking.service";
+import { bettingService } from "../../../apostar/_components/betting-flow/betting.service";
 import { Apostador, RodadaInfo } from "./ranking-table.types";
 
-export function useRankingTableModel() {
-  const rodada: RodadaInfo = {
-    id: 175,
-    titulo: "Brasileirão Série A - Rodada 38",
-    status: "aberta",
-    dataEncerramento: "05/01/2026 às 18:00",
+export function useRankingTableModel(roundId?: number) {
+  // 1. Get Active Round if roundId is not provided
+  const { data: activeRound, isLoading: isLoadingActive } = useQuery({
+    queryKey: ["activeRound"],
+    queryFn: bettingService.getActiveRound,
+    enabled: !roundId,
+  });
+
+  const targetRoundId = roundId || activeRound?.id;
+
+  // 2. Get Round Details
+  const { data: roundDetails, isLoading: isLoadingRound } = useQuery({
+    queryKey: ["round", targetRoundId],
+    queryFn: () => rankingService.getRoundDetails(targetRoundId!),
+    enabled: !!targetRoundId,
+  });
+
+  // 3. Get Ranking
+  const { data: rankingData, isLoading: isLoadingRanking } = useQuery({
+    queryKey: ["ranking", targetRoundId],
+    queryFn: () => rankingService.getRanking(targetRoundId!),
+    enabled: !!targetRoundId,
+  });
+
+  const rodada: RodadaInfo | null = roundDetails ? {
+    id: roundDetails.id,
+    titulo: roundDetails.title,
+    status: roundDetails.status === "OPEN" ? "aberta" : "encerrada",
+    dataEncerramento: new Date(roundDetails.startDate).toLocaleString("pt-BR"),
+  } : null;
+
+  const rankingList: Apostador[] = (rankingData || []).map(item => ({
+    id: item.position, // position as id is fine for mapping
+    posicao: item.position,
+    nome: item.name,
+    numeroBilhete: item.ticketCode,
+    pontos: item.points,
+    acertosExatos: item.exactScores,
+    acertosVencedor: item.winnerScores,
+  }));
+
+  return {
+    rodada,
+    ranking: rankingList,
+    isLoading: isLoadingActive || isLoadingRound || isLoadingRanking,
+    hasNoRound: !isLoadingActive && !targetRoundId
   };
-
-  const ranking: Apostador[] = [
-    { id: 1, posicao: 1, nome: "João Silva", numeroBilhete: "175-001", pontos: 24, acertosExatos: 6, acertosVencedor: 6 },
-    { id: 2, posicao: 2, nome: "Maria Santos", numeroBilhete: "175-015", pontos: 22, acertosExatos: 5, acertosVencedor: 7 },
-    { id: 3, posicao: 3, nome: "Pedro Oliveira", numeroBilhete: "175-023", pontos: 21, acertosExatos: 5, acertosVencedor: 6 },
-    { id: 4, posicao: 4, nome: "Ana Costa", numeroBilhete: "175-034", pontos: 19, acertosExatos: 4, acertosVencedor: 7 },
-    { id: 5, posicao: 5, nome: "Carlos Lima", numeroBilhete: "175-042", pontos: 18, acertosExatos: 4, acertosVencedor: 6 },
-    { id: 6, posicao: 6, nome: "Fernanda Souza", numeroBilhete: "175-056", pontos: 17, acertosExatos: 4, acertosVencedor: 5 },
-    { id: 7, posicao: 7, nome: "Lucas Pereira", numeroBilhete: "175-067", pontos: 16, acertosExatos: 3, acertosVencedor: 7 },
-    { id: 8, posicao: 8, nome: "Juliana Alves", numeroBilhete: "175-078", pontos: 15, acertosExatos: 3, acertosVencedor: 6 },
-    { id: 9, posicao: 9, nome: "Roberto Dias", numeroBilhete: "175-089", pontos: 14, acertosExatos: 3, acertosVencedor: 5 },
-    { id: 10, posicao: 10, nome: "Patrícia Mendes", numeroBilhete: "175-095", pontos: 13, acertosExatos: 2, acertosVencedor: 7 },
-  ];
-
-  return { rodada, ranking };
 }

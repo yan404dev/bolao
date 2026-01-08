@@ -86,16 +86,44 @@ public class RoundService {
   @Transactional(readOnly = true)
   public List<RankingDto> getRanking(Long roundId) {
     List<Bet> bets = betRepository.findByRoundId(roundId);
+    List<Match> matches = matchRepository.findByRoundId(roundId);
 
-    return IntStream.range(0, bets.size())
-        .mapToObj(i -> {
-          Bet bet = bets.get(i);
+    List<RankingDto> ranking = bets.stream()
+        .map(bet -> {
+          int exact = 0;
+          int winner = 0;
+          for (Match match : matches) {
+            if (!match.isFinished())
+              continue;
+
+            Prediction prediction = bet.getPredictions().get(match.getId());
+            if (prediction == null)
+              continue;
+
+            int points = scoreCalculator.calculate(prediction, match);
+            if (points == 3)
+              exact++;
+            else if (points == 1)
+              winner++;
+          }
+
           return RankingDto.builder()
-              .position(i + 1)
               .name(bet.getName())
               .ticketCode(bet.getTicketCode())
-              .points(bet.getPoints())
+              .points(bet.getPoints() != null ? bet.getPoints() : 0)
+              .exactScores(exact)
+              .winnerScores(winner)
               .build();
+        })
+        .sorted((a, b) -> Integer.compare(b.getPoints(), a.getPoints()))
+        .toList();
+
+    // Assign positions after sorting
+    return IntStream.range(0, ranking.size())
+        .mapToObj(i -> {
+          RankingDto dto = ranking.get(i);
+          dto.setPosition(i + 1);
+          return dto;
         })
         .toList();
   }

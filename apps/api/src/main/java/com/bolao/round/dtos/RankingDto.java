@@ -10,4 +10,6 @@ public class RankingDto {
   private String name;
   private String ticketCode;
   private int points;
+  private int exactScores;
+  private int winnerScores;
 }

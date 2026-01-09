@@ -50,7 +50,7 @@ export function RankingTable({ roundId }: RankingTableProps) {
         columns={columns}
         data={ranking}
         isLoading={isFetchingRanking}
-        emptyMessage="No results matching your search."
+        emptyMessage="NENHUM RESULTADO PARA ESTA BUSCA."
         pagination={{
           currentPage: page,
           totalPages: pagination.totalPages,
@@ -58,9 +58,15 @@ export function RankingTable({ roundId }: RankingTableProps) {
         }}
       />
 
-      <div className="mt-8 flex flex-wrap items-center gap-6 text-[10px] font-black uppercase tracking-widest">
-        <span className="flex items-center gap-2"><div className="w-2 h-2 bg-yellow-500" /> Placar Exato (+3 PTS)</span>
-        <span className="flex items-center gap-2 text-gray-400"><div className="w-2 h-2 bg-gray-400" /> Vencedor (+1 PT)</span>
+      <div className="mt-8 flex flex-wrap items-center gap-8 text-[11px] font-black uppercase tracking-widest text-black/60 bg-gray-50 p-4 border-2 border-black border-dashed">
+        <span className="flex items-center gap-3">
+          <div className="w-3 h-3 bg-yellow-400 border border-black" />
+          PLACAR EXATO (+3 PONTOS)
+        </span>
+        <span className="flex items-center gap-3">
+          <div className="w-3 h-3 bg-gray-300 border border-black" />
+          VENCEDOR E SALDO (+1 PONTO)
+        </span>
       </div>
     </div>
   );

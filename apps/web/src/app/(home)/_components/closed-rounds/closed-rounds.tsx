@@ -45,7 +45,7 @@ export function ClosedRounds() {
             >
               <Card className="h-full brutalist-card overflow-hidden">
                 <div className="bg-black text-white px-4 py-2 flex justify-between items-center bg-gray-900">
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-yellow-400">Finalizada</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-yellow-400 bg-black px-2 py-0.5 border border-yellow-400">Finalizada</span>
                   <span className="text-[10px] font-bold text-gray-400 italic">{formatDate(round.endDate || round.createdAt)}</span>
                 </div>
 
@@ -56,22 +56,24 @@ export function ClosedRounds() {
                 </CardHeader>
 
                 <CardContent>
-                  <div className="grid grid-cols-2 gap-4 pt-6 border-t-2 border-dashed border-gray-100 mt-4">
+                  <div className="grid grid-cols-2 gap-4 pt-6 border-t-2 border-dashed border-black mt-4">
                     <div className="flex flex-col">
                       <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">
                         Apostas
                       </span>
-                      <span className="text-xl font-black text-gray-900">{round.totalTickets}</span>
+                      <span className="text-xl font-black text-black italic">
+                        {round.totalTickets || 0}
+                      </span>
                     </div>
-                    <div className="flex flex-col border-l-2 border-gray-100 pl-4">
+                    <div className="flex flex-col border-l-2 border-black pl-4">
                       <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">
                         Prêmio Total
                       </span>
-                      <span className="text-xl font-black text-yellow-600">
+                      <span className="text-xl font-black text-yellow-500 italic">
                         {new Intl.NumberFormat("pt-BR", {
                           style: "currency",
                           currency: "BRL",
-                        }).format(round.prizePool / 100)}
+                        }).format((round.prizePool || 0) / 100)}
                       </span>
                     </div>
                   </div>

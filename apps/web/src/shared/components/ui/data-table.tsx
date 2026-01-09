@@ -35,28 +35,24 @@ function DataTablePagination({
 
   return (
     <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200">
-      <div className="text-sm text-gray-500">
-        Page <span className="font-medium text-gray-900">{currentPage + 1}</span> of{" "}
-        <span className="font-medium text-gray-900">{totalPages}</span>
+      <div className="text-sm font-black uppercase tracking-widest text-gray-500 italic">
+        PÁGINA <span className="text-black">{currentPage + 1}</span> DE{" "}
+        <span className="text-black">{totalPages}</span>
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-4">
         <Button
-          variant="outline"
-          size="sm"
+          className="bg-white border-2 border-black font-black uppercase italic text-xs tracking-widest h-10 px-6 hover:bg-yellow-400 hover:translate-x-1 hover:translate-y-1 hover:shadow-none brutalist-shadow transition-all disabled:opacity-30 disabled:pointer-events-none"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 0 || isLoading}
         >
           <ChevronLeft className="w-4 h-4 mr-1" />
-          Previous
         </Button>
         <Button
-          variant="outline"
-          size="sm"
+          className="bg-white border-2 border-black font-black uppercase italic text-xs tracking-widest h-10 px-6 hover:bg-yellow-400 hover:translate-x-1 hover:translate-y-1 hover:shadow-none brutalist-shadow transition-all disabled:opacity-30 disabled:pointer-events-none"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages - 1 || isLoading}
         >
-          Next
-          <ChevronRight className="w-4 h-4 ml-1" />
+          <ChevronRight className="w-4 h-4 ml-1" color="black" />
         </Button>
       </div>
     </div>
@@ -79,7 +75,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   isLoading,
-  emptyMessage = "No results found.",
+  emptyMessage = "NENHUM RESULTADO ENCONTRADO.",
   pagination,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({

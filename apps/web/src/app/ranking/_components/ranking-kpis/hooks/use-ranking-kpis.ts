@@ -10,10 +10,10 @@ export function useRankingKpis(roundId?: number) {
   const { roundDetails, rankingData, isLoading } = useRankingKpisQueries(roundId);
 
   const kpis: KpiItem[] = roundDetails ? [
-    { label: "Tickets", value: String(roundDetails.totalTickets || 0), icon: "🎫" },
-    { label: "Prize Pool", value: `R$ ${roundDetails.prizePool?.toLocaleString("en-US") || 0}`, icon: "💰" },
-    { label: "Participants", value: String(rankingData?.totalItems || 0), icon: "👥" },
-    { label: "Matches", value: String(roundDetails.matches?.length || 0), icon: "⚽" },
+    { label: "BILHETES", value: String(roundDetails.totalTickets || 0), icon: "🎫" },
+    { label: "PRÊMIO", value: `R$ ${(roundDetails.prizePool / 100)?.toLocaleString("pt-BR", { minimumFractionDigits: 2 }) || "0,00"}`, icon: "💰" },
+    { label: "PARTICIPANTES", value: String(rankingData?.totalItems || 0), icon: "👥" },
+    { label: "JOGOS", value: String(roundDetails.matches?.length || 0), icon: "⚽" },
   ] : [];
 
   return { kpis, isLoading };

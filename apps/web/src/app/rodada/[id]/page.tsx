@@ -16,7 +16,7 @@ export default async function RoundPage({ params }: RoundPageProps) {
       <TickerBanner />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 text-black">
-        <div className="mb-12 flex items-end justify-between gap-6">
+        <div className="mb-12 flex items-center justify-between gap-6">
           <div className="flex items-center gap-4">
             <Link
               href="/"
@@ -35,9 +35,11 @@ export default async function RoundPage({ params }: RoundPageProps) {
         </div>
 
         <div className="space-y-12">
+          {/* BANNER DA RODADA */}
+          <RoundHeader roundId={roundId} />
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-8 space-y-12">
-              <RoundHeader roundId={roundId} />
               <RoundMatches roundId={roundId} />
             </div>
             <div className="lg:col-span-4 space-y-12">

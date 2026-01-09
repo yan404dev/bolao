@@ -6,7 +6,7 @@ import { Footer } from "@/shared/components/footer";
 
 export default function Home() {
   return (
-    <main>
+    <main className="min-h-screen bg-gray-50">
       <TickerBanner />
       <Image src="/hero.png" alt="Hero" width={1920} height={1080} className="w-full" />
       <UserActions />

@@ -115,4 +115,11 @@ public class BetRepositoryImpl implements BetRepository {
   public long countByRoundId(Long roundId) {
     return jpaRepository.countByRoundId(roundId);
   }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Page<Bet> findByRoundIdWithFilters(Long roundId, String search, Integer minPoints, Pageable pageable) {
+    return jpaRepository.findByRoundIdWithFilters(roundId, search, minPoints, pageable)
+        .map(mapper::toDomain);
+  }
 }

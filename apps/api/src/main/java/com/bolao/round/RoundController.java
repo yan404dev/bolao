@@ -4,8 +4,11 @@ import com.bolao.round.dtos.CreateRoundDto;
 import com.bolao.round.dtos.RankingDto;
 import com.bolao.round.entities.Round;
 import com.bolao.shared.dtos.ApiResponse;
+import com.bolao.shared.entities.ResultEntity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,8 +40,14 @@ public class RoundController {
   }
 
   @GetMapping("/{id}/ranking")
-  public ResponseEntity<ApiResponse<List<RankingDto>>> getRanking(@PathVariable Long id) {
-    return ResponseEntity.ok(ApiResponse.ok(roundService.getRanking(id)));
+  public ResponseEntity<ApiResponse<ResultEntity<RankingDto>>> getRanking(
+      @PathVariable Long id,
+      @RequestParam(required = false) String search,
+      @RequestParam(required = false) Integer minPoints,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "50") int size) {
+    PageRequest pageable = PageRequest.of(page, size, Sort.by("points").descending());
+    return ResponseEntity.ok(ApiResponse.ok(roundService.getRanking(id, search, minPoints, pageable)));
   }
 
   @PostMapping("/{id}/calculate")

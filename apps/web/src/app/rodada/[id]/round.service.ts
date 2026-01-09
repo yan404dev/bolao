@@ -1,5 +1,5 @@
 import { api } from "@/shared/lib/api";
-import { RoundEntity, RankingItemEntity } from "@/shared/entities";
+import { RoundEntity, RankingItemEntity, ResultEntity } from "@/shared/entities";
 
 export const roundService = {
   getRound: async (roundId: number): Promise<RoundEntity> => {
@@ -7,8 +7,8 @@ export const roundService = {
     return data.data;
   },
 
-  getRanking: async (roundId: number): Promise<RankingItemEntity[]> => {
-    const { data } = await api.get<{ data: RankingItemEntity[] }>(`/rounds/${roundId}/ranking`);
+  getRanking: async (roundId: number): Promise<ResultEntity<RankingItemEntity>> => {
+    const { data } = await api.get<{ data: ResultEntity<RankingItemEntity> }>(`/rounds/${roundId}/ranking`);
     return data.data;
   },
 };

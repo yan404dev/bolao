@@ -43,7 +43,7 @@ export function Modal({ isOpen, onClose, children, title, footer }: ModalProps) 
         {/* Modal Box */}
         <div className="pointer-events-auto w-full max-w-lg bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl flex flex-col" style={{ maxHeight: "90vh" }}>
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-100 shrink-0">
+          <div className="flex items-center justify-between p-4 border-b border-gray-200 shrink-0">
             <h2 className="text-lg font-bold text-gray-900">{title}</h2>
             <button
               onClick={onClose}
@@ -60,7 +60,7 @@ export function Modal({ isOpen, onClose, children, title, footer }: ModalProps) 
 
           {/* Footer - Fixed at bottom */}
           {footer && (
-            <div className="border-t border-gray-100 p-4 shrink-0 bg-white sm:rounded-b-2xl">
+            <div className="border-t border-gray-200 p-4 shrink-0 bg-white sm:rounded-b-2xl">
               {footer}
             </div>
           )}

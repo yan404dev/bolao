@@ -1,16 +1,17 @@
-import { useRankingTableQueries } from "@/app/ranking/_components/ranking-table/hooks/use-ranking-table-queries";
+import { useRankingTableQueries, RankingTableFilterParams } from "@/app/ranking/_components/ranking-table/hooks/use-ranking-table-queries";
 import { RoundInfo } from "@/app/ranking/_components/ranking-table/_components/ranking-table-round-header";
-import { BettorEntity } from "@/shared/entities";
+import { RankingItemEntity, ResultEntity } from "@/shared/entities";
 import dayjs from "dayjs";
 
-export function useRankingTable(roundId?: number) {
+export function useRankingTable(roundId?: number, filters?: RankingTableFilterParams) {
   const {
     roundDetails,
     rankingData,
     isLoading,
+    isFetchingRanking,
     isLoadingActive,
     targetRoundId
-  } = useRankingTableQueries(roundId);
+  } = useRankingTableQueries(roundId, filters);
 
   const round: RoundInfo | null = roundDetails ? {
     id: roundDetails.id,
@@ -19,19 +20,23 @@ export function useRankingTable(roundId?: number) {
     startTime: dayjs(roundDetails.startDate).format("DD/MM/YYYY [at] HH:mm"),
   } : null;
 
-  const rankingList: BettorEntity[] = (rankingData || []).map(item => ({
-    position: item.position,
-    name: item.name,
-    ticketCode: item.ticketCode,
-    points: item.points,
-    exactScores: item.exactScores,
-    winnerScores: item.winnerScores,
-  }));
+  const rankingResults: ResultEntity<RankingItemEntity> = rankingData || {
+    items: [],
+    totalItems: 0,
+    totalPages: 0,
+    currentPage: 0
+  };
 
   return {
     round,
-    ranking: rankingList,
+    ranking: rankingResults.items,
+    pagination: {
+      totalItems: rankingResults.totalItems,
+      totalPages: rankingResults.totalPages,
+      currentPage: rankingResults.currentPage
+    },
     isLoading,
+    isFetchingRanking,
     hasNoRound: !isLoadingActive && !targetRoundId
   };
 }

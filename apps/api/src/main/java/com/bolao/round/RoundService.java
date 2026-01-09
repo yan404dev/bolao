@@ -9,19 +9,18 @@ import com.bolao.round.entities.Match;
 import com.bolao.round.entities.Round;
 import com.bolao.round.repositories.MatchRepository;
 import com.bolao.round.repositories.RoundRepository;
+import com.bolao.shared.entities.ResultEntity;
 import com.bolao.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.IntStream;
 
-/**
- * Service responsible for round management operations.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -84,11 +83,11 @@ public class RoundService {
   }
 
   @Transactional(readOnly = true)
-  public List<RankingDto> getRanking(Long roundId) {
-    List<Bet> bets = betRepository.findByRoundId(roundId);
+  public ResultEntity<RankingDto> getRanking(Long roundId, String search, Integer minPoints, Pageable pageable) {
+    Page<Bet> betsPage = betRepository.findByRoundIdWithFilters(roundId, search, minPoints, pageable);
     List<Match> matches = matchRepository.findByRoundId(roundId);
 
-    List<RankingDto> ranking = bets.stream()
+    List<RankingDto> items = betsPage.getContent().stream()
         .map(bet -> {
           int exact = 0;
           int winner = 0;
@@ -115,17 +114,19 @@ public class RoundService {
               .winnerScores(winner)
               .build();
         })
-        .sorted((a, b) -> Integer.compare(b.getPoints(), a.getPoints()))
         .toList();
 
-    // Assign positions after sorting
-    return IntStream.range(0, ranking.size())
-        .mapToObj(i -> {
-          RankingDto dto = ranking.get(i);
-          dto.setPosition(i + 1);
-          return dto;
-        })
-        .toList();
+    int startPosition = (int) pageable.getOffset() + 1;
+    for (int i = 0; i < items.size(); i++) {
+      items.get(i).setPosition(startPosition + i);
+    }
+
+    return ResultEntity.<RankingDto>builder()
+        .items(items)
+        .totalItems(betsPage.getTotalElements())
+        .totalPages(betsPage.getTotalPages())
+        .currentPage(betsPage.getNumber())
+        .build();
   }
 
   @Transactional

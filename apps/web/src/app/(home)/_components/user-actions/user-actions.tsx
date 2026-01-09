@@ -1,5 +1,6 @@
 "use client";
 
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/shared/components/ui/card";
 import Link from "next/link";
 import { useUserActions } from "./hooks/use-user-actions";
 import { BettingModal } from "@/app/apostar/_components/betting-flow/betting-modal";
@@ -9,29 +10,31 @@ export function UserActions() {
     useUserActions();
 
   return (
-    <section id="acoes" className="w-full py-8 bg-white">
+    <section id="acoes" className="w-full py-8">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Acesso Rápido</h2>
-        </div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Acesso rápido</h2>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {actions.map((action) => (
             <Link
               key={action.id}
               href={action.href || ""}
               onClick={action.onClick}
-              className={`${action.className} rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer transition-all hover:shadow-md min-h-[140px] gap-3`}
+              className="group block"
             >
-              <div className="text-4xl mb-1">{action.emoji}</div>
-              <div className="text-center">
-                <span className="block font-semibold text-lg">
-                  {action.title}
-                </span>
-                <span className="block text-sm opacity-80 mt-1">
-                  {action.subtitle}
-                </span>
-              </div>
+              <Card className="h-full transition-all hover:shadow-md">
+                <CardHeader className="flex flex-col items-center justify-center space-y-2 pb-4 pt-6">
+                  <div className="text-4xl mb-2">{action.emoji}</div>
+                  <div className="text-center space-y-1">
+                    <CardTitle className={`text-lg font-bold ${action.className}`}>
+                      {action.title}
+                    </CardTitle>
+                    <CardDescription className="text-sm opacity-80">
+                      {action.subtitle}
+                    </CardDescription>
+                  </div>
+                </CardHeader>
+              </Card>
             </Link>
           ))}
         </div>

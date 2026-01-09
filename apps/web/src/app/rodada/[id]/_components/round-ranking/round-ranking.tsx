@@ -35,8 +35,8 @@ export function RoundRanking({ roundId }: RoundRankingProps) {
   }
 
   const isClosed = round?.status === "CLOSED";
-  const winner = ranking?.[0];
-  const topRanking = ranking?.slice(0, 5) || [];
+  const winner = ranking?.items?.[0];
+  const topRanking = ranking?.items?.slice(0, 5) || [];
 
   return (
     <div className="space-y-4">
@@ -51,7 +51,7 @@ export function RoundRanking({ roundId }: RoundRankingProps) {
       )}
 
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div className="p-4 border-b border-gray-100 flex justify-between items-center">
+        <div className="p-4 border-b border-gray-200 flex justify-between items-center">
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Ranking</h2>
           <Link href={`/ranking/${roundId}`} className="text-xs text-green-600 font-medium hover:underline">View full</Link>
         </div>
@@ -59,7 +59,7 @@ export function RoundRanking({ roundId }: RoundRankingProps) {
         {topRanking.length === 0 ? (
           <div className="p-8 text-center text-gray-500">No bets registered</div>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-gray-200">
             {topRanking.map((item) => (
               <div key={item.position} className={`flex items-center gap-3 px-4 py-3 ${item.position <= 3 ? "bg-amber-50/50" : ""}`}>
                 <span className="w-6 text-center">

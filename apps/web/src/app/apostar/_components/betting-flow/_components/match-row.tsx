@@ -17,7 +17,7 @@ interface MatchRowProps {
 
 export function MatchRow({ jogo, form }: MatchRowProps) {
   return (
-    <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+    <div className="bg-gray-50 rounded-xl p-3 border border-gray-200">
       <div className="flex items-center gap-3">
         <div className="flex-1 flex flex-col items-center gap-1">
           <img src={jogo.timeCasaImg} alt={jogo.timeCasa} className="w-8 h-8 object-contain" />

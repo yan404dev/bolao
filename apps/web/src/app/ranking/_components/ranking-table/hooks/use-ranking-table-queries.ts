@@ -1,8 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { rankingService } from "@/app/ranking/ranking.service";
 import { bettingService } from "@/app/apostar/_components/betting-flow/betting.service";
 
-export function useRankingTableQueries(roundId?: number) {
+export interface RankingTableFilterParams {
+  search?: string;
+  minPoints?: number;
+  page?: number;
+  size?: number;
+}
+
+export function useRankingTableQueries(roundId?: number, filters?: RankingTableFilterParams) {
   const activeRoundQuery = useQuery({
     queryKey: ["activeRound"],
     queryFn: bettingService.getActiveRound,
@@ -18,9 +25,10 @@ export function useRankingTableQueries(roundId?: number) {
   });
 
   const rankingQuery = useQuery({
-    queryKey: ["ranking", targetRoundId],
-    queryFn: () => rankingService.getRanking(targetRoundId!),
+    queryKey: ["ranking", targetRoundId, filters],
+    queryFn: () => rankingService.getRanking(targetRoundId!, filters),
     enabled: !!targetRoundId,
+    placeholderData: keepPreviousData,
   });
 
   return {
@@ -28,6 +36,7 @@ export function useRankingTableQueries(roundId?: number) {
     roundDetails: roundDetailsQuery.data,
     rankingData: rankingQuery.data,
     isLoading: activeRoundQuery.isLoading || roundDetailsQuery.isLoading || rankingQuery.isLoading,
+    isFetchingRanking: rankingQuery.isFetching,
     isLoadingActive: activeRoundQuery.isLoading,
     targetRoundId,
   };

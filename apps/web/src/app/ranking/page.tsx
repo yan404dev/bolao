@@ -1,4 +1,5 @@
-import { RankingTable, RankingKpis } from "./_components";
+import { Suspense } from "react";
+import { RankingTable, RankingKpis, RankingTableLoader } from "./_components";
 import { TickerBanner } from "@/shared/components/ticker-banner";
 import { Footer } from "@/shared/components/footer";
 import { ChevronLeft } from "lucide-react";
@@ -27,8 +28,10 @@ export default function RankingPage() {
           <p className="text-gray-500 mt-1">Follow the current round standings</p>
         </div>
 
-        <RankingKpis />
-        <RankingTable />
+        <Suspense fallback={<RankingTableLoader />}>
+          <RankingKpis />
+          <RankingTable />
+        </Suspense>
       </div>
 
       <Footer />

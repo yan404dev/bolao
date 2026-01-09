@@ -23,7 +23,7 @@ export function useUserActions() {
         setIsBettingModalOpen(true);
       },
       emoji: "⚽",
-      className: "bg-white border-2 border-slate-100 hover:border-slate-300 hover:shadow-lg text-slate-800",
+      className: "text-slate-800",
     },
     {
       id: 2,
@@ -31,7 +31,7 @@ export function useUserActions() {
       subtitle: "Classificação",
       href: "/ranking",
       emoji: "🏆",
-      className: "bg-white border-2 border-slate-100 hover:border-slate-300 hover:shadow-lg text-slate-800",
+      className: "text-slate-800",
     },
     {
       id: 3,
@@ -39,7 +39,7 @@ export function useUserActions() {
       subtitle: "Grupo no WhatsApp",
       href: "https://chat.whatsapp.com",
       emoji: "💬",
-      className: "bg-white border-2 border-slate-100 hover:border-slate-300 hover:shadow-lg text-slate-800",
+      className: "text-slate-800",
     },
     {
       id: 4,
@@ -47,7 +47,7 @@ export function useUserActions() {
       subtitle: "Regras do bolão",
       href: "/regulamento",
       emoji: "📜",
-      className: "bg-white border-2 border-slate-100 hover:border-slate-300 hover:shadow-lg text-slate-800",
+      className: "text-slate-800",
     },
   ];
 

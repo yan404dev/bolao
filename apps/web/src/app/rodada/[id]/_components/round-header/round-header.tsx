@@ -13,9 +13,9 @@ export function RoundHeader({ roundId }: RoundHeaderProps) {
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 p-6 animate-pulse">
-        <div className="h-6 bg-gray-200 rounded w-24 mb-2" />
-        <div className="h-8 bg-gray-200 rounded w-64 mb-2" />
+      <div className="brutalist-card p-6 animate-pulse">
+        <div className="h-6 bg-gray-200 rounded w-24 mb-4" />
+        <div className="h-10 bg-gray-200 rounded w-64 mb-4" />
         <div className="h-4 bg-gray-100 rounded w-48" />
       </div>
     );
@@ -24,32 +24,41 @@ export function RoundHeader({ roundId }: RoundHeaderProps) {
   if (!round) return null;
 
   const statusStyles: Record<string, string> = {
-    OPEN: "bg-blue-100 text-blue-700",
-    LIVE: "bg-red-100 text-red-700",
-    CLOSED: "bg-gray-100 text-gray-600",
+    OPEN: "bg-yellow-400 text-black",
+    LIVE: "bg-red-600 text-white animate-pulse",
+    CLOSED: "bg-gray-900 text-white",
   };
 
   const statusLabels: Record<string, string> = {
-    OPEN: "Open",
-    LIVE: "🔴 Live",
-    CLOSED: "Closed",
+    OPEN: "ABERTA",
+    LIVE: "AO VIVO",
+    CLOSED: "ENCERRADA",
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
-      <div className="flex items-start justify-between gap-4">
+    <div className="brutalist-card p-8 border-l-8 border-l-yellow-400 bg-white">
+      <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
         <div>
-          <span className={`inline-block px-2.5 py-1 text-xs font-semibold rounded-full mb-2 ${statusStyles[round.status] || statusStyles.CLOSED}`}>
-            {statusLabels[round.status] || "Closed"}
+          <span className={`inline-block px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] mb-4 ${statusStyles[round.status] || statusStyles.CLOSED}`}>
+            {statusLabels[round.status] || "ENCERRADA"}
           </span>
-          <h1 className="text-xl font-bold text-gray-900">{round.title}</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            {dayjs(round.startDate).format("DD/MM/YYYY")} — {round.endDate ? dayjs(round.endDate).format("DD/MM/YYYY") : "Ongoing"}
+          <h1 className="text-4xl font-black uppercase italic tracking-tighter text-gray-900 leading-none">
+            {round.title}
+          </h1>
+          <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mt-4 flex items-center gap-2">
+            <span className="w-2 h-2 bg-yellow-400" />
+            {dayjs(round.startDate).format("DD/MM/YYYY")} — {round.endDate ? dayjs(round.endDate).format("DD/MM/YYYY") : "EM ANDAMENTO"}
           </p>
         </div>
-        <div className="text-right">
-          <p className="text-2xl font-bold text-green-600">{formatCurrency(round.prizePool || 0)}</p>
-          <p className="text-xs text-gray-500">Total Prize</p>
+
+        <div className="flex flex-col items-start md:items-end">
+          <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Prêmio Acumulado</span>
+          <p className="text-3xl font-black text-yellow-500 italic tracking-tighter">
+            {formatCurrency(round.prizePool || 0)}
+          </p>
+          <div className="mt-2 text-[10px] font-black uppercase tracking-widest text-gray-900 bg-yellow-100 px-2 py-0.5 border border-yellow-200">
+            {round.totalTickets} Apostas
+          </div>
         </div>
       </div>
     </div>

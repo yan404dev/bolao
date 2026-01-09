@@ -10,10 +10,15 @@ interface BettingModalLoadingProps {
 
 export function BettingModalLoading({ isOpen, onClose }: BettingModalLoadingProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Fazer Aposta">
-      <div className="p-8 flex flex-col items-center justify-center gap-4">
-        <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
-        <p className="text-gray-600">Carregando jogos...</p>
+    <Modal isOpen={isOpen} onClose={onClose} title="BOLÃOJC">
+      <div className="p-12 flex flex-col items-center justify-center gap-6 bg-white">
+        <div className="relative">
+          <div className="absolute inset-0 bg-yellow-400 rotate-6 border-2 border-black" />
+          <div className="relative p-4 bg-black border-2 border-black animate-pulse">
+            <Loader2 className="w-10 h-10 text-yellow-400 animate-spin" />
+          </div>
+        </div>
+        <p className="text-xl font-black uppercase italic tracking-tighter text-black">CARREGANDO JOGOS...</p>
       </div>
     </Modal>
   );

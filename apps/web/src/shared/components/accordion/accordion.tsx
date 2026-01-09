@@ -8,18 +8,19 @@ export function AccordionItem({ title, children, defaultOpen = false }: Accordio
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="border-b border-gray-200">
+    <div className={`transition-all duration-300 ${isOpen ? "mb-6" : "mb-2"}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+        className={`w-full p-6 flex items-center justify-between text-left transition-all duration-300 border-2 border-black brutalist-shadow ${isOpen ? "bg-black text-white translate-x-1 translate-y-1 shadow-none" : "bg-white text-black hover:bg-yellow-400"
+          }`}
       >
-        <span className="text-base font-medium text-gray-900">{title}</span>
+        <span className="text-xl font-black uppercase italic tracking-tighter">{title}</span>
         <ChevronDown
-          className={`w-5 h-5 text-gray-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
+          className={`w-6 h-6 transition-transform duration-300 ${isOpen ? "rotate-180 text-yellow-400" : "text-black"}`}
         />
       </button>
       {isOpen && (
-        <div className="pb-5 text-gray-600 leading-relaxed">
+        <div className="p-8 bg-white border-2 border-t-0 border-black brutalist-shadow-yellow text-gray-800 leading-relaxed font-bold">
           {children}
         </div>
       )}

@@ -23,7 +23,7 @@ export function ScoreInput({ form, name }: ScoreInputProps) {
               type="tel"
               inputMode="numeric"
               maxLength={1}
-              className="w-9 h-10 text-center text-lg font-bold bg-white border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 transition-colors"
+              className="w-12 h-14 text-center text-3xl font-black italic bg-white border-2 border-black brutalist-shadow focus:outline-none focus:bg-yellow-400 focus:translate-x-1 focus:translate-y-1 focus:shadow-none transition-all"
               onChange={(e) => {
                 if (/^\d?$/.test(e.target.value)) {
                   field.onChange(e.target.value);

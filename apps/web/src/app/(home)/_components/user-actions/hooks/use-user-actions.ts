@@ -53,7 +53,7 @@ export function useUserActions() {
       id: 5,
       title: "Calendário",
       subtitle: "Temporada 2026",
-      href: "/calendar",
+      href: "/calendario",
       emoji: "📅",
       className: "text-slate-800",
     },

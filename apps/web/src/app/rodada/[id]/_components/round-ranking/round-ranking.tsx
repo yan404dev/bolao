@@ -39,39 +39,50 @@ export function RoundRanking({ roundId }: RoundRankingProps) {
   const topRanking = ranking?.items?.slice(0, 5) || [];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6 text-black">
       {isClosed && winner && (
-        <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-xl border border-amber-200 p-5 text-center">
-          <Trophy className="w-10 h-10 text-amber-500 mx-auto mb-2" />
-          <p className="text-xs text-amber-600 uppercase tracking-wider font-semibold mb-1">Winner</p>
-          <p className="text-xl font-bold text-gray-900">{winner.name}</p>
-          <p className="text-sm text-gray-500">#{winner.ticketCode} • {winner.points} pts</p>
-          <p className="text-lg font-bold text-green-600 mt-2">{formatCurrency(round?.prizePool || 0)}</p>
+        <div className="bg-yellow-400 border-4 border-black p-6 text-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <Trophy className="w-12 h-12 text-black mx-auto mb-3" />
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] font-black mb-2 text-black/60">VENCEDOR DA RODADA</p>
+          <p className="text-3xl font-black italic uppercase tracking-tighter text-black leading-none">{winner.name}</p>
+          <div className="flex items-center justify-center gap-2 mt-4 text-[10px] font-black uppercase tracking-widest text-black/60">
+            <span>#{winner.ticketCode}</span>
+            <span className="w-1.5 h-1.5 bg-black rounded-full" />
+            <span>{winner.points} PONTOS</span>
+          </div>
+          <div className="mt-6 bg-black text-yellow-400 py-3 text-2xl font-black italic tracking-tighter uppercase">
+            {formatCurrency(round?.prizePool || 0)}
+          </div>
         </div>
       )}
 
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div className="p-4 border-b border-gray-200 flex justify-between items-center">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Ranking</h2>
-          <Link href={`/ranking/${roundId}`} className="text-xs text-green-600 font-medium hover:underline">View full</Link>
+      <div className="brutalist-card bg-white overflow-hidden">
+        <div className="p-4 bg-black flex justify-between items-center px-6">
+          <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-white">Ranking da Rodada</h2>
+          <Link href={`/ranking/${roundId}`} className="text-[10px] font-black uppercase tracking-widest text-yellow-500 hover:underline">Ver Mais</Link>
         </div>
 
         {topRanking.length === 0 ? (
-          <div className="p-8 text-center text-gray-500">No bets registered</div>
+          <div className="p-8 text-center text-gray-400 text-xs font-black uppercase tracking-widest italic">Ainda não há palpites</div>
         ) : (
-          <div className="divide-y divide-gray-200">
+          <div className="divide-y-2 divide-gray-100">
             {topRanking.map((item) => (
-              <div key={item.position} className={`flex items-center gap-3 px-4 py-3 ${item.position <= 3 ? "bg-amber-50/50" : ""}`}>
-                <span className="w-6 text-center">
-                  {getMedal(item.position) || <span className="text-gray-400 text-sm">{item.position}</span>}
-                </span>
-                <div className="flex-1">
-                  <p className="font-medium text-gray-900 text-sm">{item.name}</p>
-                  <p className="text-xs text-gray-500">#{item.ticketCode}</p>
+              <div key={item.position} className={`flex items-center gap-4 px-6 py-4 transition-colors ${item.position <= 3 ? "bg-yellow-50/50" : "hover:bg-gray-50"}`}>
+                <div className="w-8 flex justify-center">
+                  <span className={`text-sm font-black italic ${item.position <= 3 ? "text-yellow-600 underline decoration-2 decoration-black underline-offset-4" : "text-gray-400"}`}>
+                    {item.position.toString().padStart(2, '0')}
+                  </span>
                 </div>
-                <span className={`font-bold ${item.position === 1 ? "text-amber-600" : "text-gray-700"}`}>
-                  {item.points}
-                </span>
+                <div className="flex-1">
+                  <p className="text-sm font-black uppercase italic tracking-tighter text-gray-900">{item.name}</p>
+                  <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">#{item.ticketCode}</p>
+                </div>
+                <div className="text-right">
+                  <span className={`text-xl font-black italic tracking-tighter ${item.position === 1 ? "text-yellow-600" : "text-gray-900"}`}>
+                    {item.points}
+                  </span>
+                  <span className="text-[8px] font-black uppercase tracking-widest text-gray-400 ml-1">PTS</span>
+                </div>
               </div>
             ))}
           </div>

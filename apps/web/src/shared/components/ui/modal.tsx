@@ -31,36 +31,30 @@ export function Modal({ isOpen, onClose, children, title, footer }: ModalProps) 
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50">
-      {/* Backdrop */}
+    <div className="fixed inset-0 z-[100]">
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/90 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      {/* Modal Container - Centered */}
       <div className="absolute inset-0 flex items-end sm:items-center justify-center sm:p-4 pointer-events-none">
-        {/* Modal Box */}
-        <div className="pointer-events-auto w-full max-w-lg bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl flex flex-col" style={{ maxHeight: "90vh" }}>
-          {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200 shrink-0">
-            <h2 className="text-lg font-bold text-gray-900">{title}</h2>
+        <div className="pointer-events-auto w-full max-w-lg bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col sm:rounded-none rounded-t-none" style={{ maxHeight: "95vh" }}>
+          <div className="flex items-center justify-between p-6 border-b-4 border-black bg-yellow-400 shrink-0">
+            <h2 className="text-2xl font-black uppercase italic tracking-tighter text-black">{title}</h2>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              className="p-2 hover:bg-black hover:text-white transition-colors border-2 border-black"
             >
-              <X className="w-5 h-5 text-gray-500" />
+              <X className="w-6 h-6" />
             </button>
           </div>
 
-          {/* Content - Scrollable */}
-          <div className="overflow-y-auto flex-1 overscroll-contain">
+          <div className="overflow-y-auto flex-1 overscroll-contain bg-white">
             {children}
           </div>
 
-          {/* Footer - Fixed at bottom */}
           {footer && (
-            <div className="border-t border-gray-200 p-4 shrink-0 bg-white sm:rounded-b-2xl">
+            <div className="border-t-4 border-black p-6 shrink-0 bg-white">
               {footer}
             </div>
           )}

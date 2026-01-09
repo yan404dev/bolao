@@ -5,9 +5,9 @@ import { BettorEntity } from "@/shared/entities";
 
 const getMedal = (position: number) => {
   switch (position) {
-    case 1: return "🥇";
-    case 2: return "🥈";
-    case 3: return "🥉";
+    case 1: return <div className="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center border-2 border-black font-black text-xs">01</div>;
+    case 2: return <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center border-2 border-black font-black text-xs">02</div>;
+    case 3: return <div className="w-8 h-8 rounded-full bg-orange-200 flex items-center justify-center border-2 border-black font-black text-xs">03</div>;
     default: return null;
   }
 };
@@ -15,25 +15,25 @@ const getMedal = (position: number) => {
 export const columns: ColumnDef<BettorEntity>[] = [
   {
     accessorKey: "position",
-    header: "#",
+    header: () => <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">POS</span>,
     cell: ({ row }) => {
       const position = row.original.position;
       return (
-        <span className="text-lg">
+        <div className="flex justify-center">
           {getMedal(position) || (
-            <span className="text-gray-400 text-sm font-medium">{position}</span>
+            <span className="text-gray-400 text-sm font-black italic">{position.toString().padStart(2, '0')}</span>
           )}
-        </span>
+        </div>
       );
     },
   },
   {
     accessorKey: "name",
-    header: "Bettor",
+    header: () => <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">APOSTADOR</span>,
     cell: ({ row }) => {
       const bettor = row.original;
       return (
-        <span className={`font-medium ${bettor.position <= 3 ? "text-gray-900" : "text-gray-700"}`}>
+        <span className={`text-sm font-black uppercase italic tracking-tighter ${bettor.position <= 3 ? "text-gray-900 underline decoration-yellow-400 decoration-2 underline-offset-4" : "text-gray-700"}`}>
           {bettor.name}
         </span>
       );
@@ -41,12 +41,12 @@ export const columns: ColumnDef<BettorEntity>[] = [
   },
   {
     accessorKey: "ticketCode",
-    header: "Ticket",
+    header: () => <div className="text-center text-[10px] font-black uppercase tracking-widest text-gray-500">BILHETE</div>,
     cell: ({ row }) => {
       return (
         <div className="text-center">
-          <span className="text-xs font-mono text-gray-500 bg-gray-100 px-2 py-1 rounded-full whitespace-nowrap">
-            #{row.original.ticketCode}
+          <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 border border-gray-100 px-2 py-0.5 rounded">
+            {row.original.ticketCode}
           </span>
         </div>
       );
@@ -54,34 +54,34 @@ export const columns: ColumnDef<BettorEntity>[] = [
   },
   {
     accessorKey: "exactScores",
-    header: () => <div className="text-center">Exact</div>,
+    header: () => <div className="text-center text-[10px] font-black uppercase tracking-widest text-gray-500">EXATOS</div>,
     cell: ({ row }) => (
       <div className="text-center">
-        <span className="text-green-600 font-medium">{row.original.exactScores}</span>
+        <span className="text-sm font-black text-yellow-600">{row.original.exactScores}</span>
       </div>
     ),
   },
   {
     accessorKey: "winnerScores",
-    header: () => <div className="text-center">Winner</div>,
+    header: () => <div className="text-center text-[10px] font-black uppercase tracking-widest text-gray-500">VENCEDOR</div>,
     cell: ({ row }) => (
       <div className="text-center">
-        <span className="text-gray-600">{row.original.winnerScores}</span>
+        <span className="text-sm font-black text-gray-400">{row.original.winnerScores}</span>
       </div>
     ),
   },
   {
     accessorKey: "points",
-    header: () => <div className="text-right">Points</div>,
+    header: () => <div className="text-right text-[10px] font-black uppercase tracking-widest text-gray-500">PONTOS</div>,
     cell: ({ row }) => {
       const bettor = row.original;
       return (
         <div className="text-right">
-          <span className={`font-bold ${bettor.position === 1
-              ? "text-amber-600 text-lg"
-              : bettor.position <= 3
-                ? "text-gray-900"
-                : "text-gray-700"
+          <span className={`font-black text-lg italic ${bettor.position === 1
+            ? "text-yellow-500"
+            : bettor.position <= 3
+              ? "text-gray-900"
+              : "text-gray-700"
             }`}>
             {bettor.points}
           </span>

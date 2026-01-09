@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 };
 
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Footer } from "@/shared/components/footer";
 
 export default function RootLayout({
   children,
@@ -28,10 +29,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <NuqsAdapter>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </QueryProvider>
         </NuqsAdapter>
       </body>
     </html>

@@ -58,9 +58,9 @@ export function RankingTable({ roundId }: RankingTableProps) {
         }}
       />
 
-      <div className="mt-4 flex flex-wrap items-center gap-6 text-sm text-gray-500">
-        <span><strong className="text-green-600">Exact:</strong> Correct score (+3 pts)</span>
-        <span><strong className="text-gray-600">Winner:</strong> Correct winner (+1 pt)</span>
+      <div className="mt-8 flex flex-wrap items-center gap-6 text-[10px] font-black uppercase tracking-widest">
+        <span className="flex items-center gap-2"><div className="w-2 h-2 bg-yellow-500" /> Placar Exato (+3 PTS)</span>
+        <span className="flex items-center gap-2 text-gray-400"><div className="w-2 h-2 bg-gray-400" /> Vencedor (+1 PT)</span>
       </div>
     </div>
   );

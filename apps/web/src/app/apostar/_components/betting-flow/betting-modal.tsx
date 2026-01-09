@@ -60,57 +60,59 @@ export function BettingModal({ isOpen, onClose }: BettingModalProps) {
       onClose={handleClose}
       title={activeRound.title}
       footer={
-        <div>
+        <div className="space-y-4">
           <Button
             type="submit"
             form="aposta-form"
-            className="w-full h-12 text-base rounded-xl bg-green-600 hover:bg-green-700 shadow-lg shadow-green-600/20 disabled:opacity-50"
+            className="w-full h-16 text-2xl font-black uppercase italic tracking-tighter bg-yellow-400 text-black border-4 border-black brutalist-shadow hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all disabled:opacity-50"
             disabled={!isValid || isSubmitting}
           >
-            {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-            {isSubmitting ? "Enviando..." : isValid ? "Finalizar Aposta" : `Preencha tudo (${progresso})`}
+            {isSubmitting && <Loader2 className="w-6 h-6 mr-3 animate-spin" />}
+            {isSubmitting ? "ENVIANDO..." : isValid ? "FINALIZAR APOSTA" : `FALTAM PALPITES (${progresso})`}
           </Button>
-          <p className="text-center text-[10px] text-gray-400 mt-2 flex items-center justify-center gap-1">
-            <ShieldCheck className="w-3 h-3" />
-            Seus dados estão protegidos
+          <p className="text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center justify-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-black" />
+            SEUS DADOS ESTÃO PROTEGIDOS PELO BOLÃOJC
           </p>
         </div>
       }
     >
       <Form {...form}>
-        <form id="aposta-form" onSubmit={handleSubmit} className="p-4 space-y-6">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Seus Palpites</p>
+        <form id="aposta-form" onSubmit={handleSubmit} className="p-6 space-y-8">
+          <div className="flex items-center justify-between border-b-4 border-black pb-4">
+            <p className="text-lg font-black uppercase italic tracking-tighter text-black">Seus Palpites</p>
             <span
-              className={`text-xs font-bold px-2 py-0.5 rounded-full ${palpitesPreenchidos === totalJogos ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"
+              className={`text-sm font-black uppercase italic px-4 py-1 border-2 border-black brutalist-shadow ${palpitesPreenchidos === totalJogos ? "bg-yellow-400 text-black" : "bg-white text-black"
                 }`}
             >
               {progresso}
             </span>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-6">
             {jogos.map((jogo) => (
               <MatchRow key={jogo.id} jogo={jogo} form={form} />
             ))}
           </div>
 
-          <div className="space-y-3">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Seus Dados</p>
-            <div className="space-y-2">
+          <div className="space-y-6 pt-4 border-t-4 border-black">
+            <p className="text-lg font-black uppercase italic tracking-tighter text-black">Seus Dados</p>
+            <div className="space-y-4">
               <FormField
                 control={form.control}
                 name="nome"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <div className="relative">
-                        <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <div className="relative group">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 p-1 border border-black bg-yellow-400">
+                          <User className="w-4 h-4 text-black" />
+                        </div>
                         <input
                           {...field}
                           type="text"
-                          placeholder="Seu nome"
-                          className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-green-500 text-sm"
+                          placeholder="DIGITE SEU NOME"
+                          className="w-full pl-14 pr-4 py-4 bg-white border-2 border-black font-black uppercase italic placeholder:text-gray-300 focus:outline-none focus:bg-yellow-50 focus:brutalist-shadow transition-all"
                         />
                       </div>
                     </FormControl>
@@ -123,13 +125,15 @@ export function BettingModal({ isOpen, onClose }: BettingModalProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <div className="relative">
-                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <div className="relative group">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 p-1 border border-black bg-yellow-400">
+                          <Phone className="w-4 h-4 text-black" />
+                        </div>
                         <input
                           {...field}
                           type="tel"
-                          placeholder="Seu WhatsApp"
-                          className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-green-500 text-sm"
+                          placeholder="SEU WHATSAPP"
+                          className="w-full pl-14 pr-4 py-4 bg-white border-2 border-black font-black uppercase italic placeholder:text-gray-300 focus:outline-none focus:bg-yellow-50 focus:brutalist-shadow transition-all"
                         />
                       </div>
                     </FormControl>

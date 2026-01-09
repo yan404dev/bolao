@@ -11,15 +11,22 @@ interface BettingModalEmptyProps {
 
 export function BettingModalEmpty({ isOpen, onClose }: BettingModalEmptyProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Fazer Aposta">
-      <div className="p-8 text-center space-y-4">
-        <div className="w-16 h-16 bg-gray-100 rounded-full mx-auto flex items-center justify-center">
-          <Trophy className="w-8 h-8 text-gray-400" />
+    <Modal isOpen={isOpen} onClose={onClose} title="AVISO IMPORTANTE">
+      <div className="p-12 text-center space-y-8 bg-white">
+        <div className="w-24 h-24 bg-gray-100 border-4 border-black mx-auto flex items-center justify-center brutalist-shadow">
+          <Trophy className="w-12 h-12 text-gray-400" />
         </div>
-        <h3 className="text-lg font-semibold text-gray-900">Nenhuma rodada aberta</h3>
-        <p className="text-gray-600 text-sm">Não há rodada disponível para apostas no momento. Volte mais tarde!</p>
-        <Button onClick={onClose} variant="outline" className="w-full">
-          Fechar
+        <div className="space-y-4">
+          <h3 className="text-3xl font-black uppercase italic tracking-tighter text-black leading-none">NENHUMA RODADA ABERTA</h3>
+          <p className="text-sm font-bold text-gray-500 uppercase tracking-widest leading-relaxed">
+            NÃO HÁ RODADA DISPONÍVEL PARA APOSTAS NO MOMENTO. VOLTE MAIS TARDE PARA O JOGO!
+          </p>
+        </div>
+        <Button
+          onClick={onClose}
+          className="w-full h-16 text-2xl font-black uppercase italic tracking-tighter bg-black text-white border-4 border-black brutalist-shadow hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
+        >
+          FECHAR AGORA
         </Button>
       </div>
     </Modal>

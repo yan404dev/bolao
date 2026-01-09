@@ -1,40 +1,50 @@
 import { Suspense } from "react";
 import { RankingTable, RankingKpis, RankingTableLoader } from "./_components";
 import { TickerBanner } from "@/shared/components/ticker-banner";
-import { Footer } from "@/shared/components/footer";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Trophy, Zap } from "lucide-react";
 import Link from "next/link";
 
 export default function RankingPage() {
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-white pb-12">
       <TickerBanner />
 
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="container mx-auto px-4 h-14 flex items-center">
-          <Link
-            href="/"
-            className="flex items-center gap-1 text-gray-600 hover:text-gray-900 transition-colors"
-          >
-            <ChevronLeft className="w-5 h-5" />
-            <span className="text-sm font-medium">Back</span>
-          </Link>
-        </div>
-      </header>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="flex items-center gap-4">
+            <Link
+              href="/"
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors border-2 border-transparent hover:border-black"
+            >
+              <ChevronLeft className="w-6 h-6 text-gray-900" />
+            </Link>
+            <div>
+              <h1 className="text-5xl font-black uppercase italic tracking-tighter text-gray-900 leading-none flex items-center gap-3">
+                <Trophy className="w-12 h-12 text-yellow-500" />
+                Ranking <span className="text-yellow-400">Geral</span>
+              </h1>
+              <p className="text-gray-500 font-bold uppercase tracking-widest text-xs mt-2 ml-1">Acompanhe os líderes da rodada atual</p>
+            </div>
+          </div>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Ranking</h1>
-          <p className="text-gray-500 mt-1">Follow the current round standings</p>
+          <div className="flex bg-black px-6 py-3 brutalist-shadow-yellow items-center gap-3">
+            <Zap className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+            <span className="text-white font-black uppercase italic text-sm tracking-widest">Atualizado em Tempo Real</span>
+          </div>
         </div>
 
         <Suspense fallback={<RankingTableLoader />}>
-          <RankingKpis />
-          <RankingTable />
+          <div className="space-y-12">
+            <RankingKpis />
+            <div className="brutalist-card p-1 bg-black">
+              <div className="bg-white p-6">
+                <RankingTable />
+              </div>
+            </div>
+          </div>
         </Suspense>
       </div>
 
-      <Footer />
     </main>
   );
 }

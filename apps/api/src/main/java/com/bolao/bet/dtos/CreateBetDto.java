@@ -1,7 +1,7 @@
 package com.bolao.bet.dtos;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -9,6 +9,7 @@ import java.util.List;
 
 @Data
 public class CreateBetDto {
+
   @NotNull
   private Long roundId;
 
@@ -18,7 +19,6 @@ public class CreateBetDto {
   @NotBlank
   private String phone;
 
-  @Valid
-  @NotNull
+  @NotEmpty
   private List<PredictionDto> predictions;
 }

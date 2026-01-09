@@ -1,9 +1,9 @@
 package com.bolao.round.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,9 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Round {
-
   public enum Status {
-    OPEN, LIVE, CLOSED
+    OPEN, CLOSED, CALCULATED, CANCELLED
   }
 
   private Long id;
@@ -25,9 +24,10 @@ public class Round {
   private LocalDateTime startDate;
   private LocalDateTime endDate;
   private Integer totalTickets;
-  private Long prizePool;
-  private List<Match> matches;
+  private Double prizePool;
+  private Double ticketPrice;
   private LocalDateTime createdAt;
+  private List<Match> matches;
 
   public boolean isOpen() {
     return status == Status.OPEN;

@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class CreateRoundDto {
+
   @NotBlank
   private String title;
 
@@ -13,5 +14,5 @@ public class CreateRoundDto {
   private String externalRoundId;
 
   @NotNull
-  private Long prizePool;
+  private Double ticketPrice;
 }

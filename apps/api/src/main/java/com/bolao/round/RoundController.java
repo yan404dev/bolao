@@ -24,7 +24,7 @@ public class RoundController {
 
   @PostMapping
   public ResponseEntity<ApiResponse<Round>> create(@Valid @RequestBody CreateRoundDto dto) {
-    Round round = roundService.create(dto.getTitle(), dto.getExternalRoundId(), dto.getPrizePool());
+    Round round = roundService.create(dto.getTitle(), dto.getExternalRoundId(), dto.getTicketPrice());
     return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.ok(round));
   }
 
@@ -55,5 +55,10 @@ public class RoundController {
     Round round = roundService.findById(id);
     roundService.calculateScores(id, round.getExternalRoundId());
     return ResponseEntity.ok(ApiResponse.ok("Scores calculated successfully"));
+  }
+
+  @GetMapping("/calendar")
+  public ResponseEntity<ApiResponse<List<String>>> getCalendar() {
+    return ResponseEntity.ok(ApiResponse.ok(roundService.getExternalCalendar()));
   }
 }

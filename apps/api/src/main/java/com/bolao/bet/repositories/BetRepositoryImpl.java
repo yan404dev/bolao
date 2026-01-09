@@ -4,6 +4,7 @@ import com.bolao.bet.BetMapper;
 import com.bolao.bet.entities.Bet;
 import com.bolao.bet.entities.BetEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,44 +14,46 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Repository
 @Primary
 @RequiredArgsConstructor
 public class BetRepositoryImpl implements BetRepository {
 
   private final JpaBetRepository jpaRepository;
-  private final BetMapper mapper;
+  private final BetMapper betMapper;
 
   @Override
   @Transactional
   public Bet save(Bet bet) {
-    BetEntity entity = mapper.toEntity(bet);
+    BetEntity entity = betMapper.toEntity(bet);
     entity = jpaRepository.save(entity);
-    return mapper.toDomain(entity);
+    return betMapper.toDomain(entity);
   }
 
   @Override
   @Transactional
   public List<Bet> saveAll(Iterable<Bet> entities) {
     List<BetEntity> jpaEntities = new java.util.ArrayList<>();
-    entities.forEach(bet -> jpaEntities.add(mapper.toEntity(bet)));
+    entities.forEach(bet -> jpaEntities.add(betMapper.toEntity(bet)));
     return jpaRepository.saveAll(jpaEntities).stream()
-        .map(mapper::toDomain)
+        .map(betMapper::toDomain)
         .toList();
   }
 
   @Override
   @Transactional(readOnly = true)
   public Optional<Bet> findById(Long id) {
-    return jpaRepository.findById(id).map(mapper::toDomain);
+    return jpaRepository.findById(id).map(betMapper::toDomain);
   }
 
   @Override
   @Transactional(readOnly = true)
   public List<Bet> findAll() {
     return jpaRepository.findAll().stream()
-        .map(mapper::toDomain)
+        .map(betMapper::toDomain)
         .toList();
   }
 
@@ -75,7 +78,7 @@ public class BetRepositoryImpl implements BetRepository {
   @Override
   @Transactional(readOnly = true)
   public Page<Bet> findAll(Pageable pageable) {
-    return jpaRepository.findAll(pageable).map(mapper::toDomain);
+    return jpaRepository.findAll(pageable).map(betMapper::toDomain);
   }
 
   @Override
@@ -100,14 +103,14 @@ public class BetRepositoryImpl implements BetRepository {
   @Transactional(readOnly = true)
   public List<Bet> findByRoundId(Long roundId) {
     return jpaRepository.findByRoundIdOrderByPointsDesc(roundId).stream()
-        .map(mapper::toDomain)
+        .map(betMapper::toDomain)
         .toList();
   }
 
   @Override
   @Transactional(readOnly = true)
   public Optional<Bet> findByTicketCode(String ticketCode) {
-    return jpaRepository.findByTicketCode(ticketCode).map(mapper::toDomain);
+    return jpaRepository.findByTicketCode(ticketCode).map(betMapper::toDomain);
   }
 
   @Override
@@ -120,6 +123,6 @@ public class BetRepositoryImpl implements BetRepository {
   @Transactional(readOnly = true)
   public Page<Bet> findByRoundIdWithFilters(Long roundId, String search, Integer minPoints, Pageable pageable) {
     return jpaRepository.findByRoundIdWithFilters(roundId, search, minPoints, pageable)
-        .map(mapper::toDomain);
+        .map(betMapper::toDomain);
   }
 }

@@ -21,8 +21,8 @@ import java.util.Optional;
 public class MatchRepositoryImpl implements MatchRepository {
 
   private final JpaMatchRepository jpaRepository;
+  private final RoundMapper roundMapper;
   private final JpaRoundRepository jpaRoundRepository;
-  private final RoundMapper mapper;
 
   @Override
   @Transactional
@@ -30,9 +30,9 @@ public class MatchRepositoryImpl implements MatchRepository {
     RoundEntity round = match.getRoundId() != null
         ? jpaRoundRepository.findById(match.getRoundId()).orElse(null)
         : null;
-    MatchEntity entity = mapper.toMatchEntity(match, round);
+    MatchEntity entity = roundMapper.toMatchEntity(match, round);
     entity = jpaRepository.save(entity);
-    return mapper.toMatchDomain(entity);
+    return roundMapper.toMatchDomain(entity);
   }
 
   @Override
@@ -43,24 +43,24 @@ public class MatchRepositoryImpl implements MatchRepository {
       RoundEntity round = match.getRoundId() != null
           ? jpaRoundRepository.findById(match.getRoundId()).orElse(null)
           : null;
-      jpaEntities.add(mapper.toMatchEntity(match, round));
+      jpaEntities.add(roundMapper.toMatchEntity(match, round));
     }
     return jpaRepository.saveAll(jpaEntities).stream()
-        .map(mapper::toMatchDomain)
+        .map(roundMapper::toMatchDomain)
         .toList();
   }
 
   @Override
   @Transactional(readOnly = true)
   public Optional<Match> findById(Long id) {
-    return jpaRepository.findById(id).map(mapper::toMatchDomain);
+    return jpaRepository.findById(id).map(roundMapper::toMatchDomain);
   }
 
   @Override
   @Transactional(readOnly = true)
   public List<Match> findAll() {
     return jpaRepository.findAll().stream()
-        .map(mapper::toMatchDomain)
+        .map(roundMapper::toMatchDomain)
         .toList();
   }
 
@@ -85,7 +85,7 @@ public class MatchRepositoryImpl implements MatchRepository {
   @Override
   @Transactional(readOnly = true)
   public Page<Match> findAll(Pageable pageable) {
-    return jpaRepository.findAll(pageable).map(mapper::toMatchDomain);
+    return jpaRepository.findAll(pageable).map(roundMapper::toMatchDomain);
   }
 
   @Override
@@ -110,7 +110,7 @@ public class MatchRepositoryImpl implements MatchRepository {
   @Transactional(readOnly = true)
   public List<Match> findByRoundId(Long roundId) {
     return jpaRepository.findByRoundId(roundId).stream()
-        .map(mapper::toMatchDomain)
+        .map(roundMapper::toMatchDomain)
         .toList();
   }
 }

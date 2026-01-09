@@ -3,7 +3,7 @@ package com.bolao.round;
 import com.bolao.bet.entities.Bet;
 import com.bolao.bet.entities.Prediction;
 import com.bolao.bet.repositories.BetRepository;
-import com.bolao.fixture.MatchApiClient;
+import com.bolao.fixture.MatchSyncService;
 import com.bolao.round.dtos.RankingDto;
 import com.bolao.round.entities.Match;
 import com.bolao.round.entities.Round;
@@ -29,12 +29,12 @@ public class RoundService {
   private final RoundRepository roundRepository;
   private final MatchRepository matchRepository;
   private final BetRepository betRepository;
-  private final MatchApiClient matchApiClient;
+  private final MatchSyncService matchSyncService;
   private final ScoreCalculator scoreCalculator;
 
   @Transactional
-  public Round create(String title, String externalRoundId, Long prizePool) {
-    List<Match> matches = matchApiClient.fetchByRoundId(externalRoundId);
+  public Round create(String title, String externalRoundId, Double ticketPrice) {
+    List<Match> matches = matchSyncService.fetchAndSyncMatches(null, externalRoundId);
 
     if (matches.isEmpty()) {
       throw new IllegalArgumentException("No matches found for round: " + externalRoundId);
@@ -44,8 +44,9 @@ public class RoundService {
         .title(title)
         .externalRoundId(externalRoundId)
         .status(Round.Status.OPEN)
-        .prizePool(prizePool)
+        .prizePool(0.0)
         .totalTickets(0)
+        .ticketPrice(ticketPrice)
         .startDate(LocalDateTime.now())
         .createdAt(LocalDateTime.now())
         .build();
@@ -67,6 +68,11 @@ public class RoundService {
       return loadMatchesForAll(roundRepository.findAll());
     }
     return loadMatchesForAll(roundRepository.findByStatus(status));
+  }
+
+  @Transactional(readOnly = true)
+  public List<String> getExternalCalendar() {
+    return matchSyncService.fetchAvailableRounds();
   }
 
   private List<Round> loadMatchesForAll(List<Round> rounds) {
@@ -131,7 +137,7 @@ public class RoundService {
 
   @Transactional
   public void calculateScores(Long roundId, String externalRoundId) {
-    List<Match> updatedMatches = matchApiClient.fetchByRoundId(externalRoundId);
+    List<Match> updatedMatches = matchSyncService.fetchAndSyncMatches(roundId, externalRoundId);
 
     for (Match match : updatedMatches) {
       match.setRoundId(roundId);
@@ -164,6 +170,21 @@ public class RoundService {
       totalPoints += scoreCalculator.calculate(prediction, match);
     }
     return totalPoints;
+  }
+
+  @Transactional
+  public void updateRoundStats(Long roundId) {
+    Round round = findById(roundId);
+    long ticketCount = betRepository.countByRoundId(roundId);
+
+    double totalRevenue = ticketCount * (round.getTicketPrice() != null ? round.getTicketPrice() : 0.0);
+    double prizePool = totalRevenue * 0.6; // 60% for the players
+
+    round.setTotalTickets((int) ticketCount);
+    round.setPrizePool(prizePool);
+
+    roundRepository.save(round);
+    log.info("Updated stats for round {}: {} tickets, prize pool R$ {}", roundId, ticketCount, prizePool);
   }
 
   private void loadMatches(Round round) {

@@ -7,10 +7,11 @@ import com.bolao.bet.entities.Prediction;
 import com.bolao.bet.repositories.BetRepository;
 import com.bolao.round.entities.Match;
 import com.bolao.round.entities.Round;
+import com.bolao.round.RoundService;
 import com.bolao.round.repositories.MatchRepository;
-import com.bolao.round.repositories.RoundRepository;
 import com.bolao.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,18 +22,18 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BetService {
 
   private final BetRepository betRepository;
-  private final RoundRepository roundRepository;
   private final MatchRepository matchRepository;
+  private final RoundService roundService;
 
   @Transactional
   public Bet create(CreateBetDto dto) {
-    Round round = roundRepository.findById(dto.getRoundId())
-        .orElseThrow(() -> new NotFoundException("Round not found: " + dto.getRoundId()));
+    Round round = roundService.findById(dto.getRoundId());
 
     if (!round.isOpen()) {
       throw new IllegalStateException("Round is not open for bets");
@@ -54,7 +55,9 @@ public class BetService {
         .createdAt(LocalDateTime.now())
         .build();
 
-    return betRepository.save(bet);
+    Bet savedBet = betRepository.save(bet);
+    roundService.updateRoundStats(savedBet.getRoundId());
+    return savedBet;
   }
 
   @Transactional(readOnly = true)

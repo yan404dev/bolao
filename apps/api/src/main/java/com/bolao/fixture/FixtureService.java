@@ -10,9 +10,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FixtureService {
 
-  private final MatchApiClient matchApiClient;
+  private final MatchSyncService matchSyncService;
 
   public List<Match> getFixtures(String roundId) {
-    return matchApiClient.fetchByRoundId(roundId);
+    return matchSyncService.fetchAndSyncMatches(null, roundId); // null roundId as it's just fetching for
+                                                                // display/selection
   }
 }

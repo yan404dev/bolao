@@ -48,6 +48,6 @@ public class MatchEntity {
   private Status status;
 
   public enum Status {
-    SCHEDULED, LIVE, FINISHED
+    SCHEDULED, LIVE, FINISHED, CANCELLED
   }
 }

@@ -6,10 +6,10 @@ import lombok.Data;
 @Data
 @Builder
 public class RankingDto {
-  private int position;
   private String name;
   private String ticketCode;
   private int points;
+  private int position;
   private int exactScores;
   private int winnerScores;
 }

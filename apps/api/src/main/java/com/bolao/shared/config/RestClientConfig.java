@@ -9,10 +9,13 @@ import org.springframework.web.client.RestClient;
 public class RestClientConfig {
 
   @Bean
-  public RestClient footballApiClient(
-      @Value("${football.api.url:https://server-api.top/api}") String baseUrl) {
+  public RestClient apiFootballClient(
+      @Value("${api-football.api.url:https://api-football-v1.p.rapidapi.com/v3}") String baseUrl,
+      @Value("${api-football.api.key:}") String apiKey) {
     return RestClient.builder()
         .baseUrl(baseUrl)
+        .defaultHeader("X-RapidAPI-Key", apiKey)
+        .defaultHeader("X-RapidAPI-Host", "api-football-v1.p.rapidapi.com")
         .build();
   }
 }

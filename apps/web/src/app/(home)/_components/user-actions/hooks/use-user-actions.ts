@@ -49,6 +49,14 @@ export function useUserActions() {
       emoji: "📜",
       className: "text-slate-800",
     },
+    {
+      id: 5,
+      title: "Calendário",
+      subtitle: "Temporada 2026",
+      href: "/calendar",
+      emoji: "📅",
+      className: "text-slate-800",
+    },
   ];
 
   return {

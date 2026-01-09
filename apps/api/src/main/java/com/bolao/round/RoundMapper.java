@@ -25,6 +25,7 @@ public class RoundMapper {
         .endDate(entity.getEndDate())
         .totalTickets(entity.getTotalTickets())
         .prizePool(entity.getPrizePool())
+        .ticketPrice(entity.getTicketPrice())
         .createdAt(entity.getCreatedAt())
         .matches(matches)
         .build();
@@ -55,6 +56,7 @@ public class RoundMapper {
         .endDate(round.getEndDate())
         .totalTickets(round.getTotalTickets())
         .prizePool(round.getPrizePool())
+        .ticketPrice(round.getTicketPrice())
         .createdAt(round.getCreatedAt())
         .build();
   }

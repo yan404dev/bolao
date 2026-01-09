@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class PredictionDto {
+
   @NotNull
   private Long matchId;
 

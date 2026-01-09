@@ -40,7 +40,10 @@ public class RoundEntity {
   private Integer totalTickets;
 
   @Column(name = "prize_pool")
-  private Long prizePool;
+  private Double prizePool;
+
+  @Column(name = "ticket_price")
+  private Double ticketPrice;
 
   @Column(name = "created_at")
   private LocalDateTime createdAt;
@@ -50,6 +53,6 @@ public class RoundEntity {
   private List<MatchEntity> matches = new ArrayList<>();
 
   public enum Status {
-    OPEN, LIVE, CLOSED
+    OPEN, CLOSED, CALCULATED, CANCELLED
   }
 }

@@ -1,9 +1,9 @@
 package com.bolao.round.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -12,9 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Match {
-
   public enum Status {
-    SCHEDULED, LIVE, FINISHED
+    SCHEDULED, LIVE, FINISHED, CANCELLED
   }
 
   private Long id;

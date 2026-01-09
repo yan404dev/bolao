@@ -20,37 +20,37 @@ import java.util.Optional;
 public class RoundRepositoryImpl implements RoundRepository {
 
   private final JpaRoundRepository jpaRepository;
-  private final RoundMapper mapper;
+  private final RoundMapper roundMapper;
 
   @Override
   @Transactional
   public Round save(Round round) {
-    RoundEntity entity = mapper.toEntity(round);
+    RoundEntity entity = roundMapper.toEntity(round);
     entity = jpaRepository.save(entity);
-    return mapper.toDomain(entity);
+    return roundMapper.toDomain(entity);
   }
 
   @Override
   @Transactional
   public List<Round> saveAll(Iterable<Round> entities) {
     List<RoundEntity> jpaEntities = new java.util.ArrayList<>();
-    entities.forEach(round -> jpaEntities.add(mapper.toEntity(round)));
+    entities.forEach(round -> jpaEntities.add(roundMapper.toEntity(round)));
     return jpaRepository.saveAll(jpaEntities).stream()
-        .map(mapper::toDomain)
+        .map(roundMapper::toDomain)
         .toList();
   }
 
   @Override
   @Transactional(readOnly = true)
   public Optional<Round> findById(Long id) {
-    return jpaRepository.findById(id).map(mapper::toDomain);
+    return jpaRepository.findById(id).map(roundMapper::toDomain);
   }
 
   @Override
   @Transactional(readOnly = true)
   public List<Round> findAll() {
     return jpaRepository.findAll().stream()
-        .map(mapper::toDomain)
+        .map(roundMapper::toDomain)
         .toList();
   }
 
@@ -75,7 +75,7 @@ public class RoundRepositoryImpl implements RoundRepository {
   @Override
   @Transactional(readOnly = true)
   public Page<Round> findAll(Pageable pageable) {
-    return jpaRepository.findAll(pageable).map(mapper::toDomain);
+    return jpaRepository.findAll(pageable).map(roundMapper::toDomain);
   }
 
   @Override
@@ -99,15 +99,15 @@ public class RoundRepositoryImpl implements RoundRepository {
   @Override
   @Transactional(readOnly = true)
   public Optional<Round> findByExternalRoundId(String externalRoundId) {
-    return jpaRepository.findByExternalRoundId(externalRoundId).map(mapper::toDomain);
+    return jpaRepository.findByExternalRoundId(externalRoundId).map(roundMapper::toDomain);
   }
 
   @Override
   @Transactional(readOnly = true)
   public List<Round> findByStatus(Round.Status status) {
     RoundEntity.Status entityStatus = RoundEntity.Status.valueOf(status.name());
-    return jpaRepository.findByStatus(entityStatus).stream()
-        .map(mapper::toDomain)
+    return jpaRepository.findByStatus(RoundEntity.Status.valueOf(status.name())).stream()
+        .map(roundMapper::toDomain)
         .toList();
   }
 }

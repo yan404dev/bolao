@@ -91,19 +91,16 @@
   }
 
   .brutalist-card {
-    @apply bg-white border-2 border-transparent hover:border-yellow-400 shadow-sm hover:shadow-xl transition-all duration-300;
+    @apply bg-white border border-black rounded-none transition-all duration-300;
   }
 
   .brutalist-text-yellow {
     @apply text-yellow-500 font-bold uppercase tracking-widest;
   }
 
-  .brutalist-shadow {
-    @apply shadow-[4px_4px_0px_0px_#000];
-  }
-
-  .brutalist-shadow-yellow {
-    @apply shadow-[4px_4px_0px_0px_#facc15];
+  /* Altura padronizada para inputs e selects */
+  .brutalist-input-height {
+    @apply h-14;
   }
 }
 

@@ -20,7 +20,7 @@ export default async function RoundPage({ params }: RoundPageProps) {
           <div className="flex items-center gap-4">
             <Link
               href="/"
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors border-2 border-transparent hover:border-black"
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors border border-transparent hover:border-black"
             >
               <ChevronLeft className="w-6 h-6 text-black" />
             </Link>
@@ -35,7 +35,6 @@ export default async function RoundPage({ params }: RoundPageProps) {
         </div>
 
         <div className="space-y-12">
-          {/* BANNER DA RODADA */}
           <RoundHeader roundId={roundId} />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -44,11 +43,7 @@ export default async function RoundPage({ params }: RoundPageProps) {
             </div>
             <div className="lg:col-span-4 space-y-12">
               <RoundKpis roundId={roundId} />
-              <div className="brutalist-card p-0.5 bg-black">
-                <div className="bg-white p-4">
-                  <RoundRanking roundId={roundId} />
-                </div>
-              </div>
+              <RoundRanking roundId={roundId} />
             </div>
           </div>
         </div>

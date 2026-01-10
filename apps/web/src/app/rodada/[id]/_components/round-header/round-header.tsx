@@ -36,7 +36,7 @@ export function RoundHeader({ roundId }: RoundHeaderProps) {
   };
 
   return (
-    <div className="brutalist-card p-8 border-l-8 border-l-yellow-400 bg-white">
+    <div className="brutalist-card p-8 border-l-2 border-l-yellow-400 bg-white">
       <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
         <div>
           <span className={`inline-block px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] mb-4 ${statusStyles[round.status] || statusStyles.CLOSED}`}>
@@ -45,18 +45,18 @@ export function RoundHeader({ roundId }: RoundHeaderProps) {
           <h1 className="text-4xl font-black uppercase italic tracking-tighter text-gray-900 leading-none">
             {round.title}
           </h1>
-          <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mt-4 flex items-center gap-2">
+          <p className="text-xs font-bold uppercase tracking-widest text-black/50 mt-4 flex items-center gap-2">
             <span className="w-2 h-2 bg-yellow-400" />
             {dayjs(round.startDate).format("DD/MM/YYYY")} — {round.endDate ? dayjs(round.endDate).format("DD/MM/YYYY") : "EM ANDAMENTO"}
           </p>
         </div>
 
         <div className="flex flex-col items-start md:items-end">
-          <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Prêmio Acumulado</span>
+          <span className="text-[10px] font-black uppercase tracking-widest text-black/50 mb-1">Prêmio Acumulado</span>
           <p className="text-3xl font-black text-yellow-500 italic tracking-tighter">
             {formatCurrency(round.prizePool || 0)}
           </p>
-          <div className="mt-2 text-[10px] font-black uppercase tracking-widest text-gray-900 bg-yellow-100 px-2 py-0.5 border border-yellow-200">
+          <div className="mt-2 text-[10px] font-black uppercase tracking-widest text-black bg-yellow-400 px-3 py-1 border border-black italic">
             {round.totalTickets} Apostas
           </div>
         </div>

@@ -41,12 +41,12 @@ export function RoundRanking({ roundId }: RoundRankingProps) {
   return (
     <div className="space-y-6 text-black">
       {isClosed && winner && (
-        <div className="bg-yellow-400 border-4 border-black p-6 text-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+        <div className="bg-yellow-400 border border-black p-6 text-center">
           <Trophy className="w-12 h-12 text-black mx-auto mb-3" />
           <p className="text-[10px] font-black uppercase tracking-[0.3em] font-black mb-2 text-black/60">VENCEDOR DA RODADA</p>
           <p className="text-3xl font-black italic uppercase tracking-tighter text-black leading-none">{winner.name}</p>
-          <div className="flex items-center justify-center gap-2 mt-4 text-[10px] font-black uppercase tracking-widest text-black/60">
-            <span>#{winner.ticketCode}</span>
+          <div className="flex items-center justify-center gap-2 mt-4 text-[10px] font-black uppercase tracking-widest text-[#000]/80">
+            <span className="bg-black text-white px-2 py-0.5 border border-black italic">#{winner.ticketCode}</span>
             <span className="w-1.5 h-1.5 bg-black rounded-full" />
             <span>{winner.points} PONTOS</span>
           </div>
@@ -75,13 +75,13 @@ export function RoundRanking({ roundId }: RoundRankingProps) {
                 </div>
                 <div className="flex-1">
                   <p className="text-sm font-black uppercase italic tracking-tighter text-gray-900">{item.name}</p>
-                  <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">#{item.ticketCode}</p>
+                  <p className="text-[9px] font-black text-black/40 uppercase tracking-widest mt-0.5">#{item.ticketCode}</p>
                 </div>
                 <div className="text-right">
                   <span className={`text-xl font-black italic tracking-tighter ${item.position === 1 ? "text-yellow-600" : "text-gray-900"}`}>
                     {item.points}
                   </span>
-                  <span className="text-[8px] font-black uppercase tracking-widest text-gray-400 ml-1">PTS</span>
+                  <span className="text-[8px] font-black uppercase tracking-widest text-black/40 ml-1">PTS</span>
                 </div>
               </div>
             ))}

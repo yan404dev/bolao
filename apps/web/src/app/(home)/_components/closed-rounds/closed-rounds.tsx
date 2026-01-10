@@ -56,7 +56,7 @@ export function ClosedRounds() {
                 </CardHeader>
 
                 <CardContent>
-                  <div className="grid grid-cols-2 gap-4 pt-6 border-t-2 border-dashed border-black mt-4">
+                  <div className="grid grid-cols-2 gap-4 pt-6 border-t border-dashed border-black mt-4">
                     <div className="flex flex-col">
                       <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">
                         Apostas

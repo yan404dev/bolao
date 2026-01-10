@@ -36,7 +36,7 @@ export function UserActions() {
               onClick={action.onClick}
               className="group"
             >
-              <Card className="h-full brutalist-card border-l-4 border-l-yellow-400 hover:border-yellow-400">
+              <Card className="h-full brutalist-card border-l border-l-yellow-400 hover:border-yellow-400">
                 <CardHeader className="flex flex-col items-center justify-center space-y-4 pb-6 pt-8">
                   <div className="p-4 bg-gray-50 rounded-2xl group-hover:bg-yellow-50 group-hover:scale-110 transition-all duration-300">
                     {actionIcons[action.id] || <span className="text-4xl">{action.emoji}</span>}

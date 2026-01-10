@@ -11,7 +11,7 @@ export function AccordionItem({ title, children, defaultOpen = false }: Accordio
     <div className={`transition-all duration-300 ${isOpen ? "mb-6" : "mb-2"}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full p-6 flex items-center justify-between text-left transition-all duration-300 border-2 border-black brutalist-shadow ${isOpen ? "bg-black text-white translate-x-1 translate-y-1 shadow-none" : "bg-white text-black hover:bg-yellow-400"
+        className={`w-full p-6 flex items-center justify-between text-left transition-all duration-300 border border-black brutalist-shadow ${isOpen ? "bg-black text-white translate-x-1 translate-y-1 shadow-none" : "bg-white text-black hover:bg-yellow-400"
           }`}
       >
         <span className="text-xl font-black uppercase italic tracking-tighter">{title}</span>
@@ -20,7 +20,7 @@ export function AccordionItem({ title, children, defaultOpen = false }: Accordio
         />
       </button>
       {isOpen && (
-        <div className="p-8 bg-white border-2 border-t-0 border-black brutalist-shadow-yellow text-gray-800 leading-relaxed font-bold">
+        <div className="p-8 bg-white border border-t-0 border-black brutalist-shadow-yellow text-gray-800 leading-relaxed font-bold">
           {children}
         </div>
       )}

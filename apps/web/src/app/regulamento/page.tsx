@@ -13,7 +13,7 @@ export default function RegulamentoPage() {
           <div className="flex items-center gap-4">
             <Link
               href="/"
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors border-2 border-transparent hover:border-black"
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors border border-transparent hover:border-black"
             >
               <ChevronLeft className="w-6 h-6 text-gray-900" />
             </Link>

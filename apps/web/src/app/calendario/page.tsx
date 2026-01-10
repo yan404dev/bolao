@@ -45,7 +45,7 @@ export default function CalendarPage() {
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {Array.from({ length: 12 }).map((_, i) => (
-              <Skeleton key={i} className="h-24 w-full rounded-xl border-2 border-dashed border-gray-200" />
+              <Skeleton key={i} className="h-24 w-full rounded-xl border border-dashed border-gray-200" />
             ))}
           </div>
         ) : (
@@ -53,7 +53,7 @@ export default function CalendarPage() {
             {rounds?.map((round, index) => (
               <Card
                 key={round}
-                className="group relative overflow-hidden border-2 border-transparent hover:border-yellow-400 transition-all duration-300 shadow-sm hover:shadow-xl bg-white"
+                className="group relative overflow-hidden border border-transparent hover:border-yellow-400 transition-all duration-300 shadow-sm hover:shadow-xl bg-white"
               >
                 <div className="absolute top-0 right-0 p-3 opacity-5 group-hover:opacity-20 transition-opacity">
                   <span className="text-6xl font-black italic">{index + 1}</span>

@@ -20,7 +20,7 @@ export default async function RankingRoundPage({ params }: RankingRoundPageProps
           <div className="flex items-center gap-4">
             <Link
               href="/"
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors border-2 border-transparent hover:border-black"
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors border border-transparent hover:border-black"
             >
               <ChevronLeft className="w-6 h-6 text-black" />
             </Link>
@@ -33,7 +33,7 @@ export default async function RankingRoundPage({ params }: RankingRoundPageProps
             </div>
           </div>
 
-          <div className="flex bg-black px-6 py-3 brutalist-shadow-yellow items-center gap-3">
+          <div className="flex bg-black px-6 py-3 border border-yellow-400 items-center gap-3">
             <Zap className="w-5 h-5 text-yellow-400 fill-yellow-400" />
             <span className="text-white font-black uppercase italic text-sm tracking-widest">Atualizado em Tempo Real</span>
           </div>
@@ -41,11 +41,7 @@ export default async function RankingRoundPage({ params }: RankingRoundPageProps
 
         <div className="space-y-12">
           <RankingKpis roundId={roundId} />
-          <div className="brutalist-card p-1 bg-black">
-            <div className="bg-white p-6">
-              <RankingTable roundId={roundId} />
-            </div>
-          </div>
+          <RankingTable roundId={roundId} />
         </div>
       </div>
     </main>

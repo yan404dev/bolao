@@ -58,7 +58,7 @@ export function RankingTable({ roundId }: RankingTableProps) {
         }}
       />
 
-      <div className="mt-8 flex flex-wrap items-center gap-8 text-[11px] font-black uppercase tracking-widest text-black/60 bg-gray-50 p-4 border-2 border-black border-dashed">
+      <div className="mt-8 flex flex-wrap items-center gap-8 text-[11px] font-black uppercase tracking-widest text-black/60 bg-gray-50 p-4 border border-black border-dashed">
         <span className="flex items-center gap-3">
           <div className="w-3 h-3 bg-yellow-400 border border-black" />
           PLACAR EXATO (+3 PONTOS)

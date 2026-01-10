@@ -64,7 +64,7 @@ export function BettingModal({ isOpen, onClose }: BettingModalProps) {
           <Button
             type="submit"
             form="aposta-form"
-            className="w-full h-16 text-2xl font-black uppercase italic tracking-tighter bg-yellow-400 text-black border-4 border-black brutalist-shadow hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all disabled:opacity-50"
+            className="w-full h-16 text-2xl font-black uppercase italic tracking-tighter bg-yellow-400 text-black border border-black hover:bg-black hover:text-white transition-all disabled:opacity-50 rounded-none"
             disabled={!isValid || isSubmitting}
           >
             {isSubmitting && <Loader2 className="w-6 h-6 mr-3 animate-spin" />}
@@ -79,10 +79,10 @@ export function BettingModal({ isOpen, onClose }: BettingModalProps) {
     >
       <Form {...form}>
         <form id="aposta-form" onSubmit={handleSubmit} className="p-6 space-y-8">
-          <div className="flex items-center justify-between border-b-4 border-black pb-4">
+          <div className="flex items-center justify-between border-b border-black pb-4">
             <p className="text-lg font-black uppercase italic tracking-tighter text-black">Seus Palpites</p>
             <span
-              className={`text-sm font-black uppercase italic px-4 py-1 border-2 border-black brutalist-shadow ${palpitesPreenchidos === totalJogos ? "bg-yellow-400 text-black" : "bg-white text-black"
+              className={`text-sm font-black uppercase italic px-4 py-1 border border-black ${palpitesPreenchidos === totalJogos ? "bg-yellow-400 text-black" : "bg-white text-black"
                 }`}
             >
               {progresso}
@@ -95,7 +95,7 @@ export function BettingModal({ isOpen, onClose }: BettingModalProps) {
             ))}
           </div>
 
-          <div className="space-y-6 pt-4 border-t-4 border-black">
+          <div className="space-y-6 pt-4 border-t border-black">
             <p className="text-lg font-black uppercase italic tracking-tighter text-black">Seus Dados</p>
             <div className="space-y-4">
               <FormField
@@ -112,7 +112,7 @@ export function BettingModal({ isOpen, onClose }: BettingModalProps) {
                           {...field}
                           type="text"
                           placeholder="DIGITE SEU NOME"
-                          className="w-full pl-14 pr-4 py-4 bg-white border-2 border-black font-black uppercase italic placeholder:text-gray-300 focus:outline-none focus:bg-yellow-50 focus:brutalist-shadow transition-all"
+                          className="w-full pl-14 pr-4 brutalist-input-height bg-white border border-black font-black uppercase italic placeholder:text-gray-300 focus:outline-none focus:bg-yellow-50 transition-all rounded-none"
                         />
                       </div>
                     </FormControl>
@@ -133,7 +133,7 @@ export function BettingModal({ isOpen, onClose }: BettingModalProps) {
                           {...field}
                           type="tel"
                           placeholder="SEU WHATSAPP"
-                          className="w-full pl-14 pr-4 py-4 bg-white border-2 border-black font-black uppercase italic placeholder:text-gray-300 focus:outline-none focus:bg-yellow-50 focus:brutalist-shadow transition-all"
+                          className="w-full pl-14 pr-4 brutalist-input-height bg-white border border-black font-black uppercase italic placeholder:text-gray-300 focus:outline-none focus:bg-yellow-50 transition-all rounded-none"
                         />
                       </div>
                     </FormControl>

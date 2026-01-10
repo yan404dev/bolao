@@ -43,7 +43,7 @@ export function RankingTableFilters({
             placeholder="BUSCAR POR NOME OU BILHETE..."
             value={filters.search}
             onChange={(e) => onFiltersChange({ ...filters, search: e.target.value.toUpperCase() })}
-            className="pl-14 h-14 bg-white border-2 border-black font-black uppercase italic placeholder:text-gray-300 focus-visible:ring-0 focus-visible:bg-yellow-50 focus-visible:brutalist-shadow transition-all"
+            className="pl-14 brutalist-input-height bg-white border border-black font-black uppercase italic placeholder:text-gray-300 focus-visible:ring-0 focus-visible:bg-yellow-50 transition-all rounded-none"
           />
         </div>
 
@@ -51,10 +51,10 @@ export function RankingTableFilters({
           value={filters.minPoints}
           onValueChange={(value) => onFiltersChange({ ...filters, minPoints: value })}
         >
-          <SelectTrigger className="w-full sm:w-[240px] h-14 bg-white border-2 border-black font-black uppercase italic tracking-widest focus:ring-0 hover:bg-yellow-50 brutalist-shadow transition-all">
+          <SelectTrigger className="w-full sm:w-[240px] brutalist-input-height bg-white border border-black font-black uppercase italic tracking-widest focus:ring-0 hover:bg-yellow-50 transition-all rounded-none">
             <SelectValue placeholder="PONTUAÇÃO MÍNIMA" />
           </SelectTrigger>
-          <SelectContent className="border-2 border-black rounded-none">
+          <SelectContent className="border border-black rounded-none">
             {POINTS_OPTIONS.map((option) => (
               <SelectItem key={option.value} value={option.value} className="font-black uppercase italic text-xs py-3 focus:bg-yellow-400 focus:text-black">
                 {option.label}

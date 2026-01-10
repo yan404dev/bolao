@@ -17,7 +17,7 @@ export function useRankingTable(roundId?: number, filters?: RankingTableFilterPa
     id: roundDetails.id,
     title: roundDetails.title,
     status: roundDetails.status === "OPEN" ? "open" : "closed",
-    startTime: dayjs(roundDetails.startDate).format("DD/MM/YYYY [at] HH:mm"),
+    startTime: dayjs(roundDetails.startDate).format("DD/MM/YYYY [às] HH:mm"),
   } : null;
 
   const rankingResults: ResultEntity<RankingItemEntity> = rankingData || {

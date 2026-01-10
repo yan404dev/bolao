@@ -25,7 +25,7 @@ export function BettingModalSuccess({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="BOOOOORA! APOSTA CONFIRMADA 🚀">
       <div className="p-8 text-center space-y-8 bg-white">
-        <div className="w-24 h-24 bg-yellow-400 border-4 border-black mx-auto flex items-center justify-center brutalist-shadow rotate-3 shadow-black">
+        <div className="w-24 h-24 bg-yellow-400 border border-black mx-auto flex items-center justify-center rotate-3">
           <Trophy className="w-12 h-12 text-black" />
         </div>
 
@@ -38,13 +38,13 @@ export function BettingModalSuccess({
           </p>
         </div>
 
-        <div className="bg-black border-4 border-black p-6 brutalist-shadow-yellow transform -rotate-1">
+        <div className="bg-black border border-black p-6 transform -rotate-1">
           <p className="text-xs font-black text-yellow-400 uppercase tracking-widest mb-3">SEU CÓDIGO DO BILHETE</p>
-          <div className="flex items-center justify-center gap-4 bg-white border-2 border-black p-4">
+          <div className="flex items-center justify-center gap-4 bg-white border border-black p-4">
             <span className="text-4xl font-black text-black font-mono tracking-tighter">{betResult.ticketCode}</span>
             <button
               onClick={onCopyTicket}
-              className="p-3 bg-yellow-400 border-2 border-black hover:bg-black hover:text-white transition-all active:scale-90"
+              className="p-3 bg-yellow-400 border border-black hover:bg-black hover:text-white transition-all active:scale-90"
               title="Copiar Código"
             >
               {copied ? <CheckCircle className="w-6 h-6" /> : <Copy className="w-6 h-6" />}
@@ -57,7 +57,7 @@ export function BettingModalSuccess({
 
         <Button
           onClick={onClose}
-          className="w-full h-16 text-2xl font-black uppercase italic tracking-tighter bg-black text-white border-4 border-black brutalist-shadow-yellow hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
+          className="w-full h-16 text-2xl font-black uppercase italic tracking-tighter bg-black text-white border border-black hover:bg-yellow-400 hover:text-black transition-all rounded-none"
         >
           FECHAR E ACOMPANHAR
         </Button>

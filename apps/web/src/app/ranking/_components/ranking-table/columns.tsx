@@ -5,9 +5,9 @@ import { BettorEntity } from "@/shared/entities";
 
 const getMedal = (position: number) => {
   switch (position) {
-    case 1: return <div className="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center border-2 border-black font-black text-xs">01</div>;
-    case 2: return <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center border-2 border-black font-black text-xs">02</div>;
-    case 3: return <div className="w-8 h-8 rounded-full bg-orange-200 flex items-center justify-center border-2 border-black font-black text-xs">03</div>;
+    case 1: return <div className="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center border border-black font-black text-xs">01</div>;
+    case 2: return <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center border border-black font-black text-xs">02</div>;
+    case 3: return <div className="w-8 h-8 rounded-full bg-orange-200 flex items-center justify-center border border-black font-black text-xs">03</div>;
     default: return null;
   }
 };
@@ -45,7 +45,7 @@ export const columns: ColumnDef<BettorEntity>[] = [
     cell: ({ row }) => {
       return (
         <div className="text-center">
-          <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 border border-gray-100 px-2 py-0.5 rounded">
+          <span className="text-[10px] font-black uppercase tracking-widest text-[#FFF] bg-[#000] px-3 py-1 rounded-none border border-black">
             {row.original.ticketCode}
           </span>
         </div>

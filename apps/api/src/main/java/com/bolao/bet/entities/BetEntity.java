@@ -37,6 +37,9 @@ public class BetEntity {
   @Column(name = "created_at")
   private LocalDateTime createdAt;
 
+  @Enumerated(EnumType.STRING)
+  private Bet.PaymentStatus status;
+
   @OneToMany(mappedBy = "bet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @Builder.Default
   private List<PredictionEntity> predictions = new ArrayList<>();

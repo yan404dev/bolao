@@ -13,6 +13,7 @@ export interface RoundEntity {
   endDate: string | null;
   totalTickets: number;
   prizePool: number;
+  ticketPrice: number;
   matches: MatchEntity[];
   createdAt: string;
 }

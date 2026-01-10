@@ -16,7 +16,8 @@ public interface JpaBetRepository extends JpaRepository<BetEntity, Long>, JpaSpe
   @Query("SELECT b FROM BetEntity b WHERE b.roundId = :roundId " +
       "AND (:search IS NULL OR LOWER(b.name) LIKE LOWER(CAST(CONCAT('%', :search, '%') AS string)) " +
       "OR LOWER(b.ticketCode) LIKE LOWER(CAST(CONCAT('%', :search, '%') AS string))) " +
-      "AND (:minPoints IS NULL OR b.points >= :minPoints)")
+      "AND (:minPoints IS NULL OR b.points >= :minPoints) " +
+      "AND b.status = 'PAID'")
   Page<BetEntity> findByRoundIdWithFilters(
       @Param("roundId") Long roundId,
       @Param("search") String search,

@@ -49,12 +49,24 @@ export function RoundHeader({ roundId }: RoundHeaderProps) {
         </div>
 
         <div className="flex flex-col items-start md:items-end">
-          <span className="text-[10px] font-black uppercase tracking-widest text-black/50 mb-1">Prêmio Acumulado</span>
-          <p className="text-3xl font-black text-yellow-500 italic tracking-tighter">
-            {formatCurrency(round.prizePool || 0)}
-          </p>
-          <div className="mt-2 text-[10px] font-black uppercase tracking-widest text-black bg-yellow-400 px-3 py-1 border border-black italic">
-            {round.totalTickets} Apostas
+          <div className="flex flex-col items-end gap-1 mb-2">
+            <span className="text-[10px] font-black uppercase tracking-widest text-black/50 mb-1">
+              {round.ticketPrice && round.ticketPrice > 10 ? "Prêmio Acumulado" : "Prêmio da Rodada"}
+            </span>
+            <p className="text-3xl font-black text-yellow-500 italic tracking-tighter">
+              {formatCurrency(round.prizePool || 0)}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            {round.ticketPrice && round.ticketPrice > 10 && (
+              <div className="text-[10px] font-black uppercase tracking-widest text-white bg-black px-3 py-1 border border-black italic animate-bounce">
+                ★ PRÊMIO DOBRADO
+              </div>
+            )}
+            <div className="text-[10px] font-black uppercase tracking-widest text-black bg-yellow-400 px-3 py-1 border border-black italic">
+              {round.totalTickets} Apostas
+            </div>
           </div>
         </div>
       </div>

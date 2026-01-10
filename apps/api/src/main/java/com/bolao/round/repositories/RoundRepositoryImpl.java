@@ -110,4 +110,11 @@ public class RoundRepositoryImpl implements RoundRepository {
         .map(roundMapper::toDomain)
         .toList();
   }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Optional<Round> findPreviousRound(java.time.LocalDateTime date) {
+    return jpaRepository.findFirstByStartDateBeforeOrderByStartDateDesc(date)
+        .map(roundMapper::toDomain);
+  }
 }

@@ -32,7 +32,14 @@ public class Round {
   private List<Match> matches;
 
   public boolean isOpen() {
-    return status == Status.OPEN;
+    boolean isStatusOpen = status == Status.OPEN;
+    if (!isStatusOpen)
+      return false;
+
+    if (startDate == null)
+      return true;
+
+    return LocalDateTime.now().isBefore(startDate.minusMinutes(1));
   }
 
   public String getFormattedPrizePool() {

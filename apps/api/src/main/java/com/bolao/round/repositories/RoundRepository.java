@@ -10,4 +10,6 @@ public interface RoundRepository extends BaseRepository<Round, Long> {
   Optional<Round> findByExternalRoundId(String externalRoundId);
 
   List<Round> findByStatus(Round.Status status);
+
+  Optional<Round> findPreviousRound(java.time.LocalDateTime date);
 }

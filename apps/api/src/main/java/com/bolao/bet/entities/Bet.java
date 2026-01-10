@@ -13,6 +13,10 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Bet {
+  public enum PaymentStatus {
+    PENDING, PAID, CANCELLED
+  }
+
   private Long id;
   private Long roundId;
   private String ticketCode;
@@ -20,5 +24,6 @@ public class Bet {
   private String phone;
   private Map<Long, Prediction> predictions;
   private Integer points;
+  private PaymentStatus status;
   private LocalDateTime createdAt;
 }

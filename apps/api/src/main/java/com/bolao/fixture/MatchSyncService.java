@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bolao.round.services.RoundPricingService;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -21,6 +23,7 @@ public class MatchSyncService {
   private final ExternalMatchProvider matchProvider;
   private final MatchRepository matchRepository;
   private final RoundRepository roundRepository;
+  private final RoundPricingService pricingService;
 
   public List<Match> fetchAndSyncMatches(Long roundId, String externalRoundId) {
     log.info("Requesting match sync for external round: {} (local id: {})", externalRoundId, roundId);
@@ -57,6 +60,8 @@ public class MatchSyncService {
 
       Round.Status roundStatus = determineRoundStatus(matches);
 
+      double ticketPrice = pricingService.calculateInitialTicketPrice(matches.get(0).getKickoffTime());
+
       Round round = Round.builder()
           .title(matchProvider.getChampionshipName() + " - " + extId)
           .externalRoundId(extId)
@@ -65,7 +70,7 @@ public class MatchSyncService {
           .status(roundStatus)
           .prizePool(0.0)
           .totalTickets(0)
-          .ticketPrice(10.0)
+          .ticketPrice(ticketPrice)
           .startDate(matches.get(0).getKickoffTime())
           .endDate(findLatestKickoff(matches))
           .createdAt(LocalDateTime.now())

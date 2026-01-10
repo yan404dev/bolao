@@ -52,6 +52,7 @@ public class BetService {
         .ticketCode(ticketCode)
         .predictions(predictions)
         .points(0)
+        .status(Bet.PaymentStatus.PENDING)
         .createdAt(LocalDateTime.now())
         .build();
 

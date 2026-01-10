@@ -11,4 +11,6 @@ public interface JpaRoundRepository extends JpaRepository<RoundEntity, Long>, Jp
   Optional<RoundEntity> findByExternalRoundId(String externalRoundId);
 
   List<RoundEntity> findByStatus(RoundEntity.Status status);
+
+  Optional<RoundEntity> findFirstByStartDateBeforeOrderByStartDateDesc(java.time.LocalDateTime date);
 }

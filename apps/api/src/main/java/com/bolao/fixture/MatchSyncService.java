@@ -8,10 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Serviço orquestrador para sincronização de partidas com provedores externos.
- * Atua como uma fachada para a camada de integração.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -20,10 +16,6 @@ public class MatchSyncService {
   private final List<ExternalMatchProvider> providers;
   private final MatchRepository matchRepository;
 
-  /**
-   * Busca partidas de uma rodada externa usando o provedor configurado e as
-   * persiste localmente.
-   */
   public List<Match> fetchAndSyncMatches(Long roundId, String externalRoundId) {
     log.info("Requesting match sync for external round: {} (local id: {})", externalRoundId, roundId);
 
@@ -43,9 +35,6 @@ public class MatchSyncService {
     return externalMatches;
   }
 
-  /**
-   * Busca todas as rodadas disponíveis nos provedores configurados.
-   */
   public List<String> fetchAvailableRounds() {
     return providers.stream()
         .filter(p -> p.getProviderName().equals("api-football"))
@@ -54,10 +43,6 @@ public class MatchSyncService {
         .orElse(List.of());
   }
 
-  /**
-   * Atualiza placares ao vivo de jogos em andamento pesquisando em todos os
-   * provedores.
-   */
   public void syncLiveScores() {
     log.info("Starting live scores sync");
 
@@ -67,8 +52,7 @@ public class MatchSyncService {
         continue;
 
       for (Match liveMatch : liveMatches) {
-        // Tenta encontrar a partida local pelo ID externo (que é o ID da partida no
-        // provedor)
+
         matchRepository.findById(liveMatch.getId()).ifPresent(localMatch -> {
           log.info("Updating score for match {}: {} x {}", localMatch.getId(), liveMatch.getHomeScore(),
               liveMatch.getAwayScore());

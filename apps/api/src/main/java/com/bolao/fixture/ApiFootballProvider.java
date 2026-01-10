@@ -21,7 +21,7 @@ public class ApiFootballProvider implements ExternalMatchProvider {
 
   private final RestClient apiFootballClient;
 
-  @Value("${api-football.league-id:71}") // Default: Brasileirão Série A
+  @Value("${api-football.league-id:71}")
   private Integer leagueId;
 
   @Value("${api-football.season:2026}")

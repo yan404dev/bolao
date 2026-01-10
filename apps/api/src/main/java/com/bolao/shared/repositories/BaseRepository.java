@@ -7,10 +7,6 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * @param <T>  the domain entity type
- * @param <ID> the type of the entity's identifier
- */
 public interface BaseRepository<T, ID> {
 
   T save(T entity);

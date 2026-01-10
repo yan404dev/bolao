@@ -13,7 +13,7 @@ public class FixtureService {
   private final MatchSyncService matchSyncService;
 
   public List<Match> getFixtures(String roundId) {
-    return matchSyncService.fetchAndSyncMatches(null, roundId); // null roundId as it's just fetching for
-                                                                // display/selection
+    return matchSyncService.fetchAndSyncMatches(null, roundId);
+
   }
 }

@@ -178,7 +178,7 @@ public class RoundService {
     long ticketCount = betRepository.countByRoundId(roundId);
 
     double totalRevenue = ticketCount * (round.getTicketPrice() != null ? round.getTicketPrice() : 0.0);
-    double prizePool = totalRevenue * 0.6; // 60% for the players
+    double prizePool = totalRevenue * 0.6;
 
     round.setTotalTickets((int) ticketCount);
     round.setPrizePool(prizePool);

@@ -1,0 +1,462 @@
+{
+  "1": [
+    {
+      "id": 1000,
+      "homeTeam": "Fluminense",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/fluminense.svg",
+      "awayTeam": "Grêmio",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/12/gremio.svg",
+      "kickoffTime": "2026-01-28 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 1001,
+      "homeTeam": "Botafogo",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2019/02/04/botafogo-svg.svg",
+      "awayTeam": "Cruzeiro",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2021/02/13/cruzeiro_2021.svg",
+      "kickoffTime": "2026-01-28 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 1002,
+      "homeTeam": "São Paulo",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/sao-paulo.svg",
+      "awayTeam": "Flamengo",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/04/10/Flamengo-2018.svg",
+      "kickoffTime": "2026-01-28 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 1003,
+      "homeTeam": "Corinthians",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2024/10/09/Corinthians_2024_Q4ahot4.svg",
+      "awayTeam": "Bahia",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/bahia.svg",
+      "kickoffTime": "2026-01-28 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 1004,
+      "homeTeam": "Mirassol",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2024/08/20/mirassol-novo-svg-71690.svg",
+      "awayTeam": "Vasco",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2021/09/04/vasco_SVG.svg",
+      "kickoffTime": "2026-01-28 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 1005,
+      "homeTeam": "Atlético-MG",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/10/atletico-mg.svg",
+      "awayTeam": "Palmeiras",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2019/07/06/Palmeiras.svg",
+      "kickoffTime": "2026-01-28 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 1006,
+      "homeTeam": "Internacional",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/internacional.svg",
+      "awayTeam": "Athletico-PR",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2026/01/07/Athletico-PR.svg",
+      "kickoffTime": "2026-01-28 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 1007,
+      "homeTeam": "Coritiba",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/coritiba.svg",
+      "awayTeam": "Bragantino",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2021/06/28/bragantino.svg",
+      "kickoffTime": "2026-01-28 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 1008,
+      "homeTeam": "Vitória",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2025/12/18/Vitoria_2025.svg",
+      "awayTeam": "Remo",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2021/02/25/Remo-PA.svg",
+      "kickoffTime": "2026-01-28 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 1009,
+      "homeTeam": "Chapecoense",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2021/06/21/CHAPECOENSE-2018.svg",
+      "awayTeam": "Santos",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/12/santos.svg",
+      "kickoffTime": "2026-01-28 21:30",
+      "status": "SCHEDULED"
+    }
+  ],
+  "2": [
+    {
+      "id": 2000,
+      "homeTeam": "Flamengo",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/04/10/Flamengo-2018.svg",
+      "awayTeam": "Internacional",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/internacional.svg",
+      "kickoffTime": "2026-02-04 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 2001,
+      "homeTeam": "Vasco",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2021/09/04/vasco_SVG.svg",
+      "awayTeam": "Chapecoense",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2021/06/21/CHAPECOENSE-2018.svg",
+      "kickoffTime": "2026-02-04 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 2002,
+      "homeTeam": "Santos",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/12/santos.svg",
+      "awayTeam": "São Paulo",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/sao-paulo.svg",
+      "kickoffTime": "2026-02-04 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 2003,
+      "homeTeam": "Palmeiras",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2019/07/06/Palmeiras.svg",
+      "awayTeam": "Vitória",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2025/12/18/Vitoria_2025.svg",
+      "kickoffTime": "2026-02-04 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 2004,
+      "homeTeam": "Bragantino",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2021/06/28/bragantino.svg",
+      "awayTeam": "Atlético-MG",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/10/atletico-mg.svg",
+      "kickoffTime": "2026-02-04 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 2005,
+      "homeTeam": "Cruzeiro",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2021/02/13/cruzeiro_2021.svg",
+      "awayTeam": "Coritiba",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/coritiba.svg",
+      "kickoffTime": "2026-02-04 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 2006,
+      "homeTeam": "Grêmio",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/12/gremio.svg",
+      "awayTeam": "Botafogo",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2019/02/04/botafogo-svg.svg",
+      "kickoffTime": "2026-02-04 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 2007,
+      "homeTeam": "Athletico-PR",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2026/01/07/Athletico-PR.svg",
+      "awayTeam": "Corinthians",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2024/10/09/Corinthians_2024_Q4ahot4.svg",
+      "kickoffTime": "2026-02-04 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 2008,
+      "homeTeam": "Bahia",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/bahia.svg",
+      "awayTeam": "Fluminense",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/fluminense.svg",
+      "kickoffTime": "2026-02-04 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 2009,
+      "homeTeam": "Remo",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2021/02/25/Remo-PA.svg",
+      "awayTeam": "Mirassol",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2024/08/20/mirassol-novo-svg-71690.svg",
+      "kickoffTime": "2026-02-04 21:30",
+      "status": "SCHEDULED"
+    }
+  ],
+  "3": [
+    {
+      "id": 3000,
+      "homeTeam": "Fluminense",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/fluminense.svg",
+      "awayTeam": "Botafogo",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2019/02/04/botafogo-svg.svg",
+      "kickoffTime": "2026-02-11 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 3001,
+      "homeTeam": "Vasco",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2021/09/04/vasco_SVG.svg",
+      "awayTeam": "Bahia",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/bahia.svg",
+      "kickoffTime": "2026-02-11 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 3002,
+      "homeTeam": "São Paulo",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/sao-paulo.svg",
+      "awayTeam": "Grêmio",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/12/gremio.svg",
+      "kickoffTime": "2026-02-11 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 3003,
+      "homeTeam": "Corinthians",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2024/10/09/Corinthians_2024_Q4ahot4.svg",
+      "awayTeam": "Bragantino",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2021/06/28/bragantino.svg",
+      "kickoffTime": "2026-02-11 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 3004,
+      "homeTeam": "Mirassol",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2024/08/20/mirassol-novo-svg-71690.svg",
+      "awayTeam": "Cruzeiro",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2021/02/13/cruzeiro_2021.svg",
+      "kickoffTime": "2026-02-11 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 3005,
+      "homeTeam": "Atlético-MG",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/10/atletico-mg.svg",
+      "awayTeam": "Remo",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2021/02/25/Remo-PA.svg",
+      "kickoffTime": "2026-02-11 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 3006,
+      "homeTeam": "Internacional",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/internacional.svg",
+      "awayTeam": "Palmeiras",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2019/07/06/Palmeiras.svg",
+      "kickoffTime": "2026-02-11 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 3007,
+      "homeTeam": "Athletico-PR",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2026/01/07/Athletico-PR.svg",
+      "awayTeam": "Santos",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/12/santos.svg",
+      "kickoffTime": "2026-02-11 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 3008,
+      "homeTeam": "Vitória",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2025/12/18/Vitoria_2025.svg",
+      "awayTeam": "Flamengo",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/04/10/Flamengo-2018.svg",
+      "kickoffTime": "2026-02-11 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 3009,
+      "homeTeam": "Chapecoense",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2021/06/21/CHAPECOENSE-2018.svg",
+      "awayTeam": "Coritiba",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/coritiba.svg",
+      "kickoffTime": "2026-02-11 21:30",
+      "status": "SCHEDULED"
+    }
+  ],
+  "4": [
+    {
+      "id": 4000,
+      "homeTeam": "Flamengo",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/04/10/Flamengo-2018.svg",
+      "awayTeam": "Mirassol",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2024/08/20/mirassol-novo-svg-71690.svg",
+      "kickoffTime": "2026-02-25 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 4001,
+      "homeTeam": "Botafogo",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2019/02/04/botafogo-svg.svg",
+      "awayTeam": "Vitória",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2025/12/18/Vitoria_2025.svg",
+      "kickoffTime": "2026-02-25 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 4002,
+      "homeTeam": "Santos",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/12/santos.svg",
+      "awayTeam": "Vasco",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2021/09/04/vasco_SVG.svg",
+      "kickoffTime": "2026-02-25 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 4003,
+      "homeTeam": "Palmeiras",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2019/07/06/Palmeiras.svg",
+      "awayTeam": "Fluminense",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/fluminense.svg",
+      "kickoffTime": "2026-02-25 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 4004,
+      "homeTeam": "Bragantino",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2021/06/28/bragantino.svg",
+      "awayTeam": "Athletico-PR",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2026/01/07/Athletico-PR.svg",
+      "kickoffTime": "2026-02-25 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 4005,
+      "homeTeam": "Cruzeiro",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2021/02/13/cruzeiro_2021.svg",
+      "awayTeam": "Corinthians",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2024/10/09/Corinthians_2024_Q4ahot4.svg",
+      "kickoffTime": "2026-02-25 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 4006,
+      "homeTeam": "Grêmio",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/12/gremio.svg",
+      "awayTeam": "Atlético-MG",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/10/atletico-mg.svg",
+      "kickoffTime": "2026-02-25 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 4007,
+      "homeTeam": "Coritiba",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/coritiba.svg",
+      "awayTeam": "São Paulo",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/sao-paulo.svg",
+      "kickoffTime": "2026-02-25 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 4008,
+      "homeTeam": "Bahia",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/bahia.svg",
+      "awayTeam": "Chapecoense",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2021/06/21/CHAPECOENSE-2018.svg",
+      "kickoffTime": "2026-02-25 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 4009,
+      "homeTeam": "Remo",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/internacional.svg",
+      "awayTeam": "Internacional",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/internacional.svg",
+      "kickoffTime": "2026-02-25 21:30",
+      "status": "SCHEDULED"
+    }
+  ],
+  "5": [
+    {
+      "id": 5000,
+      "homeTeam": "Flamengo",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/04/10/Flamengo-2018.svg",
+      "awayTeam": "Cruzeiro",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2021/02/13/cruzeiro_2021.svg",
+      "kickoffTime": "2026-03-11 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 5001,
+      "homeTeam": "Vasco",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2021/09/04/vasco_SVG.svg",
+      "awayTeam": "Palmeiras",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2019/07/06/Palmeiras.svg",
+      "kickoffTime": "2026-03-11 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 5002,
+      "homeTeam": "São Paulo",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/sao-paulo.svg",
+      "awayTeam": "Chapecoense",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2021/06/21/CHAPECOENSE-2018.svg",
+      "kickoffTime": "2026-03-11 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 5003,
+      "homeTeam": "Corinthians",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2024/10/09/Corinthians_2024_Q4ahot4.svg",
+      "awayTeam": "Coritiba",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/coritiba.svg",
+      "kickoffTime": "2026-03-11 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 5004,
+      "homeTeam": "Mirassol",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2024/08/20/mirassol-novo-svg-71690.svg",
+      "awayTeam": "Santos",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/12/santos.svg",
+      "kickoffTime": "2026-03-11 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 5005,
+      "homeTeam": "Atlético-MG",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/10/atletico-mg.svg",
+      "awayTeam": "Internacional",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/internacional.svg",
+      "kickoffTime": "2026-03-11 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 5006,
+      "homeTeam": "Grêmio",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/12/gremio.svg",
+      "awayTeam": "Bragantino",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2021/06/28/bragantino.svg",
+      "kickoffTime": "2026-03-11 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 5007,
+      "homeTeam": "Athletico-PR",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2026/01/07/Athletico-PR.svg",
+      "awayTeam": "Botafogo",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2019/02/04/botafogo-svg.svg",
+      "kickoffTime": "2026-03-11 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 5008,
+      "homeTeam": "Bahia",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/bahia.svg",
+      "awayTeam": "Vitória",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2025/12/18/Vitoria_2025.svg",
+      "kickoffTime": "2026-03-11 21:30",
+      "status": "SCHEDULED"
+    },
+    {
+      "id": 5009,
+      "homeTeam": "Remo",
+      "homeTeamLogo": "https://s.sde.globo.com/media/organizations/2021/02/25/Remo-PA.svg",
+      "awayTeam": "Fluminense",
+      "awayTeamLogo": "https://s.sde.globo.com/media/organizations/2018/03/11/fluminense.svg",
+      "kickoffTime": "2026-03-11 21:30",
+      "status": "SCHEDULED"
+    }
+  ]
+}

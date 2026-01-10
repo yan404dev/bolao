@@ -1,7 +1,6 @@
-import { RoundHeader, RoundKpis, RoundMatches, RoundRanking } from "./_components";
-import { TickerBanner } from "@/shared/components/ticker-banner";
-import { ChevronLeft, Zap } from "lucide-react";
-import Link from "next/link";
+import { RoundHeader, RoundKpis, RoundMatches, RoundRanking, StandingsTable } from "./_components";
+import { TickerBanner, BackButton } from "@/shared/components";
+import { Zap } from "lucide-react";
 
 interface RoundPageProps {
   params: Promise<{ id: string }>;
@@ -15,21 +14,20 @@ export default async function RoundPage({ params }: RoundPageProps) {
     <main className="min-h-screen bg-white pb-12">
       <TickerBanner />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 text-black">
-        <div className="mb-12 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <Link
-              href="/"
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors border border-transparent hover:border-black"
-            >
-              <ChevronLeft className="w-6 h-6 text-black" />
-            </Link>
-            <div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase italic tracking-tighter text-gray-900 leading-none flex items-center gap-3">
-                <Zap className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-yellow-500" />
-                Rodada <span className="text-yellow-400">#{id}</span>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8 text-black">
+        <div className="mb-8 sm:mb-12 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <div className="flex items-start sm:items-center gap-3 sm:gap-4">
+            <div className="mt-1 sm:mt-0">
+              <BackButton />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black uppercase italic tracking-tighter text-gray-900 leading-tight sm:leading-none flex flex-wrap items-center gap-2 sm:gap-3">
+                <Zap className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-yellow-500 shrink-0" />
+                Rodada <span className="text-yellow-400 whitespace-nowrap">#{id}</span>
               </h1>
-              <p className="text-gray-500 font-bold uppercase tracking-widest text-xs mt-2 ml-1">Detalhes e classificação da rodada</p>
+              <p className="text-gray-500 font-bold uppercase tracking-widest text-[10px] sm:text-xs mt-1 sm:mt-2 ml-0 sm:ml-1 line-clamp-1 sm:line-clamp-none">
+                Detalhes e classificação
+              </p>
             </div>
           </div>
         </div>
@@ -42,8 +40,13 @@ export default async function RoundPage({ params }: RoundPageProps) {
               <RoundMatches roundId={roundId} />
             </div>
             <div className="lg:col-span-4 space-y-12">
-              <RoundKpis roundId={roundId} />
-              <RoundRanking roundId={roundId} />
+              <div className="sticky top-24">
+                <StandingsTable />
+                <div className="mt-12 space-y-12">
+                  <RoundKpis roundId={roundId} />
+                  <RoundRanking roundId={roundId} />
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -32,6 +32,12 @@ public class RoundService {
   private final MatchSyncService matchSyncService;
   private final ScoreCalculator scoreCalculator;
 
+  @jakarta.annotation.PostConstruct
+  public void init() {
+    log.info("System startup: Triggering matches seed from scraper...");
+    matchSyncService.seedRoundsFromScraper();
+  }
+
   @Transactional
   public Round create(String title, String externalRoundId, Double ticketPrice) {
     List<Match> matches = matchSyncService.fetchAndSyncMatches(null, externalRoundId);

@@ -1,77 +1,52 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { calendarService } from "./calendar.service";
-import { TickerBanner } from "@/shared/components/ticker-banner";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { TickerBanner, BackButton } from "@/shared/components";
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { Calendar, Trophy, ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { Calendar, Trophy } from "lucide-react";
+import { RoundCard } from "./_components";
+import { useCalendar } from "./_hooks/use-calendar";
 
 export default function CalendarPage() {
-  const { data: rounds, isLoading } = useQuery({
-    queryKey: ["calendar"],
-    queryFn: calendarService.getCalendar,
-  });
+  const { data: rounds, isLoading } = useCalendar();
 
   return (
-    <main className="min-h-screen bg-gray-50 pb-12">
+    <main className="min-h-screen bg-gray-50 pb-12 text-black">
       <TickerBanner />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8">
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <Link
-              href="/"
-              className="p-2 hover:bg-white rounded-full transition-colors border border-transparent hover:border-gray-200"
-            >
-              <ArrowLeft className="w-6 h-6 text-gray-700" />
-            </Link>
-            <div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase italic tracking-tight text-gray-900 leading-none flex items-center gap-3">
-                <Calendar className="w-8 h-8 md:w-10 md:h-10 text-yellow-500" />
-                Calendário <span className="text-yellow-400">Brasileirão 2026</span>
+          <div className="flex items-start sm:items-center gap-3 sm:gap-4">
+            <div className="mt-1 sm:mt-0">
+              <BackButton />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h1 className="text-xl sm:text-3xl md:text-4xl font-black uppercase italic tracking-tight text-black leading-tight sm:leading-none flex flex-wrap items-center gap-2 sm:gap-3">
+                <Calendar className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-yellow-500 shrink-0" />
+                <span className="truncate sm:whitespace-normal">Calendário</span>
+                <span className="text-yellow-400 whitespace-nowrap sm:whitespace-normal">Brasileirão 2026</span>
               </h1>
-              <p className="text-gray-500 font-medium ml-1">Acompanhe todas as 38 rodadas da temporada</p>
+              <p className="text-gray-500 font-bold uppercase tracking-widest text-[10px] sm:text-xs mt-1 sm:mt-2 ml-0 sm:ml-1 line-clamp-1 sm:line-clamp-none">
+                38 rodadas da temporada
+              </p>
             </div>
           </div>
 
-          <div className="hidden md:flex bg-yellow-50 px-4 py-2 rounded-lg border border-yellow-200 items-center gap-2">
-            <Trophy className="w-5 h-5 text-yellow-600" />
-            <span className="text-yellow-800 font-bold uppercase text-sm tracking-wider">Cobertura Oficial</span>
+          <div className="hidden md:flex bg-yellow-400 border-2 border-black px-4 py-2 rounded-none items-center gap-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <Trophy className="w-5 h-5 text-black" />
+            <span className="text-black font-black uppercase text-sm tracking-wider italic">Cobertura Oficial</span>
           </div>
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {Array.from({ length: 12 }).map((_, i) => (
-              <Skeleton key={i} className="h-24 w-full rounded-xl border border-dashed border-gray-200" />
+              <Skeleton key={i} className="h-64 w-full rounded-none border-4 border-black bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]" />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {rounds?.map((round, index) => (
-              <Card
-                key={round}
-                className="group relative overflow-hidden border border-transparent hover:border-yellow-400 transition-all duration-300 shadow-sm hover:shadow-xl bg-white"
-              >
-                <div className="absolute top-0 right-0 p-3 opacity-5 group-hover:opacity-20 transition-opacity">
-                  <span className="text-6xl font-black italic">{index + 1}</span>
-                </div>
-
-                <CardHeader className="pb-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-widest text-yellow-600">Rodada {index + 1}</span>
-                  </div>
-                  <CardTitle className="text-lg font-black uppercase italic text-gray-800 line-clamp-1">
-                    {round.replace("Regular Season - ", "Rodada ")}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-1 w-12 bg-gray-200 group-hover:bg-yellow-400 transition-colors mb-4" />
-                  <p className="text-sm text-gray-500 font-medium">Jogos integrados em tempo real</p>
-                </CardContent>
-              </Card>
+              <RoundCard key={round.id} round={round} index={index} />
             ))}
           </div>
         )}

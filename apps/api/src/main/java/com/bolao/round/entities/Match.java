@@ -24,6 +24,7 @@ public class Match {
   private String awayTeam;
   private String awayTeamLogo;
   private Integer awayScore;
+  @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm")
   private LocalDateTime kickoffTime;
   private Status status;
 

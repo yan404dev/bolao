@@ -1,31 +1,33 @@
 package com.bolao.fixture;
 
 import com.bolao.round.entities.Match;
+import com.bolao.round.entities.Round;
 import com.bolao.round.repositories.MatchRepository;
+import com.bolao.round.repositories.RoundRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MatchSyncService {
 
-  private final List<ExternalMatchProvider> providers;
+  private final ScraperMatchProvider scraperProvider;
   private final MatchRepository matchRepository;
+  private final RoundRepository roundRepository;
 
   public List<Match> fetchAndSyncMatches(Long roundId, String externalRoundId) {
     log.info("Requesting match sync for external round: {} (local id: {})", externalRoundId, roundId);
 
-    List<Match> externalMatches = providers.stream()
-        .filter(p -> p.getProviderName().equals("api-football"))
-        .findFirst()
-        .map(p -> p.fetchMatchesByRound(externalRoundId))
-        .orElseThrow(() -> new IllegalStateException("Nenhum provedor de dados configurado"));
+    List<Match> externalMatches = scraperProvider.fetchMatchesByRound(externalRoundId);
 
-    if (roundId != null) {
+    if (roundId != null && !externalMatches.isEmpty()) {
       for (Match match : externalMatches) {
         match.setRoundId(roundId);
         matchRepository.save(match);
@@ -35,33 +37,49 @@ public class MatchSyncService {
     return externalMatches;
   }
 
+  @Transactional
+  public void seedRoundsFromScraper() {
+    log.info("Starting database seed from scraper fixtures...");
+    List<String> availableRounds = scraperProvider.fetchAvailableRounds();
+
+    for (String extId : availableRounds) {
+      if (roundRepository.findByExternalRoundId(extId).isPresent()) {
+        log.debug("Round {} already exists in DB, skipping seed", extId);
+        continue;
+      }
+
+      log.info("Seeding Round {} from scraper...", extId);
+      List<Match> matches = scraperProvider.fetchMatchesByRound(extId);
+
+      if (matches.isEmpty())
+        continue;
+
+      Round round = Round.builder()
+          .title("Brasileirão 2026 - Rodada " + extId)
+          .externalRoundId(extId)
+          .status(Round.Status.OPEN)
+          .prizePool(0.0)
+          .totalTickets(0)
+          .ticketPrice(10.0)
+          .startDate(LocalDateTime.now())
+          .createdAt(LocalDateTime.now())
+          .build();
+
+      round = roundRepository.save(round);
+
+      for (Match match : matches) {
+        match.setRoundId(round.getId());
+        matchRepository.save(match);
+      }
+      log.info("Round {} and {} matches successfully seeded", extId, matches.size());
+    }
+  }
+
   public List<String> fetchAvailableRounds() {
-    return providers.stream()
-        .filter(p -> p.getProviderName().equals("api-football"))
-        .findFirst()
-        .map(ExternalMatchProvider::fetchAvailableRounds)
-        .orElse(List.of());
+    return scraperProvider.fetchAvailableRounds();
   }
 
   public void syncLiveScores() {
-    log.info("Starting live scores sync");
-
-    for (ExternalMatchProvider provider : providers) {
-      List<Match> liveMatches = provider.fetchLiveScores();
-      if (liveMatches.isEmpty())
-        continue;
-
-      for (Match liveMatch : liveMatches) {
-
-        matchRepository.findById(liveMatch.getId()).ifPresent(localMatch -> {
-          log.info("Updating score for match {}: {} x {}", localMatch.getId(), liveMatch.getHomeScore(),
-              liveMatch.getAwayScore());
-          localMatch.setHomeScore(liveMatch.getHomeScore());
-          localMatch.setAwayScore(liveMatch.getAwayScore());
-          localMatch.setStatus(liveMatch.getStatus());
-          matchRepository.save(localMatch);
-        });
-      }
-    }
+    log.info("Live scores sync skipped (no providers configured)");
   }
 }

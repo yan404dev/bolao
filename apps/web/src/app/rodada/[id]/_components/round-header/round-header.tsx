@@ -1,6 +1,7 @@
 "use client";
 
 import { useRoundQueries } from "@/app/rodada/[id]/hooks";
+import { roundStatusStyles, roundStatusLabels } from "@/shared/constants";
 import { formatCurrency } from "@/shared/lib/utils";
 import dayjs from "dayjs";
 
@@ -23,25 +24,21 @@ export function RoundHeader({ roundId }: RoundHeaderProps) {
 
   if (!round) return null;
 
-  const statusStyles: Record<string, string> = {
-    OPEN: "bg-yellow-400 text-black",
-    LIVE: "bg-red-600 text-white animate-pulse",
-    CLOSED: "bg-gray-900 text-white",
-  };
-
-  const statusLabels: Record<string, string> = {
-    OPEN: "ABERTA",
-    LIVE: "AO VIVO",
-    CLOSED: "ENCERRADA",
-  };
-
   return (
     <div className="brutalist-card p-8 border-l-2 border-l-yellow-400 bg-white">
       <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
-        <div>
-          <span className={`inline-block px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] mb-4 ${statusStyles[round.status] || statusStyles.CLOSED}`}>
-            {statusLabels[round.status] || "ENCERRADA"}
-          </span>
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-4">
+            <span className={`px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] ${roundStatusStyles[round.status] || roundStatusStyles.CLOSED}`}>
+              {roundStatusLabels[round.status] || "ENCERRADA"}
+            </span>
+            {round.championshipLogo && (
+              <img src={round.championshipLogo} alt={round.championshipTitle} className="w-6 h-6 object-contain grayscale brightness-0" />
+            )}
+            <span className="text-[10px] font-black uppercase tracking-widest text-black/40 italic">
+              {round.championshipTitle}
+            </span>
+          </div>
           <h1 className="text-4xl font-black uppercase italic tracking-tighter text-gray-900 leading-none">
             {round.title}
           </h1>

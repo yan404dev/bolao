@@ -20,7 +20,7 @@ export default function RankingPage() {
                 Ranking <span className="text-yellow-400">Geral</span>
               </h1>
               <p className="text-gray-500 font-bold uppercase tracking-widest text-[10px] sm:text-xs mt-1 sm:mt-2 ml-0 sm:ml-1 line-clamp-1 sm:line-clamp-none">
-                Líderes da rodada atual
+                Acompanhe os líderes da temporada
               </p>
             </div>
           </div>

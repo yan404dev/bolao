@@ -34,8 +34,12 @@ public class RoundService {
 
   @jakarta.annotation.PostConstruct
   public void init() {
-    log.info("System startup: Triggering matches seed from scraper...");
-    matchSyncService.seedRoundsFromScraper();
+    log.info("System startup: Triggering matches sync from provider...");
+    matchSyncService.syncAllRounds();
+  }
+
+  public List<Round> syncAllRounds() {
+    return matchSyncService.syncAllRounds();
   }
 
   @Transactional
@@ -184,7 +188,7 @@ public class RoundService {
     long ticketCount = betRepository.countByRoundId(roundId);
 
     double totalRevenue = ticketCount * (round.getTicketPrice() != null ? round.getTicketPrice() : 0.0);
-    double prizePool = totalRevenue * 0.6;
+    double prizePool = totalRevenue * 0.8;
 
     round.setTotalTickets((int) ticketCount);
     round.setPrizePool(prizePool);

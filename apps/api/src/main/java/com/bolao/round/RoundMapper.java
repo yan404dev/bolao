@@ -27,6 +27,8 @@ public class RoundMapper {
         .prizePool(entity.getPrizePool())
         .ticketPrice(entity.getTicketPrice())
         .createdAt(entity.getCreatedAt())
+        .championshipTitle(entity.getChampionshipTitle())
+        .championshipLogo(entity.getChampionshipLogo())
         .matches(matches)
         .build();
   }
@@ -58,6 +60,8 @@ public class RoundMapper {
         .prizePool(round.getPrizePool())
         .ticketPrice(round.getTicketPrice())
         .createdAt(round.getCreatedAt())
+        .championshipTitle(round.getChampionshipTitle())
+        .championshipLogo(round.getChampionshipLogo())
         .build();
   }
 

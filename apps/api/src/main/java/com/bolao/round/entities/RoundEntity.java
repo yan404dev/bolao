@@ -27,6 +27,12 @@ public class RoundEntity {
   @Column(name = "external_round_id")
   private String externalRoundId;
 
+  @Column(name = "championship_title")
+  private String championshipTitle;
+
+  @Column(name = "championship_logo")
+  private String championshipLogo;
+
   @Enumerated(EnumType.STRING)
   private Status status;
 

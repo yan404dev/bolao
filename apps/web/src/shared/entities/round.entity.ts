@@ -6,6 +6,8 @@ export interface RoundEntity {
   id: number;
   title: string;
   externalRoundId: string;
+  championshipTitle?: string;
+  championshipLogo?: string;
   status: RoundStatus;
   startDate: string;
   endDate: string | null;

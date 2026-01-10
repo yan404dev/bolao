@@ -14,12 +14,14 @@ import java.util.List;
 @AllArgsConstructor
 public class Round {
   public enum Status {
-    OPEN, CLOSED, CALCULATED, CANCELLED
+    OPEN, LIVE, CLOSED, CALCULATED, CANCELLED
   }
 
   private Long id;
   private String title;
   private String externalRoundId;
+  private String championshipTitle;
+  private String championshipLogo;
   private Status status;
   private LocalDateTime startDate;
   private LocalDateTime endDate;

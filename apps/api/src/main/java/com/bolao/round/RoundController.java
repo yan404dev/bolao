@@ -34,6 +34,16 @@ public class RoundController {
     return ResponseEntity.ok(ApiResponse.ok(roundService.findAll(status)));
   }
 
+  @PostMapping("/sync")
+  public ResponseEntity<ApiResponse<List<Round>>> syncAll() {
+    return ResponseEntity.ok(ApiResponse.ok(roundService.syncAllRounds()));
+  }
+
+  @GetMapping("/calendar")
+  public ResponseEntity<ApiResponse<List<String>>> getCalendar() {
+    return ResponseEntity.ok(ApiResponse.ok(roundService.getExternalCalendar()));
+  }
+
   @GetMapping("/{id}")
   public ResponseEntity<ApiResponse<Round>> findById(@PathVariable Long id) {
     return ResponseEntity.ok(ApiResponse.ok(roundService.findById(id)));
@@ -55,10 +65,5 @@ public class RoundController {
     Round round = roundService.findById(id);
     roundService.calculateScores(id, round.getExternalRoundId());
     return ResponseEntity.ok(ApiResponse.ok("Scores calculated successfully"));
-  }
-
-  @GetMapping("/calendar")
-  public ResponseEntity<ApiResponse<List<String>>> getCalendar() {
-    return ResponseEntity.ok(ApiResponse.ok(roundService.getExternalCalendar()));
   }
 }

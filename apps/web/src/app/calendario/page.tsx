@@ -23,10 +23,12 @@ export default function CalendarPage() {
               <h1 className="text-xl sm:text-3xl md:text-4xl font-black uppercase italic tracking-tight text-black leading-tight sm:leading-none flex flex-wrap items-center gap-2 sm:gap-3">
                 <Calendar className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-yellow-500 shrink-0" />
                 <span className="truncate sm:whitespace-normal">Calendário</span>
-                <span className="text-yellow-400 whitespace-nowrap sm:whitespace-normal">Brasileirão 2026</span>
+                <span className="text-yellow-400 whitespace-nowrap sm:whitespace-normal">
+                  {rounds?.[0]?.championshipTitle || "Carregando..."}
+                </span>
               </h1>
               <p className="text-gray-500 font-bold uppercase tracking-widest text-[10px] sm:text-xs mt-1 sm:mt-2 ml-0 sm:ml-1 line-clamp-1 sm:line-clamp-none">
-                38 rodadas da temporada
+                {rounds?.length || "38"} rodadas da temporada
               </p>
             </div>
           </div>

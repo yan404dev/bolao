@@ -34,25 +34,28 @@ function DataTablePagination({
   if (totalPages <= 1) return null;
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between p-6 border-t border-black bg-gray-50 gap-6">
-      <div className="text-sm font-black uppercase tracking-widest text-black/40 italic">
-        PÁGINA <span className="text-black">{currentPage + 1}</span> DE{" "}
-        <span className="text-black">{totalPages}</span>
+    <div className="flex items-center justify-between p-4 sm:p-6 border-t border-black bg-gray-50">
+      <div className="text-[10px] sm:text-sm font-black uppercase tracking-widest text-black/40 italic">
+        PG <span className="text-black">{currentPage + 1}</span> / {totalPages}
       </div>
-      <div className="flex items-center gap-3 w-full sm:w-auto">
+      <div className="flex items-center gap-2">
         <Button
-          className="flex-1 sm:flex-none bg-white border border-black text-black font-black uppercase italic text-xs tracking-widest h-12 sm:h-10 px-6 hover:bg-yellow-400 transition-all disabled:opacity-30 disabled:pointer-events-none rounded-none"
+          className="bg-white border border-black text-black h-10 w-10 sm:w-auto sm:px-6 hover:bg-yellow-400 transition-all disabled:opacity-30 disabled:pointer-events-none rounded-none flex items-center justify-center p-0 sm:p-2"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 0 || isLoading}
+          title="Anterior"
         >
-          ANTERIOR
+          <ChevronLeft className="w-5 h-5 sm:mr-2" />
+          <span className="hidden sm:inline font-black uppercase italic text-xs tracking-widest">ANTERIOR</span>
         </Button>
         <Button
-          className="flex-1 sm:flex-none bg-white border border-black text-black font-black uppercase italic text-xs tracking-widest h-12 sm:h-10 px-6 hover:bg-yellow-400 transition-all disabled:opacity-30 disabled:pointer-events-none rounded-none"
+          className="bg-white border border-black text-black h-10 w-10 sm:w-auto sm:px-6 hover:bg-yellow-400 transition-all disabled:opacity-30 disabled:pointer-events-none rounded-none flex items-center justify-center p-0 sm:p-2"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages - 1 || isLoading}
+          title="Próximo"
         >
-          PRÓXIMO
+          <span className="hidden sm:inline font-black uppercase italic text-xs tracking-widest sm:ml-2">PRÓXIMO</span>
+          <ChevronRight className="w-5 h-5 sm:ml-2" />
         </Button>
       </div>
     </div>

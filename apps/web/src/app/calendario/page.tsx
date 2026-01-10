@@ -19,7 +19,7 @@ export default function CalendarPage() {
       <TickerBanner />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
             <Link
               href="/"
@@ -28,8 +28,8 @@ export default function CalendarPage() {
               <ArrowLeft className="w-6 h-6 text-gray-700" />
             </Link>
             <div>
-              <h1 className="text-4xl font-black uppercase italic tracking-tight text-gray-900 leading-none flex items-center gap-3">
-                <Calendar className="w-10 h-10 text-yellow-500" />
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase italic tracking-tight text-gray-900 leading-none flex items-center gap-3">
+                <Calendar className="w-8 h-8 md:w-10 md:h-10 text-yellow-500" />
                 Calendário <span className="text-yellow-400">Brasileirão 2026</span>
               </h1>
               <p className="text-gray-500 font-medium ml-1">Acompanhe todas as 38 rodadas da temporada</p>

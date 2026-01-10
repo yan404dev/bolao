@@ -18,8 +18,8 @@ export default function RegulamentoPage() {
               <ChevronLeft className="w-6 h-6 text-gray-900" />
             </Link>
             <div>
-              <h1 className="text-5xl font-black uppercase italic tracking-tighter text-gray-900 leading-none flex items-center gap-3">
-                <FileText className="w-12 h-12 text-yellow-500" />
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase italic tracking-tighter text-gray-900 leading-none flex items-center gap-3">
+                <FileText className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-yellow-500" />
                 Regulamento <span className="text-yellow-400">Oficial</span>
               </h1>
               <p className="text-gray-500 font-bold uppercase tracking-widest text-xs mt-2 ml-1">Como funciona o nosso bolão</p>

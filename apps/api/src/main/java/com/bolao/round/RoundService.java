@@ -104,7 +104,8 @@ public class RoundService {
 
   @Transactional
   public void calculateScores(Long roundId, String externalRoundId) {
-    scoringService.calculateScores(roundId, externalRoundId);
+    List<Match> matches = matchSyncService.fetchAndSyncMatches(roundId, externalRoundId);
+    scoringService.calculateScores(roundId, matches);
   }
 
   @Transactional

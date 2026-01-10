@@ -35,7 +35,8 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ApiResponse<Void>> handleValidation(MethodArgumentNotValidException e) {
     String message = e.getBindingResult().getFieldErrors().stream()
         .map(err -> err.getField() + ": " + err.getDefaultMessage())
-        .findFirst().orElse("Validation error");
+        .reduce((a, b) -> a + "; " + b)
+        .orElse("Validation error");
     log.warn("Validation error: {}", message);
     return ResponseEntity.badRequest().body(ApiResponse.error(message));
   }

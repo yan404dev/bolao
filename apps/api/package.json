@@ -1,0 +1,10 @@
+{
+  "name": "@bolao/api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "mvn spring-boot:run",
+    "build": "mvn clean package -DskipTests",
+    "compile": "mvn compile"
+  }
+}

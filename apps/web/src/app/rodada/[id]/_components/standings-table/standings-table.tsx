@@ -4,9 +4,17 @@ import { useStandings } from "./hooks";
 import { getPositionStyle } from "@/shared/utils";
 import { Avatar, AvatarImage, AvatarFallback } from "@/shared/components/ui/avatar";
 import { Skeleton } from "@/shared/components/ui/skeleton";
+import { useRoundQueries } from "@/app/rodada/[id]/hooks";
 
-export function StandingsTable() {
-  const { data: standings, isLoading } = useStandings();
+interface StandingsTableProps {
+  roundId: number;
+}
+
+export function StandingsTable({ roundId }: StandingsTableProps) {
+  const { data: standings, isLoading: isLoadingStandings } = useStandings();
+  const { round, isLoading: isLoadingRound } = useRoundQueries(roundId);
+
+  const isLoading = isLoadingStandings || isLoadingRound;
 
   if (isLoading) {
     return (
@@ -23,9 +31,9 @@ export function StandingsTable() {
       <div className="bg-black text-white p-4 font-black uppercase italic text-lg tracking-tighter flex items-center justify-between">
         <span className="flex items-center gap-2">
           <div className="w-3 h-6 bg-yellow-400 -skew-x-12" />
-          Tabela Brasileirão 2026
+          {round?.championshipTitle || "Classificação"}
         </span>
-        <span className="text-yellow-400 bg-white/10 px-2 py-0.5 rounded-sm text-xs">Série A</span>
+        <span className="text-yellow-400 bg-white/10 px-2 py-0.5 rounded-sm text-xs">Principal</span>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm text-left border-collapse">

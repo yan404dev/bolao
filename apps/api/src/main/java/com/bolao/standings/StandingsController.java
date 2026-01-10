@@ -2,6 +2,7 @@ package com.bolao.standings;
 
 import com.bolao.shared.dtos.ApiResponse;
 import com.bolao.standings.dtos.StandingDto;
+import com.bolao.standings.usecases.GetChampionshipStandingsUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +16,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StandingsController {
 
-  private final StandingsService standingsService;
+  private final GetChampionshipStandingsUseCase getChampionshipStandingsUseCase;
 
   @GetMapping
   public ResponseEntity<ApiResponse<List<StandingDto>>> getStandings() {
-    return ResponseEntity.ok(ApiResponse.ok(standingsService.calculateStandings()));
+    return ResponseEntity.ok(ApiResponse.ok(getChampionshipStandingsUseCase.execute()));
   }
 }

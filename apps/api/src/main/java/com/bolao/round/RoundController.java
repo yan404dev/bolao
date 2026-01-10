@@ -3,6 +3,9 @@ package com.bolao.round;
 import com.bolao.round.dtos.CreateRoundDto;
 import com.bolao.round.dtos.RankingDto;
 import com.bolao.round.entities.Round;
+import com.bolao.round.usecases.*;
+import com.bolao.fixture.usecases.SyncAllRoundsUseCase;
+import com.bolao.fixture.usecases.GetExternalCalendarUseCase;
 import com.bolao.shared.dtos.ApiResponse;
 import com.bolao.shared.entities.ResultEntity;
 import jakarta.validation.Valid;
@@ -20,33 +23,39 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoundController {
 
-  private final RoundService roundService;
+  private final ProcessRoundResultsUseCase processRoundResultsUseCase;
+  private final CreateRoundUseCase createRoundUseCase;
+  private final SyncAllRoundsUseCase syncAllRoundsUseCase;
+  private final GetExternalCalendarUseCase getExternalCalendarUseCase;
+  private final ListRoundsUseCase listRoundsUseCase;
+  private final GetRoundByIdUseCase getRoundByIdUseCase;
+  private final GetRoundRankingUseCase getRoundRankingUseCase;
 
   @PostMapping
   public ResponseEntity<ApiResponse<Round>> create(@Valid @RequestBody CreateRoundDto dto) {
-    Round round = roundService.create(dto.getTitle(), dto.getExternalRoundId(), dto.getTicketPrice());
+    Round round = createRoundUseCase.execute(dto.getTitle(), dto.getExternalRoundId(), dto.getTicketPrice());
     return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.ok(round));
   }
 
   @GetMapping
   public ResponseEntity<ApiResponse<List<Round>>> findAll(
       @RequestParam(required = false) Round.Status status) {
-    return ResponseEntity.ok(ApiResponse.ok(roundService.findAll(status)));
+    return ResponseEntity.ok(ApiResponse.ok(listRoundsUseCase.execute(status)));
   }
 
   @PostMapping("/sync")
   public ResponseEntity<ApiResponse<List<Round>>> syncAll() {
-    return ResponseEntity.ok(ApiResponse.ok(roundService.syncAllRounds()));
+    return ResponseEntity.ok(ApiResponse.ok(syncAllRoundsUseCase.execute()));
   }
 
   @GetMapping("/calendar")
   public ResponseEntity<ApiResponse<List<String>>> getCalendar() {
-    return ResponseEntity.ok(ApiResponse.ok(roundService.getExternalCalendar()));
+    return ResponseEntity.ok(ApiResponse.ok(getExternalCalendarUseCase.execute()));
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<ApiResponse<Round>> findById(@PathVariable Long id) {
-    return ResponseEntity.ok(ApiResponse.ok(roundService.findById(id)));
+    return ResponseEntity.ok(ApiResponse.ok(getRoundByIdUseCase.execute(id)));
   }
 
   @GetMapping("/{id}/ranking")
@@ -57,13 +66,12 @@ public class RoundController {
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "50") int size) {
     PageRequest pageable = PageRequest.of(page, size, Sort.by("points").descending());
-    return ResponseEntity.ok(ApiResponse.ok(roundService.getRanking(id, search, minPoints, pageable)));
+    return ResponseEntity.ok(ApiResponse.ok(getRoundRankingUseCase.execute(id, search, minPoints, pageable)));
   }
 
   @PostMapping("/{id}/calculate")
   public ResponseEntity<ApiResponse<String>> calculateScores(@PathVariable Long id) {
-    Round round = roundService.findById(id);
-    roundService.calculateScores(id, round.getExternalRoundId());
+    processRoundResultsUseCase.execute(id);
     return ResponseEntity.ok(ApiResponse.ok("Scores calculated successfully"));
   }
 }

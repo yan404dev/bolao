@@ -1,5 +1,6 @@
 package com.bolao.fixture;
 
+import com.bolao.fixture.usecases.FetchExternalMatchesUseCase;
 import com.bolao.round.entities.Match;
 import com.bolao.shared.dtos.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +14,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FixtureController {
 
-  private final FixtureService fixtureService;
+  private final FetchExternalMatchesUseCase fetchExternalMatchesUseCase;
 
   @GetMapping
   public ResponseEntity<ApiResponse<List<Match>>> getFixtures(@RequestParam String roundId) {
-    return ResponseEntity.ok(ApiResponse.ok(fixtureService.getFixtures(roundId)));
+    return ResponseEntity.ok(ApiResponse.ok(fetchExternalMatchesUseCase.execute(roundId)));
   }
 }

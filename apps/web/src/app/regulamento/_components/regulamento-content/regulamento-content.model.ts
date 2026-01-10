@@ -16,10 +16,10 @@ export function useRegulamentoContentModel() {
       id: 2,
       titulo: "Valores e Taxas",
       conteudo: [
-        "**Rodada Normal:** R$ 10,00 destinados ao prêmio + R$ 2,00 de taxa de organização.",
-        "**Rodada Acumulada:** R$ 20,00 destinados ao prêmio + R$ 5,00 de taxa de organização.",
+        "**Rodada Normal:** R$ 10,00 destinados ao prêmio + R$ 2,00 de taxa de organização (Total R$ 12,00).",
+        "**Rodada Acumulada (Prêmio Dobrado):** R$ 20,00 destinados ao prêmio + R$ 5,00 de taxa de organização (Total R$ 25,00).",
         "A taxa de organização é fixa e destinada exclusivamente a cobrir custos como: **hospedagem completa do sistema, taxas bancárias de transferência PIX e outras despesas operacionais**.",
-        "100% do valor destinado ao prêmio é distribuído aos vencedores. O JC Bolão não retém qualquer percentual da premiação.",
+        "100% do valor arrecadado para o prêmio em cada rodada é distribuído. Em caso de acúmulo, o valor total arrecadado na rodada anterior é somado ao prêmio da rodada seguinte.",
       ],
     },
     {
@@ -44,9 +44,10 @@ export function useRegulamentoContentModel() {
       id: 5,
       titulo: "Acúmulo do Prêmio",
       conteudo: [
-        "Se ninguém atingir 15 pontos, o prêmio acumula para a próxima rodada.",
-        "O prêmio acumula **apenas uma vez**.",
-        "Na rodada seguinte ao acúmulo, não há pontuação mínima: ganha quem fizer mais pontos.",
+        "Caso nenhum participante atinja a pontuação mínima de **15 pontos** em uma rodada normal, o valor destinado ao prêmio acumula para a rodada seguinte.",
+        "**Validade do Bilhete:** Os bilhetes são válidos exclusivamente para a rodada em que foram comprados. Caso o prêmio acumule, o participante deve adquirir um novo bilhete para concorrer ao prêmio acumulado na rodada seguinte.",
+        "**Regra da Rodada Acumulada:** Na rodada com prêmio acumulado, **não há pontuação mínima** para vencer. Quem fizer a maior pontuação entre os participantes da rodada leva o prêmio total (valor acumulado + valor arrecadado na rodada atual).",
+        "O prêmio acumula **apenas uma vez** consecutiva. Se houver empate na maior pontuação, o prêmio é dividido.",
       ],
     },
     {
@@ -58,16 +59,9 @@ export function useRegulamentoContentModel() {
         "**Partida encerrada antes dos 90 minutos:** Vale o placar oficial no momento do encerramento.",
       ],
     },
-    {
-      id: 7,
-      titulo: "Regra Excepcional",
-      conteudo: [
-        "Concurso 175: Excepcionalmente, esta rodada não acumulará. Quem fizer mais pontos leva o prêmio, independentemente da pontuação mínima.",
-      ],
-    },
   ];
 
-  const observacao = "Concurso 175 excepcionalmente não acumulará. Quem fizer mais pontos leva o prêmio.";
+  const observacao = "O bilhete é válido apenas para a rodada em que foi comprado. Em caso de acúmulo, é necessário um novo bilhete.";
 
   return { secoes, observacao };
 }

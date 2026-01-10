@@ -1,0 +1,57 @@
+package com.bolao.round.usecases;
+
+import com.bolao.fixture.MatchSyncService;
+import com.bolao.round.entities.Match;
+import com.bolao.round.entities.Round;
+import com.bolao.round.repositories.MatchRepository;
+import com.bolao.round.repositories.RoundRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class CreateRoundUseCase {
+
+  private final RoundRepository roundRepository;
+  private final MatchRepository matchRepository;
+  private final MatchSyncService matchSyncService;
+
+  @Transactional
+  public Round execute(String title, String externalRoundId, Double ticketPrice) {
+    log.info("Executing CreateRoundUseCase for: {}", title);
+
+    List<Match> matches = matchSyncService.fetchAndSyncMatches(null, externalRoundId);
+
+    if (matches.isEmpty()) {
+      throw new IllegalArgumentException("No matches found for round: " + externalRoundId);
+    }
+
+    Round round = Round.builder()
+        .title(title)
+        .externalRoundId(externalRoundId)
+        .status(Round.Status.OPEN)
+        .prizePool(0.0)
+        .totalTickets(0)
+        .ticketPrice(ticketPrice)
+        .startDate(LocalDateTime.now())
+        .createdAt(LocalDateTime.now())
+        .build();
+
+    round = roundRepository.save(round);
+
+    for (Match match : matches) {
+      match.setRoundId(round.getId());
+      matchRepository.save(match);
+    }
+
+    round.setMatches(matches);
+    log.info("Successfully created round with ID: {}", round.getId());
+    return round;
+  }
+}

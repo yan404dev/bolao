@@ -98,9 +98,52 @@
     @apply text-yellow-500 font-bold uppercase tracking-widest;
   }
 
-  /* Altura padronizada para inputs e selects */
   .brutalist-input-height {
     @apply h-14;
+  }
+
+  .brutalist-badge {
+    @apply px-3 py-1 text-xs font-black uppercase italic border border-black;
+  }
+
+  .brutalist-badge-sm {
+    @apply px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.2em] border border-black;
+  }
+
+  .brutalist-score-box {
+    @apply w-12 h-14 flex items-center justify-center text-3xl font-black border border-black;
+  }
+
+  .brutalist-position-badge {
+    @apply w-8 h-8 flex items-center justify-center border-2 border-black rounded-none text-xs font-black italic;
+  }
+
+  .brutalist-section-header {
+    @apply text-lg font-black uppercase italic tracking-tighter;
+  }
+
+  .brutalist-subtitle {
+    @apply text-[10px] font-black uppercase tracking-widest text-gray-400;
+  }
+
+  .brutalist-input {
+    @apply w-full bg-white border border-black font-black uppercase italic placeholder:text-gray-300 focus:outline-none focus:bg-yellow-50 transition-all rounded-none;
+  }
+
+  .brutalist-btn-primary {
+    @apply font-black uppercase italic tracking-tighter bg-yellow-400 text-black border border-black hover:bg-black hover:text-white transition-all rounded-none;
+  }
+
+  .brutalist-team-logo {
+    @apply p-2 bg-gray-50 border border-black;
+  }
+
+  .brutalist-border-b {
+    @apply border-b-2 border-black;
+  }
+
+  .brutalist-legend-item {
+    @apply w-4 h-4 border-2 border-black;
   }
 }
 

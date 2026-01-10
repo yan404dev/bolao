@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { bettingService } from "@/app/apostar/_components/betting-flow/betting.service";
+import { roundService } from "@/shared/services";
 
 export function useTickerBannerQueries() {
   const activeRoundQuery = useQuery({
     queryKey: ["activeRound"],
-    queryFn: bettingService.getActiveRound,
+    queryFn: () => roundService.getActiveRound(),
   });
 
   return {

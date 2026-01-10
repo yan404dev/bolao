@@ -2,7 +2,7 @@
 
 import { useRoundQueries } from "@/app/rodada/[id]/hooks";
 import { MatchEntity } from "@/shared/entities";
-import dayjs from "dayjs";
+import { getMatchStatusBadgeStyle, getScoreBoxStyle, formatMatchStatusLabel } from "@/shared/utils";
 
 interface RoundMatchesProps {
   roundId: number;
@@ -27,7 +27,7 @@ export function RoundMatches({ roundId }: RoundMatchesProps) {
   if (matches.length === 0) {
     return (
       <div className="space-y-3">
-        <h2 className="text-sm font-black uppercase tracking-widest text-gray-400">PARTIDAS</h2>
+        <h2 className="brutalist-subtitle">PARTIDAS</h2>
         <div className="bg-white border border-black p-8 text-center text-gray-400 font-bold uppercase tracking-widest text-xs">
           SEM PARTIDAS DISPONÍVEIS
         </div>
@@ -35,68 +35,82 @@ export function RoundMatches({ roundId }: RoundMatchesProps) {
     );
   }
 
-  const getStatusStyle = (match: MatchEntity) => {
-    if (match.status === "FINISHED") return "text-gray-500";
-    if (match.status === "LIVE") return "text-red-600";
-    return "text-blue-600";
-  };
-
-  const getStatusLabel = (match: MatchEntity) => {
-    if (match.status === "FINISHED") return `ENCERRADO • ${dayjs(match.kickoffTime).format("DD/MM HH:mm")}`;
-    if (match.status === "LIVE") return "🔴 AO VIVO";
-    return dayjs(match.kickoffTime).format("DD/MM HH:mm");
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
         <div className="h-6 w-1 bg-yellow-400" />
-        <h2 className="text-lg font-black uppercase italic tracking-tighter text-gray-900">Partidas</h2>
+        <h2 className="brutalist-section-header text-gray-900">Partidas</h2>
       </div>
       <div className="grid gap-4">
         {matches.map((match) => (
-          <div key={match.id} className="brutalist-card p-6 bg-white hover:border-yellow-400">
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex-1 flex flex-col items-center gap-2">
-                <div className="p-2 bg-gray-50 border border-black">
-                  <img
-                    src={match.homeTeamLogo || "/placeholder-team.png"}
-                    alt={match.homeTeam}
-                    className="w-12 h-12 object-contain"
-                  />
-                </div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-gray-900 text-center leading-tight h-8 flex items-center">{match.homeTeam}</span>
-              </div>
-
-              <div className="flex flex-col items-center gap-3">
-                <div className="flex items-center gap-3">
-                  <span className={`w-12 h-14 flex items-center justify-center text-3xl font-black border border-black ${match.status === "FINISHED" ? "bg-gray-900 text-white" : "bg-yellow-400 text-black"}`}>
-                    {match.homeScore ?? "-"}
-                  </span>
-                  <span className="text-gray-900 font-black italic">X</span>
-                  <span className={`w-12 h-14 flex items-center justify-center text-3xl font-black border border-black ${match.status === "FINISHED" ? "bg-gray-900 text-white" : "bg-yellow-400 text-black"}`}>
-                    {match.awayScore ?? "-"}
-                  </span>
-                </div>
-                <div className={`px-3 py-0.5 text-[8px] font-black uppercase tracking-[0.2em] border border-black ${match.status === "LIVE" ? "bg-red-600 text-white animate-pulse" : "bg-white text-black"}`}>
-                  {getStatusLabel(match)}
-                </div>
-              </div>
-
-              <div className="flex-1 flex flex-col items-center gap-2">
-                <div className="p-2 bg-gray-50 border border-black">
-                  <img
-                    src={match.awayTeamLogo || "/placeholder-team.png"}
-                    alt={match.awayTeam}
-                    className="w-12 h-12 object-contain"
-                  />
-                </div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-gray-900 text-center leading-tight h-8 flex items-center">{match.awayTeam}</span>
-              </div>
-            </div>
-          </div>
+          <MatchCard key={match.id} match={match} />
         ))}
       </div>
+    </div>
+  );
+}
+
+interface MatchCardProps {
+  match: MatchEntity;
+}
+
+function MatchCard({ match }: MatchCardProps) {
+  const scoreBoxStyle = getScoreBoxStyle(match.status);
+  const statusBadgeStyle = getMatchStatusBadgeStyle(match.status);
+
+  return (
+    <div className="brutalist-card p-6 bg-white hover:border-yellow-400">
+      <div className="flex items-center justify-between gap-4">
+        {/* Time da Casa */}
+        <TeamDisplay
+          name={match.homeTeam}
+          logo={match.homeTeamLogo}
+        />
+
+        {/* Placar */}
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex items-center gap-3">
+            <span className={`brutalist-score-box ${scoreBoxStyle}`}>
+              {match.homeScore ?? "-"}
+            </span>
+            <span className="text-gray-900 font-black italic">X</span>
+            <span className={`brutalist-score-box ${scoreBoxStyle}`}>
+              {match.awayScore ?? "-"}
+            </span>
+          </div>
+          <div className={`brutalist-badge-sm ${statusBadgeStyle}`}>
+            {formatMatchStatusLabel(match)}
+          </div>
+        </div>
+
+        {/* Time Visitante */}
+        <TeamDisplay
+          name={match.awayTeam}
+          logo={match.awayTeamLogo}
+        />
+      </div>
+    </div>
+  );
+}
+
+interface TeamDisplayProps {
+  name: string;
+  logo?: string | null;
+}
+
+function TeamDisplay({ name, logo }: TeamDisplayProps) {
+  return (
+    <div className="flex-1 flex flex-col items-center gap-2">
+      <div className="brutalist-team-logo">
+        <img
+          src={logo || "/placeholder-team.png"}
+          alt={name}
+          className="w-12 h-12 object-contain"
+        />
+      </div>
+      <span className="brutalist-subtitle text-gray-900 text-center leading-tight h-8 flex items-center">
+        {name}
+      </span>
     </div>
   );
 }

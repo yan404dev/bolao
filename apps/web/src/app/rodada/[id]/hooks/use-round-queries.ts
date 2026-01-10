@@ -1,10 +1,12 @@
+"use client";
+
 import { useQuery } from "@tanstack/react-query";
-import { roundService } from "@/app/rodada/[id]/round.service";
+import { roundService } from "@/shared/services";
 
 export function useRoundQueries(roundId: number) {
   const roundQuery = useQuery({
     queryKey: ["round", roundId],
-    queryFn: () => roundService.getRound(roundId),
+    queryFn: () => roundService.getById(roundId),
     enabled: !!roundId,
   });
 

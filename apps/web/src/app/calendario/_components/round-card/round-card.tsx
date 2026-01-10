@@ -1,14 +1,14 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
-import { Round } from "../../calendar.service";
+import { RoundEntity } from "@/shared/entities";
 import Link from "next/link";
 import { Trophy, Calendar as CalendarIcon, Users } from "lucide-react";
 import dayjs from "dayjs";
 import { formatCurrency } from "@/shared/lib/utils";
 
 interface RoundCardProps {
-  round: Round;
+  round: RoundEntity;
   index: number;
 }
 

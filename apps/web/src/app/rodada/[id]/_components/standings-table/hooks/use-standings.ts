@@ -1,17 +1,11 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@/shared/lib/api";
-import { StandingEntity } from "@/shared/entities";
-
-
+import { standingsService } from "@/shared/services";
 
 export function useStandings() {
   return useQuery({
     queryKey: ["standings"],
-    queryFn: async () => {
-      const { data } = await api.get<{ data: StandingEntity[] }>("/standings");
-      return data.data;
-    },
+    queryFn: () => standingsService.getAll(),
   });
 }

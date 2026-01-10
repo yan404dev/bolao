@@ -1,6 +1,7 @@
 "use client";
 
 import { useStandings } from "./hooks";
+import { getPositionStyle } from "@/shared/utils";
 import { Avatar, AvatarImage, AvatarFallback } from "@/shared/components/ui/avatar";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 
@@ -29,7 +30,7 @@ export function StandingsTable() {
       <div className="overflow-x-auto">
         <table className="w-full text-sm text-left border-collapse">
           <thead>
-            <tr className="bg-gray-100 border-b-4 border-black font-black uppercase italic text-xs tracking-widest">
+            <tr className="bg-gray-100 brutalist-border-b font-black uppercase italic text-xs tracking-widest">
               <th className="p-4 border-r-2 border-black">#</th>
               <th className="p-4 border-r-2 border-black">Clube</th>
               <th className="p-4 text-center border-r-2 border-black bg-yellow-400/10">P</th>
@@ -40,12 +41,9 @@ export function StandingsTable() {
           </thead>
           <tbody>
             {standings?.map((team) => (
-              <tr key={team.teamName} className="border-b-2 border-black hover:bg-yellow-50 transition-colors group font-bold">
+              <tr key={team.teamName} className="brutalist-border-b hover:bg-yellow-50 transition-colors group font-bold">
                 <td className="p-4 border-r-2 border-black text-center">
-                  <div className={`w-8 h-8 flex items-center justify-center border-2 border-black rounded-none text-xs font-black italic ${team.position <= 4 ? "bg-blue-600 text-white" :
-                      team.position <= 6 ? "bg-blue-300 text-black" :
-                        team.position >= 17 ? "bg-red-600 text-white" : "bg-white text-black"
-                    }`}>
+                  <div className={`brutalist-position-badge ${getPositionStyle(team.position)}`}>
                     {team.position}
                   </div>
                 </td>
@@ -69,10 +67,10 @@ export function StandingsTable() {
           </tbody>
         </table>
       </div>
-      <div className="p-4 bg-gray-100 border-t-4 border-black flex flex-wrap gap-4 text-[10px] font-black uppercase italic italic">
-        <div className="flex items-center gap-2"><div className="w-4 h-4 bg-blue-600 border-2 border-black" /> Libertadores</div>
-        <div className="flex items-center gap-2"><div className="w-4 h-4 bg-blue-300 border-2 border-black" /> Pré-Liberta</div>
-        <div className="flex items-center gap-2"><div className="w-4 h-4 bg-red-600 border-2 border-black" /> Rebaixamento</div>
+      <div className="p-4 bg-gray-100 border-t-4 border-black flex flex-wrap gap-4 text-[10px] font-black uppercase italic">
+        <div className="flex items-center gap-2"><div className="brutalist-legend-item bg-blue-600" /> Libertadores</div>
+        <div className="flex items-center gap-2"><div className="brutalist-legend-item bg-blue-300" /> Pré-Liberta</div>
+        <div className="flex items-center gap-2"><div className="brutalist-legend-item bg-red-600" /> Rebaixamento</div>
       </div>
     </div>
   );

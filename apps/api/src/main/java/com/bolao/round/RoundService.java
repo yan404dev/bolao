@@ -1,20 +1,22 @@
 package com.bolao.round;
 
-import com.bolao.bet.entities.Bet;
-import com.bolao.bet.entities.Prediction;
-import com.bolao.bet.repositories.BetRepository;
 import com.bolao.fixture.MatchSyncService;
 import com.bolao.round.dtos.RankingDto;
 import com.bolao.round.entities.Match;
 import com.bolao.round.entities.Round;
 import com.bolao.round.repositories.MatchRepository;
 import com.bolao.round.repositories.RoundRepository;
+import com.bolao.round.services.RoundRankingService;
+import com.bolao.round.services.RoundScoringService;
+import com.bolao.round.services.RoundStatsService;
 import com.bolao.shared.entities.ResultEntity;
 import com.bolao.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,12 +30,14 @@ public class RoundService {
 
   private final RoundRepository roundRepository;
   private final MatchRepository matchRepository;
-  private final BetRepository betRepository;
   private final MatchSyncService matchSyncService;
-  private final ScoreCalculator scoreCalculator;
+  private final RoundScoringService scoringService;
+  private final RoundStatsService statsService;
+  private final RoundRankingService rankingService;
 
-  @jakarta.annotation.PostConstruct
-  public void init() {
+  @EventListener(ApplicationReadyEvent.class)
+  @Async
+  public void onStartup() {
     log.info("System startup: Triggering matches sync from provider...");
     matchSyncService.syncAllRounds();
   }
@@ -85,11 +89,6 @@ public class RoundService {
     return matchSyncService.fetchAvailableRounds();
   }
 
-  private List<Round> loadMatchesForAll(List<Round> rounds) {
-    rounds.forEach(this::loadMatches);
-    return rounds;
-  }
-
   @Transactional(readOnly = true)
   public Round findById(Long id) {
     Round round = roundRepository.findById(id)
@@ -100,101 +99,22 @@ public class RoundService {
 
   @Transactional(readOnly = true)
   public ResultEntity<RankingDto> getRanking(Long roundId, String search, Integer minPoints, Pageable pageable) {
-    Page<Bet> betsPage = betRepository.findByRoundIdWithFilters(roundId, search, minPoints, pageable);
-    List<Match> matches = matchRepository.findByRoundId(roundId);
-
-    List<RankingDto> items = betsPage.getContent().stream()
-        .map(bet -> {
-          int exact = 0;
-          int winner = 0;
-          for (Match match : matches) {
-            if (!match.isFinished())
-              continue;
-
-            Prediction prediction = bet.getPredictions().get(match.getId());
-            if (prediction == null)
-              continue;
-
-            int points = scoreCalculator.calculate(prediction, match);
-            if (points == 3)
-              exact++;
-            else if (points == 1)
-              winner++;
-          }
-
-          return RankingDto.builder()
-              .name(bet.getName())
-              .ticketCode(bet.getTicketCode())
-              .points(bet.getPoints() != null ? bet.getPoints() : 0)
-              .exactScores(exact)
-              .winnerScores(winner)
-              .build();
-        })
-        .toList();
-
-    int startPosition = (int) pageable.getOffset() + 1;
-    for (int i = 0; i < items.size(); i++) {
-      items.get(i).setPosition(startPosition + i);
-    }
-
-    return ResultEntity.<RankingDto>builder()
-        .items(items)
-        .totalItems(betsPage.getTotalElements())
-        .totalPages(betsPage.getTotalPages())
-        .currentPage(betsPage.getNumber())
-        .build();
+    return rankingService.getRanking(roundId, search, minPoints, pageable);
   }
 
   @Transactional
   public void calculateScores(Long roundId, String externalRoundId) {
-    List<Match> updatedMatches = matchSyncService.fetchAndSyncMatches(roundId, externalRoundId);
-
-    for (Match match : updatedMatches) {
-      match.setRoundId(roundId);
-      matchRepository.save(match);
-    }
-
-    List<Bet> bets = betRepository.findByRoundId(roundId);
-    log.info("Calculating scores for {} bets in round {}", bets.size(), roundId);
-
-    for (Bet bet : bets) {
-      int totalPoints = calculateBetPoints(bet, updatedMatches);
-      bet.setPoints(totalPoints);
-      betRepository.save(bet);
-      log.info("Bet {} scored {} points", bet.getTicketCode(), totalPoints);
-    }
-  }
-
-  private int calculateBetPoints(Bet bet, List<Match> matches) {
-    int totalPoints = 0;
-    for (Match match : matches) {
-      if (!match.isFinished()) {
-        continue;
-      }
-
-      Prediction prediction = bet.getPredictions().get(match.getId());
-      if (prediction == null) {
-        continue;
-      }
-
-      totalPoints += scoreCalculator.calculate(prediction, match);
-    }
-    return totalPoints;
+    scoringService.calculateScores(roundId, externalRoundId);
   }
 
   @Transactional
   public void updateRoundStats(Long roundId) {
-    Round round = findById(roundId);
-    long ticketCount = betRepository.countByRoundId(roundId);
+    statsService.updateRoundStats(roundId);
+  }
 
-    double totalRevenue = ticketCount * (round.getTicketPrice() != null ? round.getTicketPrice() : 0.0);
-    double prizePool = totalRevenue * 0.8;
-
-    round.setTotalTickets((int) ticketCount);
-    round.setPrizePool(prizePool);
-
-    roundRepository.save(round);
-    log.info("Updated stats for round {}: {} tickets, prize pool R$ {}", roundId, ticketCount, prizePool);
+  private List<Round> loadMatchesForAll(List<Round> rounds) {
+    rounds.forEach(this::loadMatches);
+    return rounds;
   }
 
   private void loadMatches(Round round) {

@@ -1,6 +1,6 @@
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { rankingService } from "@/app/ranking/ranking.service";
-import { bettingService } from "@/app/apostar/_components/betting-flow/betting.service";
+import { roundService } from "@/shared/services";
 
 export interface RankingTableFilterParams {
   search?: string;
@@ -12,7 +12,7 @@ export interface RankingTableFilterParams {
 export function useRankingTableQueries(roundId?: number, filters?: RankingTableFilterParams) {
   const activeRoundQuery = useQuery({
     queryKey: ["activeRound"],
-    queryFn: bettingService.getActiveRound,
+    queryFn: () => roundService.getActiveRound(),
     enabled: !roundId,
   });
 

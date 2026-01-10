@@ -1,54 +1,73 @@
-import { Regra } from "./regulamento-content.types";
+import { Secao } from "./regulamento-content.types";
 
 export function useRegulamentoContentModel() {
-  const regras: Regra[] = [
+  const secoes: Secao[] = [
     {
       id: 1,
-      texto: "Placar exato = 3 pontos.",
-      destaque: true,
+      titulo: "Sobre o Bolão",
+      conteudo: [
+        "Este bolão tem caráter exclusivamente recreativo e colaborativo.",
+        "A participação é voluntária e entre pessoas conhecidas.",
+        "A administração do JC Bolão não obtém lucro sobre a premiação, recebendo apenas uma taxa fixa pelos custos de organização.",
+        "Esta iniciativa não configura casa de apostas, loteria ou qualquer modalidade de exploração de jogos de azar prevista na legislação brasileira.",
+      ],
     },
     {
       id: 2,
-      texto: "Errou o placar, mas acertou o time vencedor = 1 ponto.",
-      destaque: true,
+      titulo: "Valores e Taxas",
+      conteudo: [
+        "**Rodada Normal:** R$ 10,00 destinados ao prêmio + R$ 2,00 de taxa de organização.",
+        "**Rodada Acumulada:** R$ 20,00 destinados ao prêmio + R$ 5,00 de taxa de organização.",
+        "A taxa de organização é fixa e destinada exclusivamente a cobrir custos como: **hospedagem completa do sistema, taxas bancárias de transferência PIX e outras despesas operacionais**.",
+        "100% do valor destinado ao prêmio é distribuído aos vencedores. O JC Bolão não retém qualquer percentual da premiação.",
+      ],
     },
     {
       id: 3,
-      texto: "Atenção: Só ganhará o bolão, o apostador que fizer 15 pontos ou mais, qualquer pontuação abaixo de 15 pontos, o bolão ficará acumulado para próxima rodada.",
-      destaque: true,
+      titulo: "Sistema de Pontuação",
+      conteudo: [
+        "**3 pontos:** Acertou o placar exato da partida.",
+        "**1 ponto:** Errou o placar, mas acertou o resultado (vitória, empate ou derrota).",
+        "**0 pontos:** Errou o resultado da partida.",
+      ],
     },
     {
       id: 4,
-      texto: "E toda vez que o bolão acumular o valor da aposta vai ser R$ 20,00",
+      titulo: "Pontuação Mínima e Premiação",
+      conteudo: [
+        "Para levar o prêmio, o participante precisa fazer no mínimo **15 pontos** na rodada.",
+        "Quem fizer mais pontos leva o prêmio integral.",
+        "Em caso de empate na pontuação, o prêmio é dividido igualmente entre os vencedores.",
+      ],
     },
     {
       id: 5,
-      texto: "A premiação será dividida da seguinte forma: Primeiro lugar 90%, Segundo lugar 10%.",
-      destaque: true,
+      titulo: "Acúmulo do Prêmio",
+      conteudo: [
+        "Se ninguém atingir 15 pontos, o prêmio acumula para a próxima rodada.",
+        "O prêmio acumula **apenas uma vez**.",
+        "Na rodada seguinte ao acúmulo, não há pontuação mínima: ganha quem fizer mais pontos.",
+      ],
     },
     {
       id: 6,
-      texto: "O bolão só acumulará uma vez.",
+      titulo: "Partidas Canceladas, Interrompidas ou Encerradas",
+      conteudo: [
+        "**Partida cancelada:** A pontuação mínima para ganhar passa a ser **13 pontos**.",
+        "**Partida interrompida:** Aguardamos até 48 horas pela conclusão. Se não houver desfecho nesse prazo, a partida é considerada cancelada.",
+        "**Partida encerrada antes dos 90 minutos:** Vale o placar oficial no momento do encerramento.",
+      ],
     },
     {
       id: 7,
-      texto: "Quando o bolão estiver acumulado sairá para aquele que fizer mais pontos.",
-    },
-    {
-      id: 8,
-      texto: "Quando um jogo for cancelado a pontuação mínima para ganhar o bolão passa ser de 13 pontos.",
-    },
-    {
-      id: 9,
-      texto: "Quando um jogo for interrompido por qualquer motivo, e se os minutos finais for realizado no máximo 48 horas esperaremos o resultado final do jogo. Se o jogo for realizado após 48 horas esse fica cancelado.",
-    },
-    {
-      id: 10,
-      texto: "Se um jogo for encerrado também por qualquer motivo antes dos 90 minutos fica valendo o placar do jogo.",
+      titulo: "Regra Excepcional",
+      conteudo: [
+        "Concurso 175: Excepcionalmente, esta rodada não acumulará. Quem fizer mais pontos leva o prêmio, independentemente da pontuação mínima.",
+      ],
     },
   ];
 
-  const observacao = "Concurso 175 excepcionalmente não acumulará aquele que fizer mais pontos leva o prêmio.";
+  const observacao = "Concurso 175 excepcionalmente não acumulará. Quem fizer mais pontos leva o prêmio.";
 
-  return { regras, observacao };
+  return { secoes, observacao };
 }

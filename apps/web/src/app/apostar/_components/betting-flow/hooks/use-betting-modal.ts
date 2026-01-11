@@ -7,7 +7,8 @@ import { BettingFormData } from "../betting-modal.schema";
 import { MatchEntity } from "@/shared/entities";
 
 export function useBettingModal(onClose: () => void) {
-  const [copied, setCopied] = useState(false);
+  const [copiedTicket, setCopiedTicket] = useState(false);
+  const [copiedPix, setCopiedPix] = useState(false);
   const {
     activeRound,
     isLoadingRound,
@@ -37,16 +38,26 @@ export function useBettingModal(onClose: () => void) {
   });
 
   const handleCopyTicket = async () => {
-    const ticketCode = createBetMutation.data?.ticketCode;
+    const ticketCode = createBetMutation.data?.bet?.ticketCode;
     if (ticketCode) {
       await navigator.clipboard.writeText(ticketCode);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setCopiedTicket(true);
+      setTimeout(() => setCopiedTicket(false), 2000);
+    }
+  };
+
+  const handleCopyPix = async () => {
+    const pixCode = createBetMutation.data?.payment?.pixCopyPaste;
+    if (pixCode) {
+      await navigator.clipboard.writeText(pixCode);
+      setCopiedPix(true);
+      setTimeout(() => setCopiedPix(false), 2000);
     }
   };
 
   const handleClose = () => {
-    setCopied(false);
+    setCopiedTicket(false);
+    setCopiedPix(false);
     onClose();
   };
 
@@ -66,8 +77,10 @@ export function useBettingModal(onClose: () => void) {
     isSubmitting: createBetMutation.isPending,
     isSuccess: createBetMutation.isSuccess,
     betResult: createBetMutation.data,
-    copied,
+    copiedTicket,
+    copiedPix,
     handleCopyTicket,
+    handleCopyPix,
     handleClose,
   };
 }

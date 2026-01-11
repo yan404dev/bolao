@@ -29,8 +29,10 @@ export function BettingModal({ isOpen, onClose }: BettingModalProps) {
     isSubmitting,
     betResult,
     isSuccess,
-    copied,
+    copiedTicket,
+    copiedPix,
     handleCopyTicket,
+    handleCopyPix,
     handleClose,
   } = useBettingModal(onClose);
 
@@ -40,8 +42,10 @@ export function BettingModal({ isOpen, onClose }: BettingModalProps) {
         isOpen={isOpen}
         onClose={handleClose}
         betResult={betResult}
-        copied={copied}
+        copiedTicket={copiedTicket}
+        copiedPix={copiedPix}
         onCopyTicket={handleCopyTicket}
+        onCopyPix={handleCopyPix}
       />
     );
   }

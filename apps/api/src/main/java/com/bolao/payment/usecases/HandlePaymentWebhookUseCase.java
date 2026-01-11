@@ -91,6 +91,11 @@ public class HandlePaymentWebhookUseCase {
     payment.markAsPaid(LocalDateTime.now());
 
     betRepository.findById(payment.getBetId()).ifPresent(bet -> {
+      if (bet.getTicketCode() != null) {
+        log.info("Bet {} already has a ticket code ({}). Skipping generation.", bet.getId(), bet.getTicketCode());
+        return;
+      }
+
       bet.setTicketCode(generateTicketCode(bet.getRoundId()));
       bet.setStatus(Bet.PaymentStatus.PAID);
       betRepository.save(bet);

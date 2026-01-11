@@ -77,7 +77,6 @@ public class SubmitBetUseCase {
     return BetResponseDto.builder()
         .bet(savedBet)
         .payment(BetResponseDto.PaymentDetails.builder()
-            .externalId(payment.getExternalId())
             .pixCopyPaste(payment.getPixCopyPaste())
             .pixQrCodeBase64(payment.getPixQrCodeBase64())
             .amount(payment.getAmount())

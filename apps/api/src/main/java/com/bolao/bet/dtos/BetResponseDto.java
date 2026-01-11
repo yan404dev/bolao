@@ -13,7 +13,6 @@ public class BetResponseDto {
   @Data
   @Builder
   public static class PaymentDetails {
-    private String externalId;
     private String pixCopyPaste;
     private String pixQrCodeBase64;
     private Double amount;

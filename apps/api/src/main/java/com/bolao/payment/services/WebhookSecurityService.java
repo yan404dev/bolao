@@ -9,6 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.HexFormat;
 import java.util.Map;
@@ -22,6 +23,7 @@ public class WebhookSecurityService {
   private String secret;
 
   private static final String HMAC_SHA256 = "HmacSHA256";
+  private static final long TIME_TOLERANCE_SECONDS = 300;
 
   public boolean isValidSignature(String signature, String requestId, String resourceId) {
     if (secret == null || secret.isEmpty()) {
@@ -35,14 +37,21 @@ public class WebhookSecurityService {
 
     try {
       Map<String, String> signatureParts = parseSignature(signature);
-      String ts = signatureParts.get("ts");
+      String tsStr = signatureParts.get("ts");
       String v1 = signatureParts.get("v1");
 
-      if (ts == null || v1 == null) {
+      if (tsStr == null || v1 == null) {
         return false;
       }
 
-      String manifest = String.format("id:%s;request-id:%s;ts:%s;", resourceId, requestId, ts);
+      long ts = Long.parseLong(tsStr);
+      long now = Instant.now().getEpochSecond();
+      if (Math.abs(now - ts) > TIME_TOLERANCE_SECONDS) {
+        log.warn("Webhook security: timestamp expired (ts={}, now={}). Replay attack suspected.", ts, now);
+        return false;
+      }
+
+      String manifest = String.format("id:%s;request-id:%s;ts:%s;", resourceId, requestId, tsStr);
       String generatedHash = generateHmac(manifest);
 
       return generatedHash.equals(v1);

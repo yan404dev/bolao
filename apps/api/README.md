@@ -8,7 +8,7 @@ O projeto segue principios de Clean Architecture com estrutura modular organizad
 
 ```
 src/main/java/com/bolao/
-├── bet/                    # Dominio de apostas
+├── bet/                    # Dominio de palpites
 │   ├── entities/           # Entidades de dominio (Bet, Prediction)
 │   ├── repositories/       # Camada de acesso a dados
 │   ├── usecases/           # Logica de negocio
@@ -41,15 +41,15 @@ src/main/java/com/bolao/
 
 ## Modulos de Dominio
 
-### Bet (Apostas)
+### Bet (Palpites)
 
-Gerencia submissao de apostas, confirmacao de pagamento e pontuacao.
+Gerencia submissao de palpites, confirmacao de pagamento e pontuacao.
 
 | Componente | Responsabilidade |
 |------------|------------------|
-| `SubmitBetUseCase` | Cria nova aposta com palpites |
-| `ConfirmBetPaymentUseCase` | Atualiza status da aposta apos pagamento |
-| `CancelLatePendingBetsUseCase` | Cancela apostas nao pagas apos inicio da rodada |
+| `SubmitBetUseCase` | Cria novo palpite com previsoes |
+| `ConfirmBetPaymentUseCase` | Atualiza status do palpite apos pagamento |
+| `CancelLatePendingBetsUseCase` | Cancela palpites nao pagos apos inicio da rodada |
 | `BetPaymentListener` | Reage ao PaymentApprovedEvent |
 | `PaymentRetryScheduler` | Retenta confirmacoes de pagamento falhas |
 
@@ -67,7 +67,7 @@ Gerencia geracao de pagamento PIX e processamento de webhooks.
 
 ### Round (Rodadas)
 
-Gerencia rodadas de apostas e sincronizacao de dados de partidas.
+Gerencia rodadas e sincronizacao de dados de partidas.
 
 | Componente | Responsabilidade |
 |------------|------------------|

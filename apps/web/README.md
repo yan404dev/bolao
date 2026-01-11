@@ -10,7 +10,7 @@ O projeto segue uma arquitetura baseada em features com modulos compartilhados.
 src/
 ├── app/                    # Next.js App Router
 │   ├── (home)/             # Pagina inicial (route group)
-│   ├── apostar/            # Fluxo de apostas
+│   ├── apostar/            # Fluxo de palpites
 │   ├── calendario/         # Visualizacao de calendario
 │   ├── ranking/            # Classificacao
 │   ├── regulamento/        # Pagina de regras
@@ -32,7 +32,7 @@ src/
 
 ### Apostar
 
-O fluxo de apostas e estruturado com componentes e hooks co-localizados:
+O fluxo de palpites e estruturado com componentes e hooks co-localizados:
 
 ```
 apostar/
@@ -42,7 +42,7 @@ apostar/
 │   │   ├── active-rounds.tsx
 │   │   └── hooks/
 │   │       └── use-active-rounds.ts
-│   └── betting-flow/              # Fluxo do modal de apostas
+│   └── betting-flow/              # Fluxo do modal de palpites
 │       ├── betting-modal.tsx
 │       ├── hooks/
 │       │   ├── use-betting-form.ts

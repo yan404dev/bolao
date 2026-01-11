@@ -1,6 +1,6 @@
 # Bolao
 
-Aplicacao full-stack de bolao para palpites de partidas de futebol. Os usuarios podem fazer apostas nos placares das partidas, e o sistema calcula automaticamente os pontos e rankings quando as partidas sao finalizadas.
+Aplicacao full-stack de bolao para palpites de partidas de futebol. Os usuarios podem fazer palpites nos placares das partidas, e o sistema calcula automaticamente os pontos e rankings quando as partidas sao finalizadas.
 
 ## Estrutura do Projeto
 
@@ -104,8 +104,8 @@ A aplicacao web estara disponivel em `http://localhost:3000`.
 | GET | `/api/v1/rounds` | Listar todas as rodadas |
 | GET | `/api/v1/rounds/:id` | Obter detalhes da rodada |
 | POST | `/api/v1/rounds/sync` | Sincronizar rodadas da API-Football |
-| POST | `/api/v1/bets` | Submeter nova aposta |
-| GET | `/api/v1/bets/:ticketCode` | Buscar aposta por bilhete |
+| POST | `/api/v1/bets` | Submeter novo palpite |
+| GET | `/api/v1/bets/:ticketCode` | Buscar palpite por bilhete |
 | POST | `/api/v1/payments` | Gerar pagamento PIX |
 | POST | `/api/v1/payments/webhook` | Webhook de pagamento |
 

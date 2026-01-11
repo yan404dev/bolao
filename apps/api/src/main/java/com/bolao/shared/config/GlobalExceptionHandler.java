@@ -2,6 +2,7 @@ package com.bolao.shared.config;
 
 import com.bolao.shared.dtos.ApiResponse;
 import com.bolao.shared.exceptions.NotFoundException;
+import com.bolao.shared.exceptions.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,12 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ApiResponse<Void>> handleNotFound(NotFoundException e) {
     log.warn("Not found: {}", e.getMessage());
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(e.getMessage()));
+  }
+
+  @ExceptionHandler(UnauthorizedException.class)
+  public ResponseEntity<ApiResponse<Void>> handleUnauthorized(UnauthorizedException e) {
+    log.warn("Unauthorized: {}", e.getMessage());
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error(e.getMessage()));
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)

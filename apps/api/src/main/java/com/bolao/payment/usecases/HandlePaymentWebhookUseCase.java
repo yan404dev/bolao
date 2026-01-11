@@ -6,7 +6,6 @@ import com.bolao.payment.entities.PaymentStatus;
 import com.bolao.payment.events.PaymentApprovedEvent;
 import com.bolao.payment.repositories.PaymentRepository;
 import com.bolao.payment.services.WebhookSecurityService;
-import com.bolao.shared.exceptions.NotFoundException;
 import com.bolao.shared.exceptions.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -48,12 +48,17 @@ public class HandlePaymentWebhookUseCase {
       throw new IllegalArgumentException("Missing payment ID in payload");
     }
 
-    return processStatusUpdate(resourceId);
+    Optional<Payment> paymentOpt = paymentRepository.findByExternalId(resourceId);
+    if (paymentOpt.isEmpty()) {
+      log.info("Payment record not found locally (might be a test notification): {}", resourceId);
+      return new Result("Payment record not found: " + resourceId, null);
+    }
+
+    return processStatusUpdate(paymentOpt.get());
   }
 
-  private Result processStatusUpdate(String externalId) {
-    Payment payment = paymentRepository.findByExternalId(externalId)
-        .orElseThrow(() -> new NotFoundException("Payment record not found: " + externalId));
+  private Result processStatusUpdate(Payment payment) {
+    String externalId = payment.getExternalId();
 
     if (payment.isPaid()) {
       return new Result("Payment already processed and approved", payment.getStatus());

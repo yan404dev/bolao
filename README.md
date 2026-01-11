@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bolao
 
-## Getting Started
+A full-stack betting pool application for football match predictions. Users can place bets on match scores, and the system automatically calculates points and rankings when matches are completed.
 
-First, run the development server:
+## Project Structure
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+This is a monorepo managed with [Turborepo](https://turbo.build/repo) and [pnpm workspaces](https://pnpm.io/workspaces).
+
+```
+bolao/
+├── apps/
+│   ├── api/          # Spring Boot REST API (Java 21)
+│   └── web/          # Next.js Frontend (React 19)
+├── turbo.json        # Turborepo configuration
+└── pnpm-workspace.yaml
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Layer | Technology |
+|-------|------------|
+| Frontend | Next.js 15, React 19, TypeScript, TailwindCSS, shadcn/ui |
+| Backend | Spring Boot 3.4, Java 21, Spring Data JPA |
+| Database | PostgreSQL 16 |
+| Migrations | Flyway |
+| Payment | Mercado Pago PIX |
+| External API | API-Football |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Prerequisites
 
-## Learn More
+- Node.js 20+
+- pnpm 9+
+- Java 21
+- Maven 3.9+
+- PostgreSQL 16
+- Docker (optional)
 
-To learn more about Next.js, take a look at the following resources:
+## Environment Setup
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Copy the example environment file:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+cp .env.example .env
+```
 
-## Deploy on Vercel
+2. Configure the variables in `.env`:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Variable | Description |
+|----------|-------------|
+| `DB_URL` | PostgreSQL connection string |
+| `DB_USERNAME` | Database username |
+| `DB_PASSWORD` | Database password |
+| `API_FOOTBALL_KEY` | API-Football access key |
+| `MERCADO_PAGO_ACCESS_TOKEN` | Mercado Pago credentials |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Running Locally
+
+### Database
+
+```bash
+# Using Docker
+docker run -d \
+  --name bolao-db \
+  -e POSTGRES_USER=bolao \
+  -e POSTGRES_PASSWORD=bolao123 \
+  -e POSTGRES_DB=bolao \
+  -p 5432:5432 \
+  postgres:16
+```
+
+### Backend (API)
+
+```bash
+cd apps/api
+mvn spring-boot:run
+```
+
+The API will be available at `http://localhost:3001`.
+
+### Frontend (Web)
+
+```bash
+pnpm install
+pnpm dev
+```
+
+The web application will be available at `http://localhost:3000`.
+
+## API Documentation
+
+### Main Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/v1/rounds` | List all rounds |
+| GET | `/api/v1/rounds/:id` | Get round details |
+| POST | `/api/v1/rounds/sync` | Sync rounds from API-Football |
+| POST | `/api/v1/bets` | Submit a new bet |
+| GET | `/api/v1/bets/:ticketCode` | Get bet by ticket |
+| POST | `/api/v1/payments` | Generate PIX payment |
+| POST | `/api/v1/payments/webhook` | Payment webhook |
+
+## Project Documentation
+
+- [API Architecture](apps/api/README.md)
+- [Web Architecture](apps/web/README.md)
+
+## License
+
+Private project. All rights reserved.

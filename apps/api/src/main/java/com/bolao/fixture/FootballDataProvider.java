@@ -46,6 +46,55 @@ public class FootballDataProvider implements ExternalMatchProvider {
   }
 
   @Override
+  public List<Match> fetchAllMatchesForSeason(int leagueId, int season) {
+    log.info("Fetching ALL matches for league {}, season {} (single call)", leagueId, season);
+
+    String code = getCompetitionCode(leagueId);
+    String url = BASE_URL + "/competitions/" + code + "/matches?season=" + season;
+
+    FootballDataMatchResponse response = restClient.get()
+        .uri(url)
+        .headers(this::setAuthHeaders)
+        .retrieve()
+        .body(FootballDataMatchResponse.class);
+
+    if (response == null || response.getMatches() == null) {
+      return new ArrayList<>();
+    }
+
+    return response.getMatches().stream()
+        .map(data -> {
+          Match match = new Match();
+          match.setHomeTeam(data.getHomeTeam() != null ? data.getHomeTeam().getName() : "TBD");
+          match.setHomeTeamLogo(data.getHomeTeam() != null ? data.getHomeTeam().getCrest() : null);
+          match.setAwayTeam(data.getAwayTeam() != null ? data.getAwayTeam().getName() : "TBD");
+          match.setAwayTeamLogo(data.getAwayTeam() != null ? data.getAwayTeam().getCrest() : null);
+          match.setKickoffTime(data.getUtcDate() != null ? data.getUtcDate().toLocalDateTime() : null);
+          match.setExternalRoundId(String.valueOf(data.getMatchday()));
+          match.setStatus(mapStatus(data.getStatus()));
+          if (data.getScore() != null && data.getScore().getFullTime() != null) {
+            match.setHomeScore(data.getScore().getFullTime().getHome());
+            match.setAwayScore(data.getScore().getFullTime().getAway());
+          }
+          return match;
+        })
+        .toList();
+  }
+
+  private Match.Status mapStatus(String status) {
+    if (status == null)
+      return Match.Status.SCHEDULED;
+    return switch (status) {
+      case "SCHEDULED", "TIMED" -> Match.Status.SCHEDULED;
+      case "IN_PLAY", "PAUSED" -> Match.Status.LIVE;
+      case "FINISHED" -> Match.Status.FINISHED;
+      case "POSTPONED" -> Match.Status.POSTPONED;
+      case "CANCELLED" -> Match.Status.CANCELLED;
+      default -> Match.Status.SCHEDULED;
+    };
+  }
+
+  @Override
   public List<String> fetchAvailableRounds(int leagueId, int season) {
     log.info("Fetching available rounds for league {}, season {}", leagueId, season);
 

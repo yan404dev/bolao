@@ -27,6 +27,7 @@ public class Match {
   @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm")
   private LocalDateTime kickoffTime;
   private Status status;
+  private String externalRoundId;
 
   public boolean isFinished() {
     return status == Status.FINISHED;

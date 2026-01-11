@@ -7,6 +7,8 @@ import java.util.List;
 public interface ExternalMatchProvider {
   List<Match> fetchMatchesByRound(int leagueId, int season, String externalRoundId);
 
+  List<Match> fetchAllMatchesForSeason(int leagueId, int season);
+
   List<String> fetchAvailableRounds(int leagueId, int season);
 
   String getChampionshipName(int leagueId);

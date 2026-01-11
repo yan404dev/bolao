@@ -39,6 +39,11 @@ public class RoundPricingService {
       return STANDARD_PRICE;
     }
 
+    // Só acumula se a rodada anterior já encerrou de fato
+    if (previousRound.getStatus() != Round.Status.CLOSED && previousRound.getStatus() != Round.Status.CALCULATED) {
+      return STANDARD_PRICE;
+    }
+
     if (!hasWinner(previousRound)) {
       log.info("Round {}: Accumulating price (No winner with >= {} pts)", previousRound.getId(),
           WINNING_SCORE_THRESHOLD);

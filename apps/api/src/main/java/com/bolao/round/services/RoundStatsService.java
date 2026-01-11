@@ -32,7 +32,6 @@ public class RoundStatsService {
     double currentRevenue = ticketCount * (round.getTicketPrice() != null ? round.getTicketPrice() : 0.0);
     double accumulatedValue = 0.0;
 
-    // Check if previous round accumulated and carry over its prize pool
     if (round.getStartDate() != null) {
       accumulatedValue = roundRepository.findPreviousRound(round.getStartDate())
           .filter(prev -> !hasWinner(prev))

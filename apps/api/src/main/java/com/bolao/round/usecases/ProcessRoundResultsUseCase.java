@@ -31,7 +31,11 @@ public class ProcessRoundResultsUseCase {
     Round round = roundRepository.findById(roundId)
         .orElseThrow(() -> new NotFoundException("Round not found: " + roundId));
 
-    List<Match> matches = matchSyncService.fetchAndSyncMatches(roundId, round.getExternalRoundId());
+    // Fallback to defaults if round doesn't have league/season (legacy data)
+    int leagueId = round.getExternalLeagueId() != null ? round.getExternalLeagueId() : 39;
+    int season = round.getExternalSeason() != null ? round.getExternalSeason() : 2024;
+
+    List<Match> matches = matchSyncService.fetchAndSyncMatches(leagueId, season, roundId, round.getExternalRoundId());
 
     scoringService.calculateScores(roundId, matches);
 

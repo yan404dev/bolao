@@ -15,4 +15,7 @@ public class CreateRoundDto {
 
   @NotNull
   private Double ticketPrice;
+
+  private Integer leagueId;
+  private Integer season;
 }

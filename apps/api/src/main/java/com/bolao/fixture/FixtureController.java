@@ -17,7 +17,10 @@ public class FixtureController {
   private final FetchExternalMatchesUseCase fetchExternalMatchesUseCase;
 
   @GetMapping
-  public ResponseEntity<ApiResponse<List<Match>>> getFixtures(@RequestParam String roundId) {
-    return ResponseEntity.ok(ApiResponse.ok(fetchExternalMatchesUseCase.execute(roundId)));
+  public ResponseEntity<ApiResponse<List<Match>>> getFixtures(
+      @RequestParam String roundId,
+      @RequestParam(required = false) Integer leagueId,
+      @RequestParam(required = false) Integer season) {
+    return ResponseEntity.ok(ApiResponse.ok(fetchExternalMatchesUseCase.execute(leagueId, season, roundId)));
   }
 }

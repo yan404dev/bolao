@@ -27,6 +27,12 @@ public class RoundEntity {
   @Column(name = "external_round_id")
   private String externalRoundId;
 
+  @Column(name = "external_league_id")
+  private Integer externalLeagueId;
+
+  @Column(name = "external_season")
+  private Integer externalSeason;
+
   @Column(name = "championship_title")
   private String championshipTitle;
 

@@ -29,6 +29,8 @@ public class RoundMapper {
         .createdAt(entity.getCreatedAt())
         .championshipTitle(entity.getChampionshipTitle())
         .championshipLogo(entity.getChampionshipLogo())
+        .externalLeagueId(entity.getExternalLeagueId())
+        .externalSeason(entity.getExternalSeason())
         .matches(matches)
         .build();
   }
@@ -62,6 +64,8 @@ public class RoundMapper {
         .createdAt(round.getCreatedAt())
         .championshipTitle(round.getChampionshipTitle())
         .championshipLogo(round.getChampionshipLogo())
+        .externalLeagueId(round.getExternalLeagueId())
+        .externalSeason(round.getExternalSeason())
         .build();
   }
 

@@ -20,6 +20,8 @@ public class Round {
   private Long id;
   private String title;
   private String externalRoundId;
+  private Integer externalLeagueId;
+  private Integer externalSeason;
   private String championshipTitle;
   private String championshipLogo;
   private Status status;

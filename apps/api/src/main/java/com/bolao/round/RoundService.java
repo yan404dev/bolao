@@ -35,7 +35,7 @@ public class RoundService {
   @Async
   public void onStartup() {
     log.info("System startup: Triggering matches sync from provider...");
-    syncAllRoundsUseCase.execute();
+    syncAllRoundsUseCase.execute(null, null);
   }
 
   @Transactional(readOnly = true)

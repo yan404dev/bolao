@@ -20,6 +20,7 @@ export const metadata: Metadata = {
 
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Footer } from "@/shared/components/footer";
+import { Toaster } from "sonner";
 
 export default function RootLayout({
   children,
@@ -33,6 +34,7 @@ export default function RootLayout({
       >
         <NuqsAdapter>
           <QueryProvider>
+            <Toaster richColors position="top-right" />
             <main className="flex-1">
               {children}
             </main>

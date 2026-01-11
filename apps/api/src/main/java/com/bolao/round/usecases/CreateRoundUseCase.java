@@ -7,6 +7,7 @@ import com.bolao.round.repositories.MatchRepository;
 import com.bolao.round.repositories.RoundRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,11 +23,21 @@ public class CreateRoundUseCase {
   private final MatchRepository matchRepository;
   private final MatchSyncService matchSyncService;
 
+  @Value("${api.football.league.id:39}")
+  private int defaultLeagueId;
+
+  @Value("${api.football.season:2026}")
+  private int defaultSeason;
+
   @Transactional
-  public Round execute(String title, String externalRoundId, Double ticketPrice) {
+  public Round execute(String title, String externalRoundId, Double ticketPrice, Integer leagueId, Integer season) {
     log.info("Executing CreateRoundUseCase for: {}", title);
 
-    List<Match> matches = matchSyncService.fetchAndSyncMatches(null, externalRoundId);
+    // Default fallbacks if not provided
+    int targetLeagueId = leagueId != null ? leagueId : defaultLeagueId;
+    int targetSeason = season != null ? season : defaultSeason;
+
+    List<Match> matches = matchSyncService.fetchAndSyncMatches(targetLeagueId, targetSeason, null, externalRoundId);
 
     if (matches.isEmpty()) {
       throw new IllegalArgumentException("No matches found for round: " + externalRoundId);
@@ -35,11 +46,13 @@ public class CreateRoundUseCase {
     Round round = Round.builder()
         .title(title)
         .externalRoundId(externalRoundId)
+        .externalLeagueId(targetLeagueId)
+        .externalSeason(targetSeason)
         .status(Round.Status.OPEN)
         .prizePool(0.0)
         .totalTickets(0)
         .ticketPrice(ticketPrice)
-        .startDate(LocalDateTime.now())
+        .startDate(matches.get(0).getKickoffTime())
         .createdAt(LocalDateTime.now())
         .build();
 

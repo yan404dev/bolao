@@ -17,6 +17,7 @@ export function RoundCard({ round, index }: RoundCardProps) {
     OPEN: "bg-yellow-400 text-black",
     LIVE: "bg-red-600 text-white animate-pulse",
     CLOSED: "bg-gray-900 text-white",
+    CALCULATED: "bg-blue-600 text-white",
     CANCELLED: "bg-red-100 text-red-600",
   };
 
@@ -24,6 +25,7 @@ export function RoundCard({ round, index }: RoundCardProps) {
     OPEN: "Aberta",
     LIVE: "Ao Vivo",
     CLOSED: "Encerrada",
+    CALCULATED: "Finalizada",
     CANCELLED: "Cancelada",
   };
 

@@ -25,10 +25,10 @@ public class MatchSyncService {
   private final RoundRepository roundRepository;
   private final RoundPricingService pricingService;
 
-  public List<Match> fetchAndSyncMatches(Long roundId, String externalRoundId) {
+  public List<Match> fetchAndSyncMatches(int leagueId, int season, Long roundId, String externalRoundId) {
     log.info("Requesting match sync for external round: {} (local id: {})", externalRoundId, roundId);
 
-    List<Match> externalMatches = matchProvider.fetchMatchesByRound(externalRoundId);
+    List<Match> externalMatches = matchProvider.fetchMatchesByRound(leagueId, season, externalRoundId);
 
     if (roundId != null && !externalMatches.isEmpty()) {
       for (Match match : externalMatches) {
@@ -41,10 +41,13 @@ public class MatchSyncService {
   }
 
   @Transactional
-  public List<Round> syncAllRounds() {
-    log.info("Starting database sync from external provider...");
-    List<String> availableRounds = matchProvider.fetchAvailableRounds();
+  public List<Round> syncAllRounds(int leagueId, int season) {
+    log.info("Starting database sync for league {} season {} from external provider...", leagueId, season);
+    List<String> availableRounds = matchProvider.fetchAvailableRounds(leagueId, season);
     List<Round> syncedRounds = new ArrayList<>();
+
+    String champName = matchProvider.getChampionshipName(leagueId);
+    String champLogo = matchProvider.getChampionshipLogo(leagueId);
 
     for (String extId : availableRounds) {
       if (roundRepository.findByExternalRoundId(extId).isPresent()) {
@@ -53,7 +56,7 @@ public class MatchSyncService {
       }
 
       log.info("Seeding Round {} from provider...", extId);
-      List<Match> matches = matchProvider.fetchMatchesByRound(extId);
+      List<Match> matches = matchProvider.fetchMatchesByRound(leagueId, season, extId);
 
       if (matches.isEmpty())
         continue;
@@ -63,10 +66,12 @@ public class MatchSyncService {
       double ticketPrice = pricingService.calculateInitialTicketPrice(matches.get(0).getKickoffTime());
 
       Round round = Round.builder()
-          .title(matchProvider.getChampionshipName() + " - " + extId)
+          .title(champName + " - " + extId)
           .externalRoundId(extId)
-          .championshipTitle(matchProvider.getChampionshipName())
-          .championshipLogo(matchProvider.getChampionshipLogo())
+          .externalLeagueId(leagueId)
+          .externalSeason(season)
+          .championshipTitle(champName)
+          .championshipLogo(champLogo)
           .status(roundStatus)
           .prizePool(0.0)
           .totalTickets(0)
@@ -88,8 +93,8 @@ public class MatchSyncService {
     return syncedRounds;
   }
 
-  public List<String> fetchAvailableRounds() {
-    return matchProvider.fetchAvailableRounds();
+  public List<String> fetchAvailableRounds(int leagueId, int season) {
+    return matchProvider.fetchAvailableRounds(leagueId, season);
   }
 
   public void syncLiveScores() {

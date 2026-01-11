@@ -35,16 +35,28 @@ export const roundService = {
   },
 
   calculateScores: async (roundId: number): Promise<void> => {
-    await api.post(`/rounds/${roundId}/calculate`);
+    await api.post(`/admin/rounds/${roundId}/calculate`);
   },
 
-  syncAll: async (): Promise<RoundEntity[]> => {
-    const { data } = await api.post<{ data: RoundEntity[] }>("/rounds/sync");
+  syncAll: async (leagueId: number, season: number): Promise<RoundEntity[]> => {
+    const { data } = await api.post<{ data: RoundEntity[] }>("/admin/rounds/sync", {
+      leagueId,
+      season,
+    });
     return data.data;
   },
 
-  getCalendar: async (): Promise<string[]> => {
-    const { data } = await api.get<{ data: string[] }>("/rounds/calendar");
+  getCalendar: async (leagueId: number, season: number): Promise<string[]> => {
+    const { data } = await api.get<{ data: string[] }>("/admin/rounds/calendar", {
+      params: { leagueId, season },
+    });
+    return data.data;
+  },
+
+  getLeagues: async (country: string = "Brazil"): Promise<any[]> => {
+    const { data } = await api.get<{ data: any[] }>("/admin/rounds/leagues", {
+      params: { country },
+    });
     return data.data;
   },
 };

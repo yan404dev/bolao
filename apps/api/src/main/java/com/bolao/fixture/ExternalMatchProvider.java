@@ -1,14 +1,17 @@
 package com.bolao.fixture;
 
+import com.bolao.fixture.entities.League;
 import com.bolao.round.entities.Match;
 import java.util.List;
 
 public interface ExternalMatchProvider {
-  List<Match> fetchMatchesByRound(String externalRoundId);
+  List<Match> fetchMatchesByRound(int leagueId, int season, String externalRoundId);
 
-  List<String> fetchAvailableRounds();
+  List<String> fetchAvailableRounds(int leagueId, int season);
 
-  String getChampionshipName();
+  String getChampionshipName(int leagueId);
 
-  String getChampionshipLogo();
+  String getChampionshipLogo(int leagueId);
+
+  List<League> fetchLeagues(String country);
 }

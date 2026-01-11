@@ -24,16 +24,16 @@ public class ApiFootballProvider implements ExternalMatchProvider {
   @Value("${api.football.key}")
   private String apiKey;
 
-  @Value("${api.football.league.id:13}")
-  private int leagueId;
+  @Value("${api.football.league.id:39}")
+  private int defaultLeagueId;
 
   @Value("${api.football.season:2026}")
-  private int season;
+  private int defaultSeason;
 
   private static final String BASE_URL = "https://v3.football.api-sports.io";
 
   @Override
-  public List<Match> fetchMatchesByRound(String externalRoundId) {
+  public List<Match> fetchMatchesByRound(int leagueId, int season, String externalRoundId) {
     log.info("Fetching matches for league {}, season {}, round {}", leagueId, season, externalRoundId);
     ApiFootballFixtureResponse response = restClient.get()
         .uri(BASE_URL + "/fixtures?league={leagueId}&season={season}&round={round}",
@@ -46,7 +46,7 @@ public class ApiFootballProvider implements ExternalMatchProvider {
   }
 
   @Override
-  public List<String> fetchAvailableRounds() {
+  public List<String> fetchAvailableRounds(int leagueId, int season) {
     log.info("Fetching available rounds for league {}, season {}", leagueId, season);
     log.debug("Using API key: {}...", apiKey != null && apiKey.length() > 10 ? apiKey.substring(0, 10) : "NULL");
     try {
@@ -71,16 +71,16 @@ public class ApiFootballProvider implements ExternalMatchProvider {
   }
 
   @Override
-  public String getChampionshipName() {
-    return fetchChampionshipDetails().getName();
+  public String getChampionshipName(int leagueId) {
+    return fetchChampionshipDetails(leagueId).getName();
   }
 
   @Override
-  public String getChampionshipLogo() {
-    return fetchChampionshipDetails().getLogo();
+  public String getChampionshipLogo(int leagueId) {
+    return fetchChampionshipDetails(leagueId).getLogo();
   }
 
-  private ApiFootballLeagueResponse.League fetchChampionshipDetails() {
+  private ApiFootballLeagueResponse.League fetchChampionshipDetails(int leagueId) {
     ApiFootballLeagueResponse response = restClient.get()
         .uri(BASE_URL + "/leagues?id={leagueId}", leagueId)
         .headers(h -> h.addAll(createHeaders()))
@@ -91,6 +91,31 @@ public class ApiFootballProvider implements ExternalMatchProvider {
       return response.getResponse().get(0).getLeague();
     }
     return new ApiFootballLeagueResponse.League();
+  }
+
+  @Override
+  public List<com.bolao.fixture.entities.League> fetchLeagues(String country) {
+    log.info("Fetching leagues for country: {}", country);
+    String uri = BASE_URL + "/leagues?country=" + country;
+
+    ApiFootballLeagueResponse response = restClient.get()
+        .uri(uri)
+        .headers(h -> h.addAll(createHeaders()))
+        .retrieve()
+        .body(ApiFootballLeagueResponse.class);
+
+    if (response == null || response.getResponse() == null) {
+      return new ArrayList<>();
+    }
+
+    return response.getResponse().stream()
+        .map(item -> com.bolao.fixture.entities.League.builder()
+            .id(item.getLeague().getId())
+            .name(item.getLeague().getName())
+            .logo(item.getLeague().getLogo())
+            .country(item.getCountry() != null ? item.getCountry().getName() : null)
+            .build())
+        .toList();
   }
 
   private HttpHeaders createHeaders() {

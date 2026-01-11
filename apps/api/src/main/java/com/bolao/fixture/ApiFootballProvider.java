@@ -46,6 +46,23 @@ public class ApiFootballProvider implements ExternalMatchProvider {
   }
 
   @Override
+  public List<Match> fetchAllMatchesForSeason(int leagueId, int season) {
+    log.info("Fetching all matches for league {}, season {}", leagueId, season);
+    List<String> rounds = fetchAvailableRounds(leagueId, season);
+    List<Match> allMatches = new ArrayList<>();
+
+    for (String round : rounds) {
+      List<Match> matches = fetchMatchesByRound(leagueId, season, round);
+      for (Match m : matches) {
+        m.setExternalRoundId(round);
+      }
+      allMatches.addAll(matches);
+    }
+
+    return allMatches;
+  }
+
+  @Override
   public List<String> fetchAvailableRounds(int leagueId, int season) {
     log.info("Fetching available rounds for league {}, season {}", leagueId, season);
     log.debug("Using API key: {}...", apiKey != null && apiKey.length() > 10 ? apiKey.substring(0, 10) : "NULL");

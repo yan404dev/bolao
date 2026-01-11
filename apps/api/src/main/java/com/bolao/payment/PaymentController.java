@@ -27,7 +27,9 @@ public class PaymentController {
 
     log.info("Webhook received (ID: {}). Payload: {}", requestId, payload);
 
-    if (!securityService.isValidSignature(signature, requestId, payload.toString())) {
+    String resourceId = extractResourceId(payload);
+
+    if (!securityService.isValidSignature(signature, requestId, resourceId)) {
       log.warn("Security check failed for webhook notification");
       return ResponseEntity.status(403).body(ApiResponse.error("Invalid signature"));
     }
@@ -37,22 +39,27 @@ public class PaymentController {
       return ResponseEntity.ok(ApiResponse.ok("Event ignored: " + type));
     }
 
-    Object dataObj = payload.get("data");
-    if (!(dataObj instanceof Map)) {
-      return ResponseEntity.badRequest().body(ApiResponse.error("Invalid payload structure"));
-    }
-
-    @SuppressWarnings("unchecked")
-    Map<String, Object> data = (Map<String, Object>) dataObj;
-    String externalId = String.valueOf(data.get("id"));
-
-    if (externalId == null || "null".equals(externalId)) {
+    if (resourceId == null) {
       return ResponseEntity.badRequest().body(ApiResponse.error("Missing payment ID"));
     }
 
-    HandlePaymentWebhookUseCase.Result result = handlePaymentWebhookUseCase.execute(externalId);
+    HandlePaymentWebhookUseCase.Result result = handlePaymentWebhookUseCase.execute(resourceId);
     log.info("Webhook processed: {}", result.message());
 
     return ResponseEntity.ok(ApiResponse.ok(result.message()));
+  }
+
+  private String extractResourceId(Map<String, Object> payload) {
+    Object dataObj = payload.get("data");
+    if (dataObj instanceof Map) {
+      @SuppressWarnings("unchecked")
+      Map<String, Object> data = (Map<String, Object>) dataObj;
+      Object id = data.get("id");
+      return id != null ? String.valueOf(id) : null;
+    }
+    // Suporte para o botao "Testar" do Mercado Pago que pode enviar o ID fora do
+    // data dependendo da versao
+    Object id = payload.get("id");
+    return id != null ? String.valueOf(id) : null;
   }
 }

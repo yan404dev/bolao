@@ -23,13 +23,13 @@ public class WebhookSecurityService {
 
   private static final String HMAC_SHA256 = "HmacSHA256";
 
-  public boolean isValidSignature(String signature, String requestId, String body) {
+  public boolean isValidSignature(String signature, String requestId, String resourceId) {
     if (secret == null || secret.isEmpty()) {
       log.warn("Webhook secret not configured. Skipping validation.");
       return true;
     }
 
-    if (signature == null || signature.isEmpty() || requestId == null) {
+    if (signature == null || signature.isEmpty() || requestId == null || resourceId == null) {
       return false;
     }
 
@@ -42,7 +42,7 @@ public class WebhookSecurityService {
         return false;
       }
 
-      String manifest = String.format("id:%s;request-id:%s;ts:%s;", body, requestId, ts);
+      String manifest = String.format("id:%s;request-id:%s;ts:%s;", resourceId, requestId, ts);
       String generatedHash = generateHmac(manifest);
 
       return generatedHash.equals(v1);

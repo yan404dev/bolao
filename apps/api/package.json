@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "mvn spring-boot:run",
     "build": "mvn clean package -DskipTests",
-    "compile": "mvn compile"
+    "compile": "mvn compile",
+    "start": "java -jar target/*.jar"
   }
 }

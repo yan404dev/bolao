@@ -52,9 +52,18 @@ export function BettingModalSuccess({
 
         <div className="bg-white border-2 border-dashed border-black p-6 space-y-8">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-10">
-            <div className="w-44 h-44 bg-gray-100 border border-black flex items-center justify-center relative p-3 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)] shrink-0">
-              <QrCode className="w-36 h-36 text-black opacity-80" />
-              <div className="absolute inset-0 border-2 border-black/5 animate-pulse" />
+            <div className="w-44 h-44 bg-white border border-black flex items-center justify-center relative p-2 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)] shrink-0 overflow-hidden">
+              {betResult.payment.pixQrCodeBase64 && (
+                <img
+                  src={`data:image/png;base64,${betResult.payment.pixQrCodeBase64}`}
+                  alt="QR Code PIX"
+                  className="w-full h-full object-contain"
+                />
+              )}
+              {!betResult.payment.pixQrCodeBase64 && (
+                <QrCode className="w-36 h-36 text-black opacity-20" />
+              )}
+              <div className="absolute inset-0 border-2 border-black/5 pointer-events-none" />
             </div>
 
             <div className="text-center sm:text-left space-y-3">

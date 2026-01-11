@@ -7,7 +7,12 @@ import org.springframework.stereotype.Service;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.HexFormat;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -16,9 +21,11 @@ public class WebhookSecurityService {
   @Value("${mercadopago.webhook.secret:}")
   private String secret;
 
+  private static final String HMAC_SHA256 = "HmacSHA256";
+
   public boolean isValidSignature(String signature, String requestId, String body) {
     if (secret == null || secret.isEmpty()) {
-      log.warn("Webhook secret not configured. Skipping signature validation.");
+      log.warn("Webhook secret not configured. Skipping validation.");
       return true;
     }
 
@@ -27,36 +34,38 @@ public class WebhookSecurityService {
     }
 
     try {
-      String[] parts = signature.split(",");
-      String ts = null;
-      String v1 = null;
+      Map<String, String> signatureParts = parseSignature(signature);
+      String ts = signatureParts.get("ts");
+      String v1 = signatureParts.get("v1");
 
-      for (String part : parts) {
-        String[] keyValue = part.split("=");
-        if (keyValue.length == 2) {
-          if ("ts".equals(keyValue[0].trim()))
-            ts = keyValue[1].trim();
-          if ("v1".equals(keyValue[0].trim()))
-            v1 = keyValue[1].trim();
-        }
+      if (ts == null || v1 == null) {
+        return false;
       }
 
-      if (ts == null || v1 == null)
-        return false;
-
       String manifest = String.format("id:%s;request-id:%s;ts:%s;", body, requestId, ts);
+      String generatedHash = generateHmac(manifest);
 
-      Mac sha256Hmac = Mac.getInstance("HmacSHA256");
-      SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
-      sha256Hmac.init(secretKey);
-
-      byte[] hashBytes = sha256Hmac.doFinal(manifest.getBytes(StandardCharsets.UTF_8));
-      String hash = HexFormat.of().formatHex(hashBytes);
-
-      return hash.equals(v1);
+      return generatedHash.equals(v1);
     } catch (Exception e) {
-      log.error("Signature verification failed", e);
+      log.error("Error validating webhook signature", e);
       return false;
     }
+  }
+
+  private Map<String, String> parseSignature(String signature) {
+    return Arrays.stream(signature.split(","))
+        .map(part -> part.split("=", 2))
+        .filter(keyValue -> keyValue.length == 2)
+        .collect(Collectors.toMap(
+            kv -> kv[0].trim(),
+            kv -> kv[1].trim(),
+            (existing, replacement) -> replacement));
+  }
+
+  private String generateHmac(String data) throws NoSuchAlgorithmException, InvalidKeyException {
+    Mac mac = Mac.getInstance(HMAC_SHA256);
+    SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), HMAC_SHA256);
+    mac.init(secretKey);
+    return HexFormat.of().formatHex(mac.doFinal(data.getBytes(StandardCharsets.UTF_8)));
   }
 }

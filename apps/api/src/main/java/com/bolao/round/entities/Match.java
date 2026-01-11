@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Match {
   public enum Status {
-    SCHEDULED, LIVE, FINISHED, CANCELLED
+    SCHEDULED, LIVE, FINISHED, CANCELLED, POSTPONED
   }
 
   private Long id;

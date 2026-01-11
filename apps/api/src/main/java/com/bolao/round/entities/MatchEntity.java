@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 public class MatchEntity {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -48,6 +49,6 @@ public class MatchEntity {
   private Status status;
 
   public enum Status {
-    SCHEDULED, LIVE, FINISHED, CANCELLED
+    SCHEDULED, LIVE, FINISHED, CANCELLED, POSTPONED
   }
 }

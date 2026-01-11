@@ -1,10 +1,10 @@
 import { api } from "@/shared/lib/api";
-import { BetEntity } from "@/shared/entities";
+import { BetEntity, CreateBetResponse } from "@/shared/entities";
 import { CreateBetPayload } from "@/shared/schemas";
 
 export const betService = {
-  create: async (payload: CreateBetPayload): Promise<BetEntity> => {
-    const { data } = await api.post<{ data: BetEntity }>("/bets", payload);
+  create: async (payload: CreateBetPayload): Promise<CreateBetResponse> => {
+    const { data } = await api.post<{ data: CreateBetResponse }>("/bets", payload);
     return data.data;
   },
 

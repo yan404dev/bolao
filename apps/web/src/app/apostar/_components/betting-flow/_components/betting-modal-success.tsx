@@ -8,7 +8,7 @@ interface BettingModalSuccessProps {
   betResult: {
     bet: {
       name: string;
-      ticketCode: string;
+      ticketCode: string | null;
     };
     payment: {
       pixCopyPaste: string;

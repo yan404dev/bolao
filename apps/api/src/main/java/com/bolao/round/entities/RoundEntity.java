@@ -59,6 +59,6 @@ public class RoundEntity {
   private List<MatchEntity> matches = new ArrayList<>();
 
   public enum Status {
-    OPEN, CLOSED, CALCULATED, CANCELLED
+    OPEN, LIVE, CLOSED, CALCULATED, CANCELLED
   }
 }

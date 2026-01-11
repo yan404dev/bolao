@@ -45,6 +45,6 @@ public class Round {
   public String getFormattedPrizePool() {
     if (prizePool == null)
       return "R$ 0,00";
-    return String.format("R$ %.2f", prizePool / 100.0).replace(".", ",");
+    return String.format("R$ %.2f", prizePool).replace(".", ",");
   }
 }

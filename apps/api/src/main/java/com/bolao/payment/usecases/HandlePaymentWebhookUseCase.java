@@ -1,5 +1,7 @@
 package com.bolao.payment.usecases;
 
+import com.bolao.bet.entities.Bet;
+import com.bolao.bet.repositories.BetRepository;
 import com.bolao.payment.PaymentProvider;
 import com.bolao.payment.entities.Payment;
 import com.bolao.payment.entities.PaymentStatus;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Component
@@ -23,6 +26,7 @@ import java.util.Optional;
 public class HandlePaymentWebhookUseCase {
 
   private final PaymentRepository paymentRepository;
+  private final BetRepository betRepository;
   private final PaymentProvider paymentProvider;
   private final ApplicationEventPublisher eventPublisher;
   private final WebhookSecurityService securityService;
@@ -33,13 +37,12 @@ public class HandlePaymentWebhookUseCase {
   @Transactional
   public Result execute(String signature, String requestId, Map<String, Object> payload) {
     String resourceId = extractResourceId(payload);
+    String type = String.valueOf(payload.get("type"));
 
-    if (!securityService.isValidSignature(signature, requestId, resourceId)) {
-      log.warn("Security check failed for webhook notification: {}", resourceId);
-      throw new UnauthorizedException("Invalid signature");
-    }
+    log.info("Webhook received: type={}, resourceId={}", type, resourceId);
 
-    String type = (String) payload.get("type");
+    validateSecurity(signature, requestId, resourceId);
+
     if (!"payment".equals(type)) {
       return new Result("Event ignored: " + type, null);
     }
@@ -48,30 +51,34 @@ public class HandlePaymentWebhookUseCase {
       throw new IllegalArgumentException("Missing payment ID in payload");
     }
 
-    Optional<Payment> paymentOpt = paymentRepository.findByExternalId(resourceId);
-    if (paymentOpt.isEmpty()) {
-      log.info("Payment record not found locally (might be a test notification): {}", resourceId);
-      return new Result("Payment record not found: " + resourceId, null);
-    }
+    return paymentRepository.findByExternalId(resourceId)
+        .map(this::processStatusUpdate)
+        .orElseGet(() -> {
+          log.info("Payment record not found locally (likely test notification): {}", resourceId);
+          return new Result("Payment record not found", null);
+        });
+  }
 
-    return processStatusUpdate(paymentOpt.get());
+  private void validateSecurity(String signature, String requestId, String resourceId) {
+    if (!securityService.isValidSignature(signature, requestId, resourceId)) {
+      log.warn("Security check failed for webhook notification: {}", resourceId);
+      throw new UnauthorizedException("Invalid signature or missing headers");
+    }
   }
 
   private Result processStatusUpdate(Payment payment) {
-    String externalId = payment.getExternalId();
-
     if (payment.isPaid()) {
-      return new Result("Payment already processed and approved", payment.getStatus());
+      return new Result("Payment already processed", payment.getStatus());
     }
 
+    String externalId = payment.getExternalId();
     String providerStatus = paymentProvider.getPaymentStatus(externalId);
     PaymentStatus newStatus = mapStatus(providerStatus);
 
+    log.info("Payment {}: provider reported '{}', mapped to {}", externalId, providerStatus, newStatus);
+
     if (newStatus == PaymentStatus.APPROVED) {
-      payment.markAsPaid(LocalDateTime.now());
-      eventPublisher.publishEvent(new PaymentApprovedEvent(this,
-          externalId, payment.getBetId(), payment.getPaidAt()));
-      log.info("Payment {} approved and event published", externalId);
+      approvePayment(payment);
     } else {
       payment.updateStatus(newStatus);
     }
@@ -80,28 +87,44 @@ public class HandlePaymentWebhookUseCase {
     return new Result("Status updated to " + newStatus, newStatus);
   }
 
+  private void approvePayment(Payment payment) {
+    payment.markAsPaid(LocalDateTime.now());
+
+    betRepository.findById(payment.getBetId()).ifPresent(bet -> {
+      bet.setTicketCode(generateTicketCode(bet.getRoundId()));
+      bet.setStatus(Bet.PaymentStatus.PAID);
+      betRepository.save(bet);
+      log.info("Ticket generated for bet {}: {}", bet.getId(), bet.getTicketCode());
+    });
+
+    eventPublisher.publishEvent(new PaymentApprovedEvent(this,
+        payment.getExternalId(), payment.getBetId(), payment.getPaidAt()));
+
+    log.info("Payment {} approved and event published", payment.getExternalId());
+  }
+
+  private String generateTicketCode(Long roundId) {
+    String uuid = UUID.randomUUID().toString().substring(0, 6).toUpperCase();
+    return String.format("%d-%s", roundId, uuid);
+  }
+
   private String extractResourceId(Map<String, Object> payload) {
-    Object dataObj = payload.get("data");
-    if (dataObj instanceof Map) {
-      @SuppressWarnings("unchecked")
-      Map<String, Object> data = (Map<String, Object>) dataObj;
-      Object id = data.get("id");
-      return id != null ? String.valueOf(id) : null;
+    if (payload.get("data") instanceof Map<?, ?> data) {
+      return Optional.ofNullable(data.get("id")).map(String::valueOf).orElse(null);
     }
-    Object id = payload.get("id");
-    return id != null ? String.valueOf(id) : null;
+    return Optional.ofNullable(payload.get("id")).map(String::valueOf).orElse(null);
   }
 
   private PaymentStatus mapStatus(String status) {
     if (status == null)
       return PaymentStatus.PENDING;
+
     return switch (status.toLowerCase()) {
       case "approved", "paid" -> PaymentStatus.APPROVED;
       case "expired" -> PaymentStatus.EXPIRED;
-      case "rejected", "rejected_by_bank", "cc_rejected_bad_filled_date" -> PaymentStatus.REJECTED;
+      case "rejected", "rejected_by_bank" -> PaymentStatus.REJECTED;
       case "refunded", "charged_back" -> PaymentStatus.REFUNDED;
-      case "cancelled", "cancelled_by_user" -> PaymentStatus.REJECTED;
-      case "in_process", "pending" -> PaymentStatus.PENDING;
+      case "cancelled" -> PaymentStatus.REJECTED;
       default -> PaymentStatus.PENDING;
     };
   }

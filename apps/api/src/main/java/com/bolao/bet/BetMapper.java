@@ -31,6 +31,7 @@ public class BetMapper {
         .ticketCode(entity.getTicketCode())
         .points(entity.getPoints())
         .predictions(predictions)
+        .status(entity.getStatus())
         .createdAt(entity.getCreatedAt())
         .build();
   }
@@ -43,6 +44,7 @@ public class BetMapper {
         .phone(bet.getPhone())
         .ticketCode(bet.getTicketCode())
         .points(bet.getPoints())
+        .status(bet.getStatus())
         .createdAt(bet.getCreatedAt())
         .build();
 

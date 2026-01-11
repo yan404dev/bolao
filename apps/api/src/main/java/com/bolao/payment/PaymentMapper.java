@@ -13,6 +13,7 @@ public class PaymentMapper {
 
     return Payment.builder()
         .id(entity.getId())
+        .version(entity.getVersion())
         .betId(entity.getBetId())
         .externalId(entity.getExternalId())
         .amount(entity.getAmount())
@@ -31,6 +32,7 @@ public class PaymentMapper {
 
     return PaymentEntity.builder()
         .id(domain.getId())
+        .version(domain.getVersion())
         .betId(domain.getBetId())
         .externalId(domain.getExternalId())
         .amount(domain.getAmount())

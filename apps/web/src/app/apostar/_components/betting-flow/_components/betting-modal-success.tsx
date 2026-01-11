@@ -98,12 +98,20 @@ export function BettingModalSuccess({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-4">
           <div className="bg-yellow-400 border border-black p-5 rotate-1 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-center">
-            <p className="text-xs font-black text-black uppercase tracking-widest mb-1 text-left">BILHETE</p>
+            <p className="text-xs font-black text-black uppercase tracking-widest mb-1 text-left">STATUS DO BILHETE</p>
             <div className="flex items-center justify-between bg-white border border-black px-4 py-2">
-              <span className="text-2xl font-black text-black font-mono tracking-tighter">{betResult.bet.ticketCode}</span>
-              <button onClick={onCopyTicket} className="p-1 hover:bg-black hover:text-white transition-colors">
-                {copiedTicket ? <CheckCircle className="w-6 h-6" /> : <Copy className="w-6 h-6" />}
-              </button>
+              {betResult.bet.ticketCode ? (
+                <>
+                  <span className="text-2xl font-black text-black font-mono tracking-tighter">{betResult.bet.ticketCode}</span>
+                  <button onClick={onCopyTicket} className="p-1 hover:bg-black hover:text-white transition-colors">
+                    {copiedTicket ? <CheckCircle className="w-6 h-6" /> : <Copy className="w-6 h-6" />}
+                  </button>
+                </>
+              ) : (
+                <span className="text-xs font-black text-black uppercase tracking-tighter py-2">
+                  AGUARDANDO PAGAMENTO... ⏳
+                </span>
+              )}
             </div>
           </div>
 

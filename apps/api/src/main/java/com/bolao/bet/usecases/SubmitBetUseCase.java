@@ -50,14 +50,13 @@ public class SubmitBetUseCase {
     List<Match> matches = matchRepository.findByRoundId(dto.getRoundId());
     validatePredictionsCount(dto, matches);
 
-    String ticketCode = generateTicketCode(dto.getRoundId());
     Map<Long, Prediction> predictions = mapPredictions(dto.getPredictions());
 
     Bet bet = Bet.builder()
         .roundId(dto.getRoundId())
         .name(dto.getName())
         .phone(dto.getPhone())
-        .ticketCode(ticketCode)
+        .ticketCode(null)
         .predictions(predictions)
         .points(0)
         .status(Bet.PaymentStatus.PENDING)
@@ -78,6 +77,7 @@ public class SubmitBetUseCase {
     return BetResponseDto.builder()
         .bet(savedBet)
         .payment(BetResponseDto.PaymentDetails.builder()
+            .externalId(payment.getExternalId())
             .pixCopyPaste(payment.getPixCopyPaste())
             .pixQrCodeBase64(payment.getPixQrCodeBase64())
             .amount(payment.getAmount())
@@ -91,11 +91,6 @@ public class SubmitBetUseCase {
       throw new IllegalArgumentException(
           "Must provide predictions for all " + matches.size() + " matches");
     }
-  }
-
-  private String generateTicketCode(Long roundId) {
-    String uuid = UUID.randomUUID().toString().substring(0, 6).toUpperCase();
-    return String.format("%d-%s", roundId, uuid);
   }
 
   private Map<Long, Prediction> mapPredictions(List<PredictionDto> dtos) {

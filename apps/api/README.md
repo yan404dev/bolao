@@ -1,86 +1,86 @@
 # Bolao API
 
-Spring Boot REST API for the Bolao betting pool application.
+API REST Spring Boot para a aplicacao de bolao.
 
-## Architecture
+## Arquitetura
 
-The project follows Clean Architecture principles with a modular structure organized by domain.
+O projeto segue principios de Clean Architecture com estrutura modular organizada por dominio.
 
 ```
 src/main/java/com/bolao/
-├── bet/                    # Bet domain
-│   ├── entities/           # Domain entities (Bet, Prediction)
-│   ├── repositories/       # Data access layer
-│   ├── usecases/           # Business logic
-│   ├── listeners/          # Event handlers
-│   ├── schedulers/         # Background jobs
-│   └── BetController.java  # HTTP endpoints
-├── payment/                # Payment domain
+├── bet/                    # Dominio de apostas
+│   ├── entities/           # Entidades de dominio (Bet, Prediction)
+│   ├── repositories/       # Camada de acesso a dados
+│   ├── usecases/           # Logica de negocio
+│   ├── listeners/          # Handlers de eventos
+│   ├── schedulers/         # Jobs em background
+│   └── BetController.java  # Endpoints HTTP
+├── payment/                # Dominio de pagamentos
 │   ├── entities/           # Payment, PaymentStatus
-│   ├── repositories/       # Data access
+│   ├── repositories/       # Acesso a dados
 │   ├── usecases/           # GeneratePayment, HandleWebhook
-│   ├── events/             # Domain events
+│   ├── events/             # Eventos de dominio
 │   └── PaymentController.java
-├── round/                  # Round domain
+├── round/                  # Dominio de rodadas
 │   ├── entities/           # Round, Match
-│   ├── repositories/       # Data access
+│   ├── repositories/       # Acesso a dados
 │   ├── usecases/           # ProcessResults, SyncRounds
 │   ├── services/           # RoundPricing, RoundStats
 │   └── RoundController.java
-├── fixture/                # External API integration
-│   ├── services/           # API-Football client
-│   └── dtos/               # External API DTOs
-├── shared/                 # Cross-cutting concerns
+├── fixture/                # Integracao com API externa
+│   ├── services/           # Cliente API-Football
+│   └── dtos/               # DTOs da API externa
+├── shared/                 # Recursos compartilhados
 │   ├── entities/           # FailedEventEntity (DLQ)
-│   ├── repositories/       # Shared repositories
+│   ├── repositories/       # Repositorios compartilhados
 │   ├── services/           # FailedEventService
-│   ├── config/             # Spring configuration
-│   └── exceptions/         # Global exception handling
+│   ├── config/             # Configuracao Spring
+│   └── exceptions/         # Tratamento global de excecoes
 └── BolaoApiApplication.java
 ```
 
-## Domain Modules
+## Modulos de Dominio
 
-### Bet
+### Bet (Apostas)
 
-Handles bet submission, payment confirmation, and scoring.
+Gerencia submissao de apostas, confirmacao de pagamento e pontuacao.
 
-| Component | Responsibility |
-|-----------|----------------|
-| `SubmitBetUseCase` | Creates new bet with predictions |
-| `ConfirmBetPaymentUseCase` | Updates bet status after payment |
-| `CancelLatePendingBetsUseCase` | Cancels unpaid bets after round starts |
-| `BetPaymentListener` | Reacts to PaymentApprovedEvent |
-| `PaymentRetryScheduler` | Retries failed payment confirmations |
+| Componente | Responsabilidade |
+|------------|------------------|
+| `SubmitBetUseCase` | Cria nova aposta com palpites |
+| `ConfirmBetPaymentUseCase` | Atualiza status da aposta apos pagamento |
+| `CancelLatePendingBetsUseCase` | Cancela apostas nao pagas apos inicio da rodada |
+| `BetPaymentListener` | Reage ao PaymentApprovedEvent |
+| `PaymentRetryScheduler` | Retenta confirmacoes de pagamento falhas |
 
-### Payment
+### Payment (Pagamentos)
 
-Manages PIX payment generation and webhook processing.
+Gerencia geracao de pagamento PIX e processamento de webhooks.
 
-| Component | Responsibility |
-|-----------|----------------|
-| `GeneratePaymentUseCase` | Creates PIX payment via Mercado Pago |
-| `HandlePaymentWebhookUseCase` | Processes payment status updates |
-| `PaymentProvider` | Interface for payment gateways |
-| `MercadoPagoPaymentProvider` | Mercado Pago implementation |
-| `MockPaymentProvider` | Development mock |
+| Componente | Responsabilidade |
+|------------|------------------|
+| `GeneratePaymentUseCase` | Cria pagamento PIX via Mercado Pago |
+| `HandlePaymentWebhookUseCase` | Processa atualizacoes de status de pagamento |
+| `PaymentProvider` | Interface para gateways de pagamento |
+| `MercadoPagoPaymentProvider` | Implementacao Mercado Pago |
+| `MockPaymentProvider` | Mock para desenvolvimento |
 
-### Round
+### Round (Rodadas)
 
-Manages betting rounds and match data synchronization.
+Gerencia rodadas de apostas e sincronizacao de dados de partidas.
 
-| Component | Responsibility |
-|-----------|----------------|
-| `SyncRoundsUseCase` | Imports rounds from API-Football |
-| `ProcessRoundResultsUseCase` | Calculates points after matches |
-| `RoundPricingService` | Dynamic ticket pricing |
-| `RoundStatsService` | Round statistics and KPIs |
+| Componente | Responsabilidade |
+|------------|------------------|
+| `SyncRoundsUseCase` | Importa rodadas da API-Football |
+| `ProcessRoundResultsUseCase` | Calcula pontos apos partidas |
+| `RoundPricingService` | Precificacao dinamica de bilhetes |
+| `RoundStatsService` | Estatisticas e KPIs da rodada |
 
-## Key Patterns
+## Padroes Principais
 
-### Use Case Pattern
+### Padrao Use Case
 
-Each business operation is encapsulated in a dedicated use case class:
+Cada operacao de negocio e encapsulada em uma classe de use case dedicada:
 
 ```java
 @Service
@@ -91,14 +91,14 @@ public class SubmitBetUseCase {
 
     @Transactional
     public BetResponseDto execute(CreateBetDto request) {
-        // Business logic here
+        // Logica de negocio aqui
     }
 }
 ```
 
-### Repository Pattern
+### Padrao Repository
 
-Domain repositories abstract data access with clean interfaces:
+Repositorios de dominio abstraem o acesso a dados com interfaces limpas:
 
 ```java
 public interface BetRepository {
@@ -110,21 +110,21 @@ public interface BetRepository {
 
 ### Dead Letter Queue
 
-Failed event processing uses a database-backed retry mechanism:
+O processamento de eventos falhos usa um mecanismo de retry baseado em banco de dados:
 
 ```
-Event fails -> Persisted to failed_events table
+Evento falha -> Persiste na tabela failed_events
                       |
-Scheduler runs every 60s -> Finds pending retries
+Scheduler executa a cada 60s -> Busca retries pendentes
                       |
-Retry with exponential backoff (1min, 2min, 4min...)
+Retry com exponential backoff (1min, 2min, 4min...)
                       |
-After 5 attempts -> Moves to DEAD status
+Apos 5 tentativas -> Move para status DEAD
 ```
 
-### Event-Driven Architecture
+### Arquitetura Orientada a Eventos
 
-Domain events decouple modules:
+Eventos de dominio desacoplam modulos:
 
 ```java
 @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -133,11 +133,11 @@ public void onPaymentApproved(PaymentApprovedEvent event) {
 }
 ```
 
-## Database
+## Banco de Dados
 
 ### Migrations
 
-Database schema is managed with Flyway:
+O schema do banco e gerenciado com Flyway:
 
 ```
 src/main/resources/db/migration/
@@ -149,7 +149,7 @@ src/main/resources/db/migration/
 └── V6__create_failed_events_table.sql
 ```
 
-### Entity Relationship
+### Relacionamento de Entidades
 
 ```
 rounds (1) ─── (N) matches
@@ -159,27 +159,27 @@ rounds (1) ─── (N) matches
               └──── (1) payments
 ```
 
-## Configuration
+## Configuracao
 
-| Property | Description | Default |
-|----------|-------------|---------|
-| `server.port` | API port | 3001 |
-| `spring.datasource.url` | PostgreSQL URL | localhost:5432/bolao |
-| `spring.jpa.hibernate.ddl-auto` | Schema management | validate |
-| `spring.flyway.enabled` | Enable migrations | true |
+| Propriedade | Descricao | Padrao |
+|-------------|-----------|--------|
+| `server.port` | Porta da API | 3001 |
+| `spring.datasource.url` | URL PostgreSQL | localhost:5432/bolao |
+| `spring.jpa.hibernate.ddl-auto` | Gerenciamento de schema | validate |
+| `spring.flyway.enabled` | Habilitar migrations | true |
 
-## Running
+## Executando
 
 ```bash
-# Development
+# Desenvolvimento
 mvn spring-boot:run
 
-# Production build
+# Build de producao
 mvn clean package -DskipTests
 java -jar target/api-0.1.0.jar
 ```
 
-## Testing
+## Testes
 
 ```bash
 mvn test

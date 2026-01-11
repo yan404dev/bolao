@@ -1,48 +1,48 @@
 # Bolao Web
 
-Next.js frontend for the Bolao betting pool application.
+Frontend Next.js para a aplicacao de bolao.
 
-## Architecture
+## Arquitetura
 
-The project follows a feature-based architecture with shared modules.
+O projeto segue uma arquitetura baseada em features com modulos compartilhados.
 
 ```
 src/
 ├── app/                    # Next.js App Router
-│   ├── (home)/             # Landing page (route group)
-│   ├── apostar/            # Betting flow
-│   ├── calendario/         # Calendar view
-│   ├── ranking/            # Leaderboard
-│   ├── regulamento/        # Rules page
-│   ├── rodada/             # Round details
-│   ├── layout.tsx          # Root layout
-│   └── globals.css         # Global styles
-├── shared/                 # Shared modules
-│   ├── components/         # Reusable UI components
-│   ├── entities/           # TypeScript interfaces
-│   ├── services/           # API client functions
-│   ├── schemas/            # Zod validation schemas
-│   ├── utils/              # Utility functions
-│   ├── lib/                # Third-party configurations
-│   ├── constants/          # Application constants
-│   └── providers/          # React context providers
+│   ├── (home)/             # Pagina inicial (route group)
+│   ├── apostar/            # Fluxo de apostas
+│   ├── calendario/         # Visualizacao de calendario
+│   ├── ranking/            # Classificacao
+│   ├── regulamento/        # Pagina de regras
+│   ├── rodada/             # Detalhes da rodada
+│   ├── layout.tsx          # Layout raiz
+│   └── globals.css         # Estilos globais
+├── shared/                 # Modulos compartilhados
+│   ├── components/         # Componentes reutilizaveis
+│   ├── entities/           # Interfaces TypeScript
+│   ├── services/           # Funcoes cliente API
+│   ├── schemas/            # Schemas de validacao Zod
+│   ├── utils/              # Funcoes utilitarias
+│   ├── lib/                # Configuracoes de terceiros
+│   ├── constants/          # Constantes da aplicacao
+│   └── providers/          # Providers de contexto React
 ```
 
-## Feature Modules
+## Modulos de Feature
 
-### Apostar (Betting)
+### Apostar
 
-The betting flow is structured with co-located components and hooks:
+O fluxo de apostas e estruturado com componentes e hooks co-localizados:
 
 ```
 apostar/
-├── page.tsx                       # Page component
+├── page.tsx                       # Componente da pagina
 ├── _components/
-│   ├── active-rounds/             # Available rounds list
+│   ├── active-rounds/             # Lista de rodadas disponiveis
 │   │   ├── active-rounds.tsx
 │   │   └── hooks/
 │   │       └── use-active-rounds.ts
-│   └── betting-flow/              # Betting modal flow
+│   └── betting-flow/              # Fluxo do modal de apostas
 │       ├── betting-modal.tsx
 │       ├── hooks/
 │       │   ├── use-betting-form.ts
@@ -54,7 +54,7 @@ apostar/
 
 ### Ranking
 
-Leaderboard with filtering, pagination, and search:
+Classificacao com filtragem, paginacao e busca:
 
 ```
 ranking/
@@ -69,23 +69,23 @@ ranking/
 │       └── closed-rounds.tsx
 ```
 
-## Shared Modules
+## Modulos Compartilhados
 
 ### Components
 
-Reusable UI components built with shadcn/ui:
+Componentes de UI reutilizaveis construidos com shadcn/ui:
 
-| Component | Description |
-|-----------|-------------|
-| `DataTable` | Generic table with pagination and filtering |
-| `Modal` | Accessible modal dialog |
-| `Badge` | Status indicators |
-| `Button` | Action buttons with variants |
-| `Card` | Content containers |
+| Componente | Descricao |
+|------------|-----------|
+| `DataTable` | Tabela generica com paginacao e filtragem |
+| `Modal` | Dialog modal acessivel |
+| `Badge` | Indicadores de status |
+| `Button` | Botoes de acao com variantes |
+| `Card` | Containers de conteudo |
 
 ### Entities
 
-TypeScript interfaces matching API responses:
+Interfaces TypeScript correspondentes as respostas da API:
 
 ```typescript
 interface Round {
@@ -108,7 +108,7 @@ interface Bet {
 
 ### Services
 
-API client functions using fetch:
+Funcoes cliente de API usando fetch:
 
 ```typescript
 export async function getRounds(): Promise<Round[]> {
@@ -127,7 +127,7 @@ export async function submitBet(data: CreateBetDto): Promise<BetResponse> {
 
 ### Schemas
 
-Zod schemas for form validation:
+Schemas Zod para validacao de formularios:
 
 ```typescript
 export const bettingFormSchema = z.object({
@@ -137,11 +137,11 @@ export const bettingFormSchema = z.object({
 });
 ```
 
-## Key Patterns
+## Padroes Principais
 
-### Container/Presenter Pattern
+### Padrao Container/Presenter
 
-Logic is separated from presentation using custom hooks:
+Logica e separada da apresentacao usando hooks customizados:
 
 ```typescript
 // Container (hook)
@@ -152,30 +152,30 @@ function useBettingModal() {
   return { step, setStep, mutation };
 }
 
-// Presenter (component)
+// Presenter (componente)
 function BettingModal() {
   const { step, mutation } = useBettingModal();
   return step === 'form' ? <Form /> : <Success />;
 }
 ```
 
-### Feature Co-location
+### Co-localizacao de Features
 
-Each feature contains its own components, hooks, and types:
+Cada feature contem seus proprios componentes, hooks e tipos:
 
 ```
 feature/
-├── page.tsx              # Route entry point
-├── _components/          # Feature-specific components
+├── page.tsx              # Ponto de entrada da rota
+├── _components/          # Componentes especificos da feature
 │   └── component/
 │       ├── component.tsx
 │       └── hooks/
 │           └── use-component.ts
 ```
 
-### API Integration
+### Integracao com API
 
-React Query handles server state:
+React Query gerencia o estado do servidor:
 
 ```typescript
 function useRounds() {
@@ -186,28 +186,28 @@ function useRounds() {
 }
 ```
 
-## Styling
+## Estilizacao
 
-- TailwindCSS for utility-first styling
-- CSS variables for theming
-- shadcn/ui for base components
-- Responsive design with mobile-first approach
+- TailwindCSS para estilizacao utility-first
+- Variaveis CSS para temas
+- shadcn/ui para componentes base
+- Design responsivo com abordagem mobile-first
 
-## Configuration
+## Configuracao
 
-| File | Purpose |
-|------|---------|
-| `tailwind.config.ts` | Tailwind customization |
-| `next.config.ts` | Next.js configuration |
-| `tsconfig.json` | TypeScript settings |
+| Arquivo | Proposito |
+|---------|-----------|
+| `tailwind.config.ts` | Customizacao do Tailwind |
+| `next.config.ts` | Configuracao do Next.js |
+| `tsconfig.json` | Configuracoes TypeScript |
 
-## Running
+## Executando
 
 ```bash
-# Development
+# Desenvolvimento
 pnpm dev
 
-# Production build
+# Build de producao
 pnpm build
 pnpm start
 
@@ -215,8 +215,8 @@ pnpm start
 pnpm lint
 ```
 
-## Environment Variables
+## Variaveis de Ambiente
 
-| Variable | Description |
-|----------|-------------|
-| `NEXT_PUBLIC_API_URL` | Backend API URL |
+| Variavel | Descricao |
+|----------|-----------|
+| `NEXT_PUBLIC_API_URL` | URL da API backend |

@@ -1,64 +1,73 @@
 # Bolao
 
-A full-stack betting pool application for football match predictions. Users can place bets on match scores, and the system automatically calculates points and rankings when matches are completed.
+Aplicacao full-stack de bolao para palpites de partidas de futebol. Os usuarios podem fazer apostas nos placares das partidas, e o sistema calcula automaticamente os pontos e rankings quando as partidas sao finalizadas.
 
-## Project Structure
+## Estrutura do Projeto
 
-This is a monorepo managed with [Turborepo](https://turbo.build/repo) and [pnpm workspaces](https://pnpm.io/workspaces).
+Este e um monorepo gerenciado com [Turborepo](https://turbo.build/repo) e [pnpm workspaces](https://pnpm.io/workspaces).
 
 ```
 bolao/
 ├── apps/
-│   ├── api/          # Spring Boot REST API (Java 21)
-│   └── web/          # Next.js Frontend (React 19)
-├── turbo.json        # Turborepo configuration
+│   ├── api/          # API REST Spring Boot (Java 21)
+│   └── web/          # Frontend Next.js (React 19)
+├── turbo.json        # Configuracao Turborepo
 └── pnpm-workspace.yaml
 ```
 
-## Tech Stack
+## Stack Tecnologica
 
-| Layer | Technology |
-|-------|------------|
+| Camada | Tecnologia |
+|--------|------------|
 | Frontend | Next.js 15, React 19, TypeScript, TailwindCSS, shadcn/ui |
 | Backend | Spring Boot 3.4, Java 21, Spring Data JPA |
-| Database | PostgreSQL 16 |
+| Banco de Dados | PostgreSQL 16 |
 | Migrations | Flyway |
-| Payment | Mercado Pago PIX |
-| External API | API-Football |
+| Pagamento | Mercado Pago PIX |
+| API Externa | API-Football |
 
-## Prerequisites
+## Pre-requisitos
 
 - Node.js 20+
 - pnpm 9+
 - Java 21
 - Maven 3.9+
 - PostgreSQL 16
-- Docker (optional)
+- Docker (opcional)
 
-## Environment Setup
+## Configuracao do Ambiente
 
-1. Copy the example environment file:
+1. Copie os arquivos de ambiente de exemplo:
 
 ```bash
-cp .env.example .env
+cp apps/api/.env.example apps/api/.env
+cp apps/web/.env.example apps/web/.env.local
 ```
 
-2. Configure the variables in `.env`:
+2. Configure as variaveis em cada `.env`:
 
-| Variable | Description |
-|----------|-------------|
-| `DB_URL` | PostgreSQL connection string |
-| `DB_USERNAME` | Database username |
-| `DB_PASSWORD` | Database password |
-| `API_FOOTBALL_KEY` | API-Football access key |
-| `MERCADO_PAGO_ACCESS_TOKEN` | Mercado Pago credentials |
+**API (`apps/api/.env`):**
 
-## Running Locally
+| Variavel | Descricao |
+|----------|-----------|
+| `DB_URL` | String de conexao PostgreSQL |
+| `DB_USERNAME` | Usuario do banco |
+| `DB_PASSWORD` | Senha do banco |
+| `API_FOOTBALL_KEY` | Chave de acesso API-Football |
+| `MERCADO_PAGO_ACCESS_TOKEN` | Credenciais Mercado Pago |
 
-### Database
+**Web (`apps/web/.env.local`):**
+
+| Variavel | Descricao |
+|----------|-----------|
+| `NEXT_PUBLIC_API_URL` | URL da API backend |
+
+## Executando Localmente
+
+### Banco de Dados
 
 ```bash
-# Using Docker
+# Usando Docker
 docker run -d \
   --name bolao-db \
   -e POSTGRES_USER=bolao \
@@ -75,7 +84,7 @@ cd apps/api
 mvn spring-boot:run
 ```
 
-The API will be available at `http://localhost:3001`.
+A API estara disponivel em `http://localhost:3001`.
 
 ### Frontend (Web)
 
@@ -84,27 +93,27 @@ pnpm install
 pnpm dev
 ```
 
-The web application will be available at `http://localhost:3000`.
+A aplicacao web estara disponivel em `http://localhost:3000`.
 
-## API Documentation
+## Documentacao da API
 
-### Main Endpoints
+### Principais Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/v1/rounds` | List all rounds |
-| GET | `/api/v1/rounds/:id` | Get round details |
-| POST | `/api/v1/rounds/sync` | Sync rounds from API-Football |
-| POST | `/api/v1/bets` | Submit a new bet |
-| GET | `/api/v1/bets/:ticketCode` | Get bet by ticket |
-| POST | `/api/v1/payments` | Generate PIX payment |
-| POST | `/api/v1/payments/webhook` | Payment webhook |
+| Metodo | Endpoint | Descricao |
+|--------|----------|-----------|
+| GET | `/api/v1/rounds` | Listar todas as rodadas |
+| GET | `/api/v1/rounds/:id` | Obter detalhes da rodada |
+| POST | `/api/v1/rounds/sync` | Sincronizar rodadas da API-Football |
+| POST | `/api/v1/bets` | Submeter nova aposta |
+| GET | `/api/v1/bets/:ticketCode` | Buscar aposta por bilhete |
+| POST | `/api/v1/payments` | Gerar pagamento PIX |
+| POST | `/api/v1/payments/webhook` | Webhook de pagamento |
 
-## Project Documentation
+## Documentacao dos Projetos
 
-- [API Architecture](apps/api/README.md)
-- [Web Architecture](apps/web/README.md)
+- [Arquitetura da API](apps/api/README.md)
+- [Arquitetura do Web](apps/web/README.md)
 
-## License
+## Licenca
 
-Private project. All rights reserved.
+Projeto privado. Todos os direitos reservados.

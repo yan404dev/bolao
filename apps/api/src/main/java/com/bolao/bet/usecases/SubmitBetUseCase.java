@@ -1,9 +1,12 @@
 package com.bolao.bet.usecases;
 
+import com.bolao.bet.dtos.BetResponseDto;
 import com.bolao.bet.dtos.CreateBetDto;
 import com.bolao.bet.dtos.PredictionDto;
 import com.bolao.bet.entities.Bet;
 import com.bolao.bet.entities.Prediction;
+import com.bolao.payment.entities.Payment;
+import com.bolao.payment.usecases.GeneratePaymentUseCase;
 import com.bolao.bet.repositories.BetRepository;
 import com.bolao.round.entities.Match;
 import com.bolao.round.entities.Round;
@@ -31,9 +34,10 @@ public class SubmitBetUseCase {
   private final RoundRepository roundRepository;
   private final MatchRepository matchRepository;
   private final RoundStatsService statsService;
+  private final GeneratePaymentUseCase generatePaymentUseCase;
 
   @Transactional
-  public Bet execute(CreateBetDto dto) {
+  public BetResponseDto execute(CreateBetDto dto) {
     log.info("Executing SubmitBetUseCase for round: {} and user: {}", dto.getRoundId(), dto.getName());
 
     Round round = roundRepository.findById(dto.getRoundId())
@@ -62,11 +66,24 @@ public class SubmitBetUseCase {
 
     Bet savedBet = betRepository.save(bet);
 
-    // Update round statistics
+    Payment payment = generatePaymentUseCase.execute(
+        savedBet.getId(),
+        round.getTicketPrice() != null ? round.getTicketPrice() : 10.0,
+        "Aposta Bolão: " + savedBet.getTicketCode());
+
     statsService.updateRoundStats(savedBet.getRoundId());
 
-    log.info("Bet submitted successfully for round: {}. Ticket: {}", savedBet.getRoundId(), savedBet.getTicketCode());
-    return savedBet;
+    log.info("Bet submitted and payment generated for ticket: {}", savedBet.getTicketCode());
+
+    return BetResponseDto.builder()
+        .bet(savedBet)
+        .payment(BetResponseDto.PaymentDetails.builder()
+            .pixCopyPaste(payment.getPixCopyPaste())
+            .pixQrCodeBase64(payment.getPixQrCodeBase64())
+            .amount(payment.getAmount())
+            .expiration(payment.getExpiresAt().toString())
+            .build())
+        .build();
   }
 
   private void validatePredictionsCount(CreateBetDto dto, List<Match> matches) {

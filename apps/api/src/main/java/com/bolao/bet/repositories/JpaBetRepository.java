@@ -1,5 +1,6 @@
 package com.bolao.bet.repositories;
 
+import com.bolao.bet.entities.Bet;
 import com.bolao.bet.entities.BetEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -25,6 +26,8 @@ public interface JpaBetRepository extends JpaRepository<BetEntity, Long>, JpaSpe
       Pageable pageable);
 
   List<BetEntity> findByRoundIdOrderByPointsDesc(Long roundId);
+
+  List<BetEntity> findByRoundIdAndStatus(Long roundId, Bet.PaymentStatus status);
 
   Optional<BetEntity> findByTicketCode(String ticketCode);
 

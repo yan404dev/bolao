@@ -1,5 +1,6 @@
 package com.bolao.bet;
 
+import com.bolao.bet.dtos.BetResponseDto;
 import com.bolao.bet.dtos.CreateBetDto;
 import com.bolao.bet.entities.Bet;
 import com.bolao.bet.usecases.GetBetByCodeUseCase;
@@ -22,9 +23,9 @@ public class BetController {
   private final GetBetByCodeUseCase getBetByCodeUseCase;
 
   @PostMapping
-  public ResponseEntity<ApiResponse<Bet>> create(@Valid @RequestBody CreateBetDto dto) {
-    Bet bet = submitBetUseCase.execute(dto);
-    return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.ok(bet));
+  public ResponseEntity<ApiResponse<BetResponseDto>> create(@Valid @RequestBody CreateBetDto dto) {
+    BetResponseDto response = submitBetUseCase.execute(dto);
+    return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.ok(response));
   }
 
   @GetMapping("/{ticketCode}")

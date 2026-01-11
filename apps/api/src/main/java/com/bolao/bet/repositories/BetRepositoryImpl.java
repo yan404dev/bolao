@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -124,5 +123,13 @@ public class BetRepositoryImpl implements BetRepository {
   public Page<Bet> findByRoundIdWithFilters(Long roundId, String search, Integer minPoints, Pageable pageable) {
     return jpaRepository.findByRoundIdWithFilters(roundId, search, minPoints, pageable)
         .map(betMapper::toDomain);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<Bet> findByRoundIdAndStatus(Long roundId, Bet.PaymentStatus status) {
+    return jpaRepository.findByRoundIdAndStatus(roundId, status).stream()
+        .map(betMapper::toDomain)
+        .toList();
   }
 }

@@ -26,8 +26,9 @@ public class RoundController {
 
   @GetMapping
   public ResponseEntity<ApiResponse<List<Round>>> findAll(
-      @RequestParam(required = false) Round.Status status) {
-    return ResponseEntity.ok(ApiResponse.ok(listRoundsUseCase.execute(status)));
+      @RequestParam(required = false) Round.Status status,
+      @RequestParam(required = false) Integer limit) {
+    return ResponseEntity.ok(ApiResponse.ok(listRoundsUseCase.execute(status, limit)));
   }
 
   @GetMapping("/{id}")

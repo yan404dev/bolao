@@ -16,7 +16,14 @@ public class ListRoundsUseCase {
   private final RoundService roundService;
 
   public List<Round> execute(Round.Status status) {
-    log.info("Executing ListRoundsUseCase with status: {}", status);
-    return roundService.findAll(status);
+    return execute(status, null);
+  }
+
+  public List<Round> execute(Round.Status status, Integer limit) {
+    List<Round> rounds = roundService.findAll(status);
+    if (limit != null && limit > 0 && rounds.size() > limit) {
+      return rounds.subList(0, limit);
+    }
+    return rounds;
   }
 }

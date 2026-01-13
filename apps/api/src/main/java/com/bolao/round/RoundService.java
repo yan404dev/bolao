@@ -34,8 +34,14 @@ public class RoundService {
   @EventListener(ApplicationReadyEvent.class)
   @Async
   public void onStartup() {
-    log.info("System startup: Triggering matches sync from provider...");
-    syncAllRoundsUseCase.execute(null, null);
+    try {
+      // Small delay to ensure DB and other beans are fully settled
+      Thread.sleep(5000);
+      log.info("System startup: Triggering matches sync from provider...");
+      syncAllRoundsUseCase.execute(null, null);
+    } catch (Exception e) {
+      log.error("Startup sync failed: {}. This can be ignored if the app is still starting up.", e.getMessage());
+    }
   }
 
   @Transactional(readOnly = true)

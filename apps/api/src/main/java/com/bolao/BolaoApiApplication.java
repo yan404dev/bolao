@@ -29,7 +29,24 @@ public class BolaoApiApplication {
             }
         }
 
+        // Debug: Log database connection info
+        System.out.println("========== DATABASE CONNECTION DEBUG ==========");
+        System.out.println("PGHOST: " + maskValue(System.getenv("PGHOST")));
+        System.out.println("PGPORT: " + System.getenv("PGPORT"));
+        System.out.println("PGDATABASE: " + System.getenv("PGDATABASE"));
+        System.out.println("PGUSER: " + maskValue(System.getenv("PGUSER")));
+        System.out.println("DATABASE_URL set: " + (System.getenv("DATABASE_URL") != null ? "YES" : "NO"));
+        System.out.println("===============================================");
+
         SpringApplication.run(BolaoApiApplication.class, args);
         System.out.println("🚀 Bolao API running at http://localhost:3001");
+    }
+
+    private static String maskValue(String value) {
+        if (value == null)
+            return "null";
+        if (value.length() <= 4)
+            return "****";
+        return value.substring(0, 4) + "****";
     }
 }

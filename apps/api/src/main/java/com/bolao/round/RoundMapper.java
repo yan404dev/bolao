@@ -47,6 +47,8 @@ public class RoundMapper {
         .awayScore(entity.getAwayScore())
         .kickoffTime(entity.getKickoffTime())
         .status(Match.Status.valueOf(entity.getStatus().name()))
+        .externalRoundId(entity.getRound() != null ? entity.getRound().getExternalRoundId() : null)
+        .externalMatchId(entity.getExternalMatchId())
         .build();
   }
 
@@ -81,6 +83,7 @@ public class RoundMapper {
         .awayScore(match.getAwayScore())
         .kickoffTime(match.getKickoffTime())
         .status(MatchEntity.Status.valueOf(match.getStatus().name()))
+        .externalMatchId(match.getExternalMatchId())
         .build();
   }
 }

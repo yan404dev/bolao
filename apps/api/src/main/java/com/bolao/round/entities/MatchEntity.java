@@ -51,4 +51,7 @@ public class MatchEntity {
   public enum Status {
     SCHEDULED, LIVE, FINISHED, CANCELLED, POSTPONED
   }
+
+  @Column(name = "external_match_id")
+  private String externalMatchId;
 }

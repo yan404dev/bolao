@@ -28,6 +28,7 @@ public class Match {
   private LocalDateTime kickoffTime;
   private Status status;
   private String externalRoundId;
+  private String externalMatchId;
 
   public boolean isFinished() {
     return status == Status.FINISHED;

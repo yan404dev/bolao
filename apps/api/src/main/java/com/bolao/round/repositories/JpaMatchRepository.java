@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface JpaMatchRepository extends JpaRepository<MatchEntity, Long>, JpaSpecificationExecutor<MatchEntity> {
   List<MatchEntity> findByRoundId(Long roundId);
+
+  java.util.Optional<MatchEntity> findByExternalMatchId(String externalMatchId);
 }

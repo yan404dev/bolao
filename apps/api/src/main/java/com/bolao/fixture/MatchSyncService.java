@@ -1,9 +1,11 @@
 package com.bolao.fixture;
 
+import com.bolao.fixture.dtos.MatchResponseWrapper;
 import com.bolao.round.entities.Match;
 import com.bolao.round.entities.Round;
 import com.bolao.round.repositories.MatchRepository;
 import com.bolao.round.repositories.RoundRepository;
+import com.bolao.round.services.RoundPricingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.bolao.round.services.RoundPricingService;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -42,16 +44,18 @@ public class MatchSyncService {
 
   @Transactional
   public List<Round> syncAllRounds(int leagueId, int season) {
-    log.info("Starting optimized sync for league {} season {} (single API call)...", leagueId, season);
+    log.info("Starting smart sync for league {} season {}...", leagueId, season);
 
-    List<Match> allMatches = matchProvider.fetchAllMatchesForSeason(leagueId, season);
+    com.bolao.fixture.dtos.MatchResponseWrapper wrapper = matchProvider.fetchAllMatchesForSeason(leagueId, season);
+    List<Match> allMatches = wrapper.getMatches();
+
     if (allMatches.isEmpty()) {
       log.warn("No matches returned from provider for league {} season {}", leagueId, season);
       return new ArrayList<>();
     }
 
-    String champName = matchProvider.getChampionshipName(leagueId);
-    String champLogo = matchProvider.getChampionshipLogo(leagueId);
+    String champName = wrapper.getChampionshipName();
+    String champLogo = wrapper.getChampionshipLogo();
 
     java.util.Map<String, List<Match>> matchesByRound = allMatches.stream()
         .filter(m -> m.getExternalRoundId() != null)
@@ -60,45 +64,63 @@ public class MatchSyncService {
     List<Round> syncedRounds = new ArrayList<>();
 
     for (var entry : matchesByRound.entrySet()) {
-      String extId = entry.getKey();
-      List<Match> matches = entry.getValue();
+      String extRoundId = entry.getKey();
+      List<Match> roundMatches = entry.getValue();
 
-      if (roundRepository.findByExternalRoundId(extId).isPresent()) {
-        log.debug("Round {} already exists in DB, skipping", extId);
-        continue;
+      // 1. Find or Create Round
+      Round round = roundRepository.findByExternalRoundId(extRoundId).orElse(null);
+      boolean isNewRound = (round == null);
+
+      if (isNewRound) {
+        log.info("Seeding new Round {}...", extRoundId);
+        double ticketPrice = pricingService.calculateInitialTicketPrice(roundMatches.get(0).getKickoffTime());
+        round = Round.builder()
+            .title(champName + " - Rodada " + extRoundId)
+            .externalRoundId(extRoundId)
+            .externalLeagueId(leagueId)
+            .externalSeason(season)
+            .championshipTitle(champName)
+            .championshipLogo(champLogo)
+            .status(Round.Status.CLOSED) // Default for new rounds
+            .prizePool(0.0)
+            .totalTickets(0)
+            .ticketPrice(ticketPrice)
+            .startDate(roundMatches.get(0).getKickoffTime())
+            .endDate(findLatestKickoff(roundMatches))
+            .createdAt(LocalDateTime.now())
+            .build();
+        round = roundRepository.save(round);
+      } else {
+        log.debug("Found existing Round {}, updating matches...", extRoundId);
+        // Only update basic metadata if needed, but KEEP the status
+        round.setChampionshipTitle(champName);
+        round.setChampionshipLogo(champLogo);
+        round.setEndDate(findLatestKickoff(roundMatches));
+        round = roundRepository.save(round);
       }
 
-      log.info("Seeding Round {} with {} matches...", extId, matches.size());
+      // 2. Upsert Matches
+      for (Match externalMatch : roundMatches) {
+        Match existingMatch = matchRepository.findByExternalMatchId(externalMatch.getExternalMatchId()).orElse(null);
 
-      Round.Status roundStatus = Round.Status.CLOSED; // Default to CLOSED for manual control
-      double ticketPrice = pricingService.calculateInitialTicketPrice(matches.get(0).getKickoffTime());
-
-      Round round = Round.builder()
-          .title(champName + " - Rodada " + extId)
-          .externalRoundId(extId)
-          .externalLeagueId(leagueId)
-          .externalSeason(season)
-          .championshipTitle(champName)
-          .championshipLogo(champLogo)
-          .status(roundStatus)
-          .prizePool(0.0)
-          .totalTickets(0)
-          .ticketPrice(ticketPrice)
-          .startDate(matches.get(0).getKickoffTime())
-          .endDate(findLatestKickoff(matches))
-          .createdAt(LocalDateTime.now())
-          .build();
-
-      round = roundRepository.save(round);
-
-      for (Match match : matches) {
-        match.setRoundId(round.getId());
-        matchRepository.save(match);
+        if (existingMatch != null) {
+          // Update existing match
+          existingMatch.setHomeScore(externalMatch.getHomeScore());
+          existingMatch.setAwayScore(externalMatch.getAwayScore());
+          existingMatch.setStatus(externalMatch.getStatus());
+          existingMatch.setKickoffTime(externalMatch.getKickoffTime());
+          matchRepository.save(existingMatch);
+        } else {
+          // Create new match
+          externalMatch.setRoundId(round.getId());
+          matchRepository.save(externalMatch);
+        }
       }
+
       syncedRounds.add(round);
     }
 
-    log.info("Sync complete: {} rounds seeded from {} total matches", syncedRounds.size(), allMatches.size());
+    log.info("Smart Sync complete: {} rounds processed", syncedRounds.size());
     return syncedRounds;
   }
 

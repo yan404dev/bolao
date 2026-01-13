@@ -46,20 +46,29 @@ public class ApiFootballProvider implements ExternalMatchProvider {
   }
 
   @Override
-  public List<Match> fetchAllMatchesForSeason(int leagueId, int season) {
+  public MatchResponseWrapper fetchAllMatchesForSeason(int leagueId, int season) {
     log.info("Fetching all matches for league {}, season {}", leagueId, season);
     List<String> rounds = fetchAvailableRounds(leagueId, season);
     List<Match> allMatches = new ArrayList<>();
+
+    String champName = getChampionshipName(leagueId);
+    String champLogo = getChampionshipLogo(leagueId);
 
     for (String round : rounds) {
       List<Match> matches = fetchMatchesByRound(leagueId, season, round);
       for (Match m : matches) {
         m.setExternalRoundId(round);
+        // ApiFootballProvider doesn't easily expose the match ID in this structure
+        // without changing DTOs, but for now we'll maintain the list.
       }
       allMatches.addAll(matches);
     }
 
-    return allMatches;
+    return MatchResponseWrapper.builder()
+        .matches(allMatches)
+        .championshipName(champName)
+        .championshipLogo(champLogo)
+        .build();
   }
 
   @Override

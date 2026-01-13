@@ -2,6 +2,7 @@ package com.bolao.fixture;
 
 import com.bolao.fixture.dtos.FootballDataCompetitionResponse;
 import com.bolao.fixture.dtos.FootballDataMatchResponse;
+import com.bolao.fixture.dtos.MatchResponseWrapper;
 import com.bolao.fixture.entities.League;
 import com.bolao.round.entities.Match;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class FootballDataProvider implements ExternalMatchProvider {
   }
 
   @Override
-  public List<Match> fetchAllMatchesForSeason(int leagueId, int season) {
+  public MatchResponseWrapper fetchAllMatchesForSeason(int leagueId, int season) {
     log.info("Fetching ALL matches for league {}, season {} (single call)", leagueId, season);
 
     String code = getCompetitionCode(leagueId);
@@ -59,10 +60,13 @@ public class FootballDataProvider implements ExternalMatchProvider {
         .body(FootballDataMatchResponse.class);
 
     if (response == null || response.getMatches() == null) {
-      return new ArrayList<>();
+      return MatchResponseWrapper.builder().matches(new ArrayList<>()).build();
     }
 
-    return response.getMatches().stream()
+    String champName = response.getCompetition() != null ? response.getCompetition().getName() : "Unknown";
+    String champLogo = response.getCompetition() != null ? response.getCompetition().getEmblem() : null;
+
+    List<Match> matches = response.getMatches().stream()
         .map(data -> {
           Match match = new Match();
           match.setHomeTeam(data.getHomeTeam() != null ? data.getHomeTeam().getName() : "TBD");
@@ -71,6 +75,7 @@ public class FootballDataProvider implements ExternalMatchProvider {
           match.setAwayTeamLogo(data.getAwayTeam() != null ? data.getAwayTeam().getCrest() : null);
           match.setKickoffTime(data.getUtcDate() != null ? data.getUtcDate().toLocalDateTime() : null);
           match.setExternalRoundId(String.valueOf(data.getMatchday()));
+          match.setExternalMatchId(String.valueOf(data.getId()));
           match.setStatus(mapStatus(data.getStatus()));
           if (data.getScore() != null && data.getScore().getFullTime() != null) {
             match.setHomeScore(data.getScore().getFullTime().getHome());
@@ -79,6 +84,12 @@ public class FootballDataProvider implements ExternalMatchProvider {
           return match;
         })
         .toList();
+
+    return MatchResponseWrapper.builder()
+        .matches(matches)
+        .championshipName(champName)
+        .championshipLogo(champLogo)
+        .build();
   }
 
   private Match.Status mapStatus(String status) {

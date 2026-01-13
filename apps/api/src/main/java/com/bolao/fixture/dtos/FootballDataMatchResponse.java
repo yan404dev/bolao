@@ -108,6 +108,7 @@ public class FootballDataMatchResponse {
     match.setAwayTeamLogo(data.getAwayTeam() != null ? data.getAwayTeam().getCrest() : null);
     match.setKickoffTime(data.getUtcDate() != null ? data.getUtcDate().toLocalDateTime() : null);
     match.setStatus(mapStatus(data.getStatus()));
+    match.setExternalMatchId(String.valueOf(data.getId()));
 
     if (data.getScore() != null && data.getScore().getFullTime() != null) {
       match.setHomeScore(data.getScore().getFullTime().getHome());

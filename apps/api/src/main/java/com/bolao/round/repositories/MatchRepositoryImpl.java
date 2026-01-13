@@ -113,4 +113,11 @@ public class MatchRepositoryImpl implements MatchRepository {
         .map(roundMapper::toMatchDomain)
         .toList();
   }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Optional<Match> findByExternalMatchId(String externalMatchId) {
+    return jpaRepository.findByExternalMatchId(externalMatchId)
+        .map(roundMapper::toMatchDomain);
+  }
 }

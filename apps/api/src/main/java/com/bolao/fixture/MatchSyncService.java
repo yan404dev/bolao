@@ -46,7 +46,7 @@ public class MatchSyncService {
   public List<Round> syncAllRounds(int leagueId, int season) {
     log.info("Starting smart sync for league {} season {}...", leagueId, season);
 
-    com.bolao.fixture.dtos.MatchResponseWrapper wrapper = matchProvider.fetchAllMatchesForSeason(leagueId, season);
+    MatchResponseWrapper wrapper = matchProvider.fetchAllMatchesForSeason(leagueId, season);
     List<Match> allMatches = wrapper.getMatches();
 
     if (allMatches.isEmpty()) {
@@ -57,71 +57,91 @@ public class MatchSyncService {
     String champName = wrapper.getChampionshipName();
     String champLogo = wrapper.getChampionshipLogo();
 
-    java.util.Map<String, List<Match>> matchesByRound = allMatches.stream()
+    Map<String, List<Match>> matchesByRound = allMatches.stream()
         .filter(m -> m.getExternalRoundId() != null)
-        .collect(java.util.stream.Collectors.groupingBy(Match::getExternalRoundId));
+        .collect(Collectors.groupingBy(Match::getExternalRoundId));
 
     List<Round> syncedRounds = new ArrayList<>();
 
     for (var entry : matchesByRound.entrySet()) {
-      String extRoundId = entry.getKey();
-      List<Match> roundMatches = entry.getValue();
-
-      // 1. Find or Create Round
-      Round round = roundRepository.findByExternalRoundId(extRoundId).orElse(null);
-      boolean isNewRound = (round == null);
-
-      if (isNewRound) {
-        log.info("Seeding new Round {}...", extRoundId);
-        double ticketPrice = pricingService.calculateInitialTicketPrice(roundMatches.get(0).getKickoffTime());
-        round = Round.builder()
-            .title(champName + " - Rodada " + extRoundId)
-            .externalRoundId(extRoundId)
-            .externalLeagueId(leagueId)
-            .externalSeason(season)
-            .championshipTitle(champName)
-            .championshipLogo(champLogo)
-            .status(Round.Status.CLOSED) // Default for new rounds
-            .prizePool(0.0)
-            .totalTickets(0)
-            .ticketPrice(ticketPrice)
-            .startDate(roundMatches.get(0).getKickoffTime())
-            .endDate(findLatestKickoff(roundMatches))
-            .createdAt(LocalDateTime.now())
-            .build();
-        round = roundRepository.save(round);
-      } else {
-        log.debug("Found existing Round {}, updating matches...", extRoundId);
-        // Only update basic metadata if needed, but KEEP the status
-        round.setChampionshipTitle(champName);
-        round.setChampionshipLogo(champLogo);
-        round.setEndDate(findLatestKickoff(roundMatches));
-        round = roundRepository.save(round);
-      }
-
-      // 2. Upsert Matches
-      for (Match externalMatch : roundMatches) {
-        Match existingMatch = matchRepository.findByExternalMatchId(externalMatch.getExternalMatchId()).orElse(null);
-
-        if (existingMatch != null) {
-          // Update existing match
-          existingMatch.setHomeScore(externalMatch.getHomeScore());
-          existingMatch.setAwayScore(externalMatch.getAwayScore());
-          existingMatch.setStatus(externalMatch.getStatus());
-          existingMatch.setKickoffTime(externalMatch.getKickoffTime());
-          matchRepository.save(existingMatch);
-        } else {
-          // Create new match
-          externalMatch.setRoundId(round.getId());
-          matchRepository.save(externalMatch);
-        }
-      }
-
-      syncedRounds.add(round);
+      syncedRounds.add(processRound(entry.getKey(), entry.getValue(), leagueId, season, champName, champLogo));
     }
 
     log.info("Smart Sync complete: {} rounds processed", syncedRounds.size());
     return syncedRounds;
+  }
+
+  private Round processRound(String extRoundId, List<Match> roundMatches, int leagueId, int season, String champName,
+      String champLogo) {
+    Round round = roundRepository.findByExternalRoundId(extRoundId).orElse(null);
+
+    if (round == null) {
+      return createNewRound(extRoundId, roundMatches, leagueId, season, champName, champLogo);
+    }
+
+    return updateExistingRound(round, roundMatches, champName, champLogo);
+  }
+
+  private Round createNewRound(String extRoundId, List<Match> roundMatches, int leagueId, int season, String champName,
+      String champLogo) {
+    log.info("Seeding new Round {}...", extRoundId);
+    double ticketPrice = pricingService.calculateInitialTicketPrice(roundMatches.get(0).getKickoffTime());
+
+    Round round = Round.builder()
+        .title(champName + " - Rodada " + extRoundId)
+        .externalRoundId(extRoundId)
+        .externalLeagueId(leagueId)
+        .externalSeason(season)
+        .championshipTitle(champName)
+        .championshipLogo(champLogo)
+        .status(Round.Status.CLOSED)
+        .prizePool(0.0)
+        .totalTickets(0)
+        .ticketPrice(ticketPrice)
+        .startDate(roundMatches.get(0).getKickoffTime())
+        .endDate(findLatestKickoff(roundMatches))
+        .createdAt(LocalDateTime.now())
+        .build();
+
+    round = roundRepository.save(round);
+    saveMatches(roundMatches, round.getId());
+    return round;
+  }
+
+  private Round updateExistingRound(Round round, List<Match> roundMatches, String champName, String champLogo) {
+    log.debug("Found existing Round {}, updating matches...", round.getExternalRoundId());
+
+    round.setChampionshipTitle(champName);
+    round.setChampionshipLogo(champLogo);
+    round.setEndDate(findLatestKickoff(roundMatches));
+    Round savedRound = roundRepository.save(round);
+
+    updateMatches(roundMatches);
+    return savedRound;
+  }
+
+  private void saveMatches(List<Match> matches, Long roundId) {
+    for (Match match : matches) {
+      match.setRoundId(roundId);
+      matchRepository.save(match);
+    }
+  }
+
+  private void updateMatches(List<Match> roundMatches) {
+    for (Match externalMatch : roundMatches) {
+      Match existingMatch = matchRepository.findByExternalMatchId(externalMatch.getExternalMatchId()).orElse(null);
+
+      if (existingMatch == null) {
+        matchRepository.save(externalMatch);
+        continue;
+      }
+
+      existingMatch.setHomeScore(externalMatch.getHomeScore());
+      existingMatch.setAwayScore(externalMatch.getAwayScore());
+      existingMatch.setStatus(externalMatch.getStatus());
+      existingMatch.setKickoffTime(externalMatch.getKickoffTime());
+      matchRepository.save(existingMatch);
+    }
   }
 
   public List<String> fetchAvailableRounds(int leagueId, int season) {

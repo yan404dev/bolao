@@ -67,22 +67,7 @@ public class FootballDataProvider implements ExternalMatchProvider {
     String champLogo = response.getCompetition() != null ? response.getCompetition().getEmblem() : null;
 
     List<Match> matches = response.getMatches().stream()
-        .map(data -> {
-          Match match = new Match();
-          match.setHomeTeam(data.getHomeTeam() != null ? data.getHomeTeam().getName() : "TBD");
-          match.setHomeTeamLogo(data.getHomeTeam() != null ? data.getHomeTeam().getCrest() : null);
-          match.setAwayTeam(data.getAwayTeam() != null ? data.getAwayTeam().getName() : "TBD");
-          match.setAwayTeamLogo(data.getAwayTeam() != null ? data.getAwayTeam().getCrest() : null);
-          match.setKickoffTime(data.getUtcDate() != null ? data.getUtcDate().toLocalDateTime() : null);
-          match.setExternalRoundId(String.valueOf(data.getMatchday()));
-          match.setExternalMatchId(String.valueOf(data.getId()));
-          match.setStatus(mapStatus(data.getStatus()));
-          if (data.getScore() != null && data.getScore().getFullTime() != null) {
-            match.setHomeScore(data.getScore().getFullTime().getHome());
-            match.setAwayScore(data.getScore().getFullTime().getAway());
-          }
-          return match;
-        })
+        .map(this::toMatchDomain)
         .toList();
 
     return MatchResponseWrapper.builder()
@@ -90,6 +75,25 @@ public class FootballDataProvider implements ExternalMatchProvider {
         .championshipName(champName)
         .championshipLogo(champLogo)
         .build();
+  }
+
+  private Match toMatchDomain(FootballDataMatchResponse.MatchData data) {
+    Match match = new Match();
+    match.setHomeTeam(data.getHomeTeam() != null ? data.getHomeTeam().getName() : "TBD");
+    match.setHomeTeamLogo(data.getHomeTeam() != null ? data.getHomeTeam().getCrest() : null);
+    match.setAwayTeam(data.getAwayTeam() != null ? data.getAwayTeam().getName() : "TBD");
+    match.setAwayTeamLogo(data.getAwayTeam() != null ? data.getAwayTeam().getCrest() : null);
+    match.setKickoffTime(data.getUtcDate() != null ? data.getUtcDate().toLocalDateTime() : null);
+    match.setExternalRoundId(String.valueOf(data.getMatchday()));
+    match.setExternalMatchId(String.valueOf(data.getId()));
+    match.setStatus(mapStatus(data.getStatus()));
+
+    if (data.getScore() != null && data.getScore().getFullTime() != null) {
+      match.setHomeScore(data.getScore().getFullTime().getHome());
+      match.setAwayScore(data.getScore().getFullTime().getAway());
+    }
+
+    return match;
   }
 
   private Match.Status mapStatus(String status) {

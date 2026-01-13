@@ -56,11 +56,7 @@ public class ApiFootballProvider implements ExternalMatchProvider {
 
     for (String round : rounds) {
       List<Match> matches = fetchMatchesByRound(leagueId, season, round);
-      for (Match m : matches) {
-        m.setExternalRoundId(round);
-        // ApiFootballProvider doesn't easily expose the match ID in this structure
-        // without changing DTOs, but for now we'll maintain the list.
-      }
+      matches.forEach(m -> m.setExternalRoundId(round));
       allMatches.addAll(matches);
     }
 

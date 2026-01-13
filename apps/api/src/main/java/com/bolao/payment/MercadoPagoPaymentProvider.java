@@ -45,8 +45,11 @@ public class MercadoPagoPaymentProvider implements PaymentProvider {
     try {
       Payment payment = new PaymentClient().create(createRequest);
       return mapToResponse(payment);
-    } catch (MPException | MPApiException e) {
-      log.error("Failed to generate MP PIX: {}", e.getMessage());
+    } catch (MPApiException e) {
+      log.error("MP API Error - Status: {}, Content: {}", e.getStatusCode(), e.getApiResponse().getContent());
+      throw new RuntimeException("Payment Gateway Error: " + e.getApiResponse().getContent());
+    } catch (MPException e) {
+      log.error("MP SDK Error: {}", e.getMessage());
       throw new RuntimeException("Payment Gateway Error: " + e.getMessage());
     }
   }

@@ -41,9 +41,9 @@ public class RoundService {
   @Transactional(readOnly = true)
   public List<Round> findAll(Round.Status status) {
     if (status == null) {
-      return loadMatchesForAll(roundRepository.findAll());
+      return loadMatchesForAll(roundRepository.findAllSorted());
     }
-    return loadMatchesForAll(roundRepository.findByStatus(status));
+    return loadMatchesForAll(roundRepository.findByStatusSorted(status));
   }
 
   @Transactional(readOnly = true)

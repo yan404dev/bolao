@@ -70,7 +70,7 @@ public class MatchSyncService {
 
       log.info("Seeding Round {} with {} matches...", extId, matches.size());
 
-      Round.Status roundStatus = determineRoundStatus(matches);
+      Round.Status roundStatus = Round.Status.CLOSED; // Default to CLOSED for manual control
       double ticketPrice = pricingService.calculateInitialTicketPrice(matches.get(0).getKickoffTime());
 
       Round round = Round.builder()

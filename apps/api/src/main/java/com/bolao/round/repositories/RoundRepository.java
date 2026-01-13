@@ -11,5 +11,9 @@ public interface RoundRepository extends BaseRepository<Round, Long> {
 
   List<Round> findByStatus(Round.Status status);
 
+  List<Round> findAllSorted();
+
+  List<Round> findByStatusSorted(Round.Status status);
+
   Optional<Round> findPreviousRound(java.time.LocalDateTime date);
 }

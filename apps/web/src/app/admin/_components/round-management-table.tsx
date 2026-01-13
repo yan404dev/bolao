@@ -9,7 +9,7 @@ import { Trophy, Calendar, Globe } from "lucide-react";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 
 export function RoundManagementTable() {
-  const { rounds, isLoadingRounds, calculate, isCalculating } = useAdmin();
+  const { rounds, isLoadingRounds, calculate, isCalculating, updateStatus, isUpdatingStatus } = useAdmin();
 
   if (isLoadingRounds) {
     return (
@@ -68,17 +68,39 @@ export function RoundManagementTable() {
                       {new Date(round.startDate).toLocaleDateString("pt-BR")}
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button
-                        size="sm"
-                        onClick={() => calculate(round.id)}
-                        disabled={round.status === "OPEN" || round.status === "CALCULATED" || isCalculating}
-                        className={`
-                          h-8 px-4 rounded-none border border-black font-black uppercase italic text-[10px] transition-all
-                          ${round.status === "CLOSED" ? "bg-yellow-400 text-black hover:bg-black hover:text-white" : "bg-gray-100 text-gray-300 border-gray-200 cursor-not-allowed"}
-                        `}
-                      >
-                        {round.status === "CALCULATED" ? "OK" : "Calcular"}
-                      </Button>
+                      <div className="flex items-center justify-end gap-2">
+                        {round.status === "CLOSED" && (
+                          <Button
+                            size="sm"
+                            onClick={() => updateStatus({ roundId: round.id, status: "OPEN" })}
+                            disabled={isUpdatingStatus}
+                            className="h-8 px-3 rounded-none border-2 border-green-600 bg-green-50 text-green-600 font-black uppercase italic text-[9px] hover:bg-green-600 hover:text-white transition-all"
+                          >
+                            Abrir Apostas
+                          </Button>
+                        )}
+                        {round.status === "OPEN" && (
+                          <Button
+                            size="sm"
+                            onClick={() => updateStatus({ roundId: round.id, status: "CLOSED" })}
+                            disabled={isUpdatingStatus}
+                            className="h-8 px-3 rounded-none border-2 border-red-600 bg-red-50 text-red-600 font-black uppercase italic text-[9px] hover:bg-red-600 hover:text-white transition-all"
+                          >
+                            Fechar Apostas
+                          </Button>
+                        )}
+                        <Button
+                          size="sm"
+                          onClick={() => calculate(round.id)}
+                          disabled={round.status === "OPEN" || round.status === "CALCULATED" || isCalculating}
+                          className={`
+                            h-8 px-4 rounded-none border-2 font-black uppercase italic text-[9px] transition-all
+                            ${round.status === "CLOSED" ? "border-black bg-yellow-400 text-black hover:bg-black hover:text-white" : "border-gray-200 bg-gray-50 text-gray-300 cursor-not-allowed"}
+                          `}
+                        >
+                          {round.status === "CALCULATED" ? "Calculado" : "Calcular Pontos"}
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 );

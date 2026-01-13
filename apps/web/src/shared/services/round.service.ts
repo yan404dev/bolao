@@ -59,4 +59,11 @@ export const roundService = {
     });
     return data.data;
   },
+
+  updateStatus: async (roundId: number, status: string): Promise<RoundEntity> => {
+    const { data } = await api.put<{ data: RoundEntity }>(`/admin/rounds/${roundId}/status`, null, {
+      params: { status },
+    });
+    return data.data;
+  },
 };

@@ -105,8 +105,23 @@ public class RoundRepositoryImpl implements RoundRepository {
   @Override
   @Transactional(readOnly = true)
   public List<Round> findByStatus(Round.Status status) {
-    RoundEntity.Status entityStatus = RoundEntity.Status.valueOf(status.name());
     return jpaRepository.findByStatus(RoundEntity.Status.valueOf(status.name())).stream()
+        .map(roundMapper::toDomain)
+        .toList();
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<Round> findAllSorted() {
+    return jpaRepository.findAllSorted().stream()
+        .map(roundMapper::toDomain)
+        .toList();
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<Round> findByStatusSorted(Round.Status status) {
+    return jpaRepository.findByStatusSorted(RoundEntity.Status.valueOf(status.name())).stream()
         .map(roundMapper::toDomain)
         .toList();
   }

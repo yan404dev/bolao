@@ -36,6 +36,16 @@ export function useAdminQueries() {
     onError: () => toast.error("Erro ao calcular pontuações."),
   });
 
+  const updateStatusMutation = useMutation({
+    mutationFn: ({ roundId, status }: { roundId: number; status: string }) =>
+      roundService.updateStatus(roundId, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["rounds"] });
+      toast.success("Status da rodada atualizado!");
+    },
+    onError: () => toast.error("Erro ao atualizar status."),
+  });
+
   return {
     rounds,
     isLoadingRounds,
@@ -47,5 +57,7 @@ export function useAdminQueries() {
     isSyncing: syncMutation.isPending,
     calculate: calculateMutation.mutate,
     isCalculating: calculateMutation.isPending,
+    updateStatus: updateStatusMutation.mutate,
+    isUpdatingStatus: updateStatusMutation.isPending,
   };
 }

@@ -165,15 +165,13 @@ public class FootballDataProvider implements ExternalMatchProvider {
     String url = BASE_URL + "/competitions/" + code;
 
     try {
-      FootballDataCompetitionResponse response = restClient.get()
+      FootballDataCompetitionResponse.CompetitionData response = restClient.get()
           .uri(url)
           .headers(this::setAuthHeaders)
           .retrieve()
-          .body(FootballDataCompetitionResponse.class);
+          .body(FootballDataCompetitionResponse.CompetitionData.class);
 
-      if (response != null && response.getCompetitions() != null && !response.getCompetitions().isEmpty()) {
-        return response.getCompetitions().get(0);
-      }
+      return response;
     } catch (Exception e) {
       log.error("Error fetching competition {}: {}", leagueId, e.getMessage());
     }

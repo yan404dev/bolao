@@ -9,6 +9,7 @@ import com.bolao.round.dtos.SyncChampionshipDto;
 import com.bolao.round.entities.Round;
 import com.bolao.round.usecases.CreateRoundUseCase;
 import com.bolao.round.usecases.ProcessRoundResultsUseCase;
+import com.bolao.round.usecases.UpdateRoundStatusUseCase;
 import com.bolao.shared.dtos.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class AdminRoundController {
   private final GetExternalCalendarUseCase getExternalCalendarUseCase;
   private final CreateRoundUseCase createRoundUseCase;
   private final ListLeaguesUseCase listLeaguesUseCase;
+  private final UpdateRoundStatusUseCase updateRoundStatusUseCase;
 
   @GetMapping("/leagues")
   public ResponseEntity<ApiResponse<List<League>>> getLeagues(
@@ -70,5 +72,13 @@ public class AdminRoundController {
     log.info("Admin request to calculate scores for round {}", id);
     processRoundResultsUseCase.execute(id);
     return ResponseEntity.ok(ApiResponse.ok(null));
+  }
+
+  @PutMapping("/{id}/status")
+  public ResponseEntity<ApiResponse<Round>> updateStatus(
+      @PathVariable Long id,
+      @RequestParam Round.Status status) {
+    log.info("Admin request to update status of round {} to {}", id, status);
+    return ResponseEntity.ok(ApiResponse.ok(updateRoundStatusUseCase.execute(id, status)));
   }
 }

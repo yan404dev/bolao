@@ -46,6 +46,16 @@ export function useAdminQueries() {
     onError: () => toast.error("Erro ao atualizar status."),
   });
 
+  const batchActionMutation = useMutation({
+    mutationFn: ({ ids, action }: { ids: number[]; action: string }) =>
+      roundService.batchAction(ids, action),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["rounds"] });
+      toast.success("Ação em lote processada com sucesso!");
+    },
+    onError: () => toast.error("Erro ao processar ação em lote."),
+  });
+
   return {
     rounds,
     isLoadingRounds,
@@ -59,5 +69,7 @@ export function useAdminQueries() {
     isCalculating: calculateMutation.isPending,
     updateStatus: updateStatusMutation.mutate,
     isUpdatingStatus: updateStatusMutation.isPending,
+    batchAction: batchActionMutation.mutate,
+    isBatchProcessing: batchActionMutation.isPending,
   };
 }

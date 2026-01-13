@@ -66,4 +66,8 @@ export const roundService = {
     });
     return data.data;
   },
+
+  batchAction: async (ids: number[], action: string): Promise<void> => {
+    await api.post("/admin/rounds/batch", { ids, action });
+  },
 };

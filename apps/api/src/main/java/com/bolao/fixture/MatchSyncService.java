@@ -28,7 +28,6 @@ public class MatchSyncService {
   private final RoundPricingService pricingService;
 
   public List<Match> fetchAndSyncMatches(int leagueId, int season, Long roundId, String externalRoundId) {
-    log.info("Requesting match sync for external round: {} (local id: {})", externalRoundId, roundId);
 
     List<Match> externalMatches = matchProvider.fetchMatchesByRound(leagueId, season, externalRoundId);
 
@@ -84,7 +83,6 @@ public class MatchSyncService {
 
   private Round createNewRound(String extRoundId, List<Match> roundMatches, int leagueId, int season, String champName,
       String champLogo) {
-    log.info("Seeding new Round {}...", extRoundId);
     double ticketPrice = pricingService.calculateInitialTicketPrice(roundMatches.get(0).getKickoffTime());
 
     Round round = Round.builder()
@@ -109,10 +107,10 @@ public class MatchSyncService {
   }
 
   private Round updateExistingRound(Round round, List<Match> roundMatches, String champName, String champLogo) {
-    log.debug("Found existing Round {}, updating matches...", round.getExternalRoundId());
 
     round.setChampionshipTitle(champName);
     round.setChampionshipLogo(champLogo);
+    round.setTitle(champName + " - Rodada " + round.getExternalRoundId());
     round.setEndDate(findLatestKickoff(roundMatches));
     Round savedRound = roundRepository.save(round);
 

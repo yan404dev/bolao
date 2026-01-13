@@ -1,15 +1,35 @@
-"use client";
-
+import { useState } from "react";
 import { useAdmin } from "../_hooks/use-admin";
 import { getStatusConfig } from "../admin.utils";
 import { Card, CardHeader, CardTitle, CardContent } from "@/shared/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/components/ui/table";
 import { Button } from "@/shared/components/ui/button";
-import { Trophy, Calendar, Globe } from "lucide-react";
+import { Trophy, Calendar, Globe, CheckSquare, Square, XCircle, PlayCircle, Loader2 } from "lucide-react";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 
 export function RoundManagementTable() {
-  const { rounds, isLoadingRounds, calculate, isCalculating, updateStatus, isUpdatingStatus } = useAdmin();
+  const { rounds, isLoadingRounds, calculate, isCalculating, updateStatus, isUpdatingStatus, batchAction, isBatchProcessing } = useAdmin();
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
+  const toggleAll = () => {
+    if (selectedIds.length === rounds.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(rounds.map(r => r.id));
+    }
+  };
+
+  const toggleOne = (id: number) => {
+    setSelectedIds(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    );
+  };
+
+  const handleBatch = async (action: string) => {
+    if (selectedIds.length === 0) return;
+    await batchAction({ ids: selectedIds, action });
+    setSelectedIds([]);
+  };
 
   if (isLoadingRounds) {
     return (
@@ -39,6 +59,18 @@ export function RoundManagementTable() {
           <Table>
             <TableHeader className="bg-gray-50 border-b-2 border-black">
               <TableRow className="hover:bg-transparent border-none">
+                <TableHead className="w-10 text-center">
+                  <button
+                    onClick={toggleAll}
+                    className="flex items-center justify-center text-black hover:text-yellow-600 transition-colors"
+                  >
+                    {selectedIds.length === rounds.length && rounds.length > 0 ? (
+                      <CheckSquare className="h-4 w-4" />
+                    ) : (
+                      <Square className="h-4 w-4" />
+                    )}
+                  </button>
+                </TableHead>
                 <TableHead className="text-black font-black uppercase text-[10px] tracking-widest italic">Info</TableHead>
                 <TableHead className="text-black font-black uppercase text-[10px] tracking-widest italic text-center">Status</TableHead>
                 <TableHead className="text-black font-black uppercase text-[10px] tracking-widest italic text-center">Início</TableHead>
@@ -49,7 +81,19 @@ export function RoundManagementTable() {
               {rounds.map((round) => {
                 const config = getStatusConfig(round.status);
                 return (
-                  <TableRow key={round.id} className="border-b border-gray-100 hover:bg-yellow-50/50 transition-colors">
+                  <TableRow key={round.id} className={`border-b border-gray-100 transition-colors ${selectedIds.includes(round.id) ? 'bg-yellow-100/50' : 'hover:bg-yellow-50/50'}`}>
+                    <TableCell className="text-center">
+                      <button
+                        onClick={() => toggleOne(round.id)}
+                        className="flex items-center justify-center text-black hover:text-yellow-600 transition-colors"
+                      >
+                        {selectedIds.includes(round.id) ? (
+                          <CheckSquare className="h-4 w-4" />
+                        ) : (
+                          <Square className="h-4 w-4" />
+                        )}
+                      </button>
+                    </TableCell>
                     <TableCell className="py-4">
                       <div className="flex flex-col gap-0.5">
                         <span className="font-black uppercase italic tracking-tighter text-black">{round.title}</span>
@@ -107,7 +151,7 @@ export function RoundManagementTable() {
               })}
               {rounds.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center py-20">
+                  <TableCell colSpan={5} className="text-center py-20">
                     <div className="flex flex-col items-center gap-2 text-gray-300">
                       <Globe className="h-10 w-10" />
                       <p className="font-black uppercase italic tracking-widest text-xs">Vazio</p>
@@ -118,6 +162,47 @@ export function RoundManagementTable() {
             </TableBody>
           </Table>
         </div>
+        {selectedIds.length > 0 && (
+          <div className="bg-black text-white p-3 flex items-center justify-between border-t-2 border-black animate-in slide-in-from-bottom-2">
+            <div className="flex items-center gap-2">
+              <span className="font-black italic text-[11px] uppercase tracking-tighter text-yellow-400">
+                {selectedIds.length} Rodadas Selecionadas
+              </span>
+              <button
+                onClick={() => setSelectedIds([])}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <XCircle className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="flex items-center gap-2">
+              {(isBatchProcessing) ? (
+                <Loader2 className="h-5 w-5 animate-spin text-yellow-400" />
+              ) : (
+                <>
+                  <Button
+                    onClick={() => handleBatch("OPEN")}
+                    className="h-8 px-3 rounded-none bg-green-600 text-white font-black uppercase italic text-[10px] hover:bg-green-700 active:translate-y-0.5 transition-all shadow-[2px_2px_0px_0px_rgba(255,255,255,1)]"
+                  >
+                    Abrir Apostas
+                  </Button>
+                  <Button
+                    onClick={() => handleBatch("CLOSE")}
+                    className="h-8 px-3 rounded-none bg-red-600 text-white font-black uppercase italic text-[10px] hover:bg-red-700 active:translate-y-0.5 transition-all shadow-[2px_2px_0px_0px_rgba(255,255,255,1)]"
+                  >
+                    Fechar Apostas
+                  </Button>
+                  <Button
+                    onClick={() => handleBatch("CALCULATE")}
+                    className="h-8 px-3 rounded-none bg-yellow-400 text-black font-black uppercase italic text-[10px] hover:bg-yellow-500 active:translate-y-0.5 transition-all shadow-[2px_2px_0px_0px_rgba(255,255,255,1)]"
+                  >
+                    Calcular Pontos
+                  </Button>
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

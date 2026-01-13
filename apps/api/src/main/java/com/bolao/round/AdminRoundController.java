@@ -4,9 +4,11 @@ import com.bolao.fixture.entities.League;
 import com.bolao.fixture.usecases.GetExternalCalendarUseCase;
 import com.bolao.fixture.usecases.ListLeaguesUseCase;
 import com.bolao.fixture.usecases.SyncAllRoundsUseCase;
+import com.bolao.round.dtos.BatchActionDto;
 import com.bolao.round.dtos.CreateRoundDto;
 import com.bolao.round.dtos.SyncChampionshipDto;
 import com.bolao.round.entities.Round;
+import com.bolao.round.usecases.BatchRoundActionUseCase;
 import com.bolao.round.usecases.CreateRoundUseCase;
 import com.bolao.round.usecases.ProcessRoundResultsUseCase;
 import com.bolao.round.usecases.UpdateRoundStatusUseCase;
@@ -33,6 +35,7 @@ public class AdminRoundController {
   private final CreateRoundUseCase createRoundUseCase;
   private final ListLeaguesUseCase listLeaguesUseCase;
   private final UpdateRoundStatusUseCase updateRoundStatusUseCase;
+  private final BatchRoundActionUseCase batchRoundActionUseCase;
 
   @GetMapping("/leagues")
   public ResponseEntity<ApiResponse<List<League>>> getLeagues(
@@ -80,5 +83,12 @@ public class AdminRoundController {
       @RequestParam Round.Status status) {
     log.info("Admin request to update status of round {} to {}", id, status);
     return ResponseEntity.ok(ApiResponse.ok(updateRoundStatusUseCase.execute(id, status)));
+  }
+
+  @PostMapping("/batch")
+  public ResponseEntity<ApiResponse<Void>> batchAction(@Valid @RequestBody BatchActionDto dto) {
+    log.info("Admin request for batch action '{}' on {} rounds", dto.getAction(), dto.getIds().size());
+    batchRoundActionUseCase.execute(dto.getIds(), dto.getAction());
+    return ResponseEntity.ok(ApiResponse.ok(null));
   }
 }

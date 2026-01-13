@@ -3,6 +3,7 @@ package com.bolao.fixture;
 import com.bolao.fixture.dtos.ApiFootballFixtureResponse;
 import com.bolao.fixture.dtos.ApiFootballLeagueResponse;
 import com.bolao.fixture.dtos.ApiFootballStringResponse;
+import com.bolao.fixture.dtos.MatchResponseWrapper;
 import com.bolao.round.entities.Match;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

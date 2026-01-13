@@ -64,7 +64,14 @@ public class FootballDataProvider implements ExternalMatchProvider {
     }
 
     String champName = response.getCompetition() != null ? response.getCompetition().getName() : "Unknown";
+    if (champName == null || champName.equals("Unknown")) {
+      champName = getChampionshipName(leagueId);
+    }
+
     String champLogo = response.getCompetition() != null ? response.getCompetition().getEmblem() : null;
+    if (champLogo == null) {
+      champLogo = getChampionshipLogo(leagueId);
+    }
 
     List<Match> matches = response.getMatches().stream()
         .map(this::toMatchDomain)
@@ -150,7 +157,6 @@ public class FootballDataProvider implements ExternalMatchProvider {
 
   @Override
   public List<League> fetchLeagues(String country) {
-    log.info("Fetching leagues for: {}", country);
 
     String url = BASE_URL + "/competitions";
 

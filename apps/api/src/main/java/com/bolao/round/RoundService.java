@@ -31,19 +31,6 @@ public class RoundService {
   private final SyncAllRoundsUseCase syncAllRoundsUseCase;
   private final RoundRankingService rankingService;
 
-  @EventListener(ApplicationReadyEvent.class)
-  @Async
-  public void onStartup() {
-    try {
-      // Small delay to ensure DB and other beans are fully settled
-      Thread.sleep(5000);
-      log.info("System startup: Triggering matches sync from provider...");
-      syncAllRoundsUseCase.execute(null, null);
-    } catch (Exception e) {
-      log.error("Startup sync failed: {}. This can be ignored if the app is still starting up.", e.getMessage());
-    }
-  }
-
   @Transactional(readOnly = true)
   public List<Round> findAll(Round.Status status) {
     if (status == null) {

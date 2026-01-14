@@ -10,9 +10,7 @@ export interface ActionCard {
   className: string;
 }
 
-export function useUserActions() {
-  const [isBettingModalOpen, setIsBettingModalOpen] = useState(false);
-
+export function useUserActions(openModal: () => void) {
   const actions: ActionCard[] = [
     {
       id: 1,
@@ -20,7 +18,7 @@ export function useUserActions() {
       subtitle: "Faça seus palpites",
       onClick: (e) => {
         e?.preventDefault();
-        setIsBettingModalOpen(true);
+        openModal();
       },
       emoji: "⚽",
       className: "text-slate-800",
@@ -61,7 +59,5 @@ export function useUserActions() {
 
   return {
     actions,
-    isBettingModalOpen,
-    setIsBettingModalOpen,
   };
 }

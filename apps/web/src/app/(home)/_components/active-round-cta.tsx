@@ -4,9 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { roundService } from "@/shared/services/round.service";
 import { Zap, Trophy, Users, MoveRight } from "lucide-react";
 import { formatCurrency } from "@/shared/lib/utils";
-import Link from "next/link";
+import { useBettingModalState } from "@/shared/providers/betting-modal-provider";
 
 export function ActiveRoundCTA() {
+  const { openModal } = useBettingModalState();
   const { data: activeRound, isLoading } = useQuery({
     queryKey: ["activeRound"],
     queryFn: () => roundService.getActiveRound(),
@@ -58,8 +59,8 @@ export function ActiveRoundCTA() {
           </div>
 
           <div className="w-full md:w-auto shrink-0">
-            <Link
-              href="/apostar"
+            <button
+              onClick={openModal}
               className="group relative flex items-center justify-center w-full md:w-[280px] h-[100px] bg-yellow-400 border-4 border-black hover:bg-black transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-none translate-y-[-4px] hover:translate-y-0"
             >
               <div className="flex flex-col items-center">
@@ -70,7 +71,7 @@ export function ActiveRoundCTA() {
                   CLIQUE AQUI <MoveRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                 </span>
               </div>
-            </Link>
+            </button>
           </div>
 
         </div>

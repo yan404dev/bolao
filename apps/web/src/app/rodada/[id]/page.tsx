@@ -1,14 +1,19 @@
+"use client";
+
 import { RoundHeader, RoundKpis, RoundMatches, RoundRanking, StandingsTable } from "./_components";
 import { TickerBanner, BackButton } from "@/shared/components";
 import { Zap } from "lucide-react";
+import { useBettingModalState } from "@/shared/providers/betting-modal-provider";
+import { use } from "react";
 
 interface RoundPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default async function RoundPage({ params }: RoundPageProps) {
-  const { id } = await params;
+export default function RoundPage({ params }: RoundPageProps) {
+  const { id } = use(params);
   const roundId = parseInt(id);
+  const { openModal } = useBettingModalState();
 
   return (
     <main className="min-h-screen bg-white pb-12">
@@ -32,13 +37,13 @@ export default async function RoundPage({ params }: RoundPageProps) {
           </div>
 
           <div className="flex gap-4">
-            <a
-              href="/apostar"
+            <button
+              onClick={openModal}
               className="px-8 py-4 bg-yellow-400 text-black border-2 border-black font-black uppercase italic tracking-tighter text-xl hover:bg-black hover:text-white transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none translate-y-[-2px] hover:translate-y-0 flex items-center gap-3"
             >
               <Zap className="w-6 h-6 fill-current" />
               JOGAR AGORA
-            </a>
+            </button>
           </div>
         </div>
 

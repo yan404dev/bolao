@@ -3,7 +3,7 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/shared/components/ui/card";
 import Link from "next/link";
 import { useUserActions } from "./hooks/use-user-actions";
-import { BettingModal } from "@/app/apostar/_components/betting-flow/betting-modal";
+import { useBettingModalState } from "@/shared/providers/betting-modal-provider";
 import { Trophy, Users, BookOpen, Calendar, Zap } from "lucide-react";
 
 const actionIcons: Record<number, React.ReactNode> = {
@@ -15,8 +15,9 @@ const actionIcons: Record<number, React.ReactNode> = {
 };
 
 export function UserActions() {
-  const { actions, isBettingModalOpen, setIsBettingModalOpen } =
-    useUserActions();
+  const { openModal } = useBettingModalState();
+  const { actions } =
+    useUserActions(openModal);
 
   return (
     <section id="acoes" className="w-full py-12 px-4 sm:px-6">
@@ -56,10 +57,6 @@ export function UserActions() {
         </div>
       </div>
 
-      <BettingModal
-        isOpen={isBettingModalOpen}
-        onClose={() => setIsBettingModalOpen(false)}
-      />
     </section>
   );
 }

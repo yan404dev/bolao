@@ -54,9 +54,13 @@ public class WebhookSecurityService {
       String manifest = String.format("id:%s;request-id:%s;ts:%s;", resourceId, requestId, tsStr);
       String generatedHash = generateHmac(manifest);
 
-      return generatedHash.equals(v1);
+      boolean isValid = generatedHash.equals(v1);
+      if (!isValid) {
+        log.warn("Webhook security: signature mismatch for resourceId={}. Check webhook secret.", resourceId);
+      }
+      return isValid;
     } catch (Exception e) {
-      log.error("Error validating webhook signature", e);
+      log.error("Webhook security: unexpected error during validation for resourceId={}", resourceId, e);
       return false;
     }
   }

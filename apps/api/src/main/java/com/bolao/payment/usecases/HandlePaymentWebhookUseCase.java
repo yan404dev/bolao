@@ -1,24 +1,19 @@
 package com.bolao.payment.usecases;
 
-import com.bolao.bet.entities.Bet;
-import com.bolao.bet.repositories.BetRepository;
 import com.bolao.payment.PaymentProvider;
 import com.bolao.payment.entities.Payment;
 import com.bolao.payment.entities.PaymentStatus;
-import com.bolao.payment.events.PaymentApprovedEvent;
 import com.bolao.payment.repositories.PaymentRepository;
+import com.bolao.payment.services.PaymentApprovalService;
 import com.bolao.payment.services.WebhookSecurityService;
 import com.bolao.shared.exceptions.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @Component
@@ -26,10 +21,9 @@ import java.util.UUID;
 public class HandlePaymentWebhookUseCase {
 
   private final PaymentRepository paymentRepository;
-  private final BetRepository betRepository;
   private final PaymentProvider paymentProvider;
-  private final ApplicationEventPublisher eventPublisher;
   private final WebhookSecurityService securityService;
+  private final PaymentApprovalService approvalService;
 
   public record Result(String message, PaymentStatus status) {
   }
@@ -51,12 +45,29 @@ public class HandlePaymentWebhookUseCase {
       throw new IllegalArgumentException("Missing payment ID in payload");
     }
 
-    return paymentRepository.findByExternalId(resourceId)
+    return findPaymentWithRetry(resourceId)
         .map(this::processStatusUpdate)
         .orElseGet(() -> {
-          log.info("Payment record not found locally (likely test notification): {}", resourceId);
+          log.info("Payment record not found locally after retries (likely test or delayed): {}", resourceId);
           return new Result("Payment record not found", null);
         });
+  }
+
+  private Optional<Payment> findPaymentWithRetry(String resourceId) {
+    for (int i = 0; i < 3; i++) {
+      Optional<Payment> payment = paymentRepository.findByExternalId(resourceId);
+      if (payment.isPresent()) {
+        return payment;
+      }
+      log.info("Payment {} not found, retrying in 1s... ({}/3)", resourceId, i + 1);
+      try {
+        Thread.sleep(1000);
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        break;
+      }
+    }
+    return paymentRepository.findByExternalId(resourceId);
   }
 
   private void validateSecurity(String signature, String requestId, String resourceId) {
@@ -78,39 +89,13 @@ public class HandlePaymentWebhookUseCase {
     log.info("Payment {}: provider reported '{}', mapped to {}", externalId, providerStatus, newStatus);
 
     if (newStatus == PaymentStatus.APPROVED) {
-      approvePayment(payment);
+      approvalService.approve(payment);
     } else {
       payment.updateStatus(newStatus);
+      paymentRepository.save(payment);
     }
 
-    paymentRepository.save(payment);
     return new Result("Status updated to " + newStatus, newStatus);
-  }
-
-  private void approvePayment(Payment payment) {
-    payment.markAsPaid(LocalDateTime.now());
-
-    betRepository.findById(payment.getBetId()).ifPresent(bet -> {
-      if (bet.getTicketCode() != null) {
-        log.info("Bet {} already has a ticket code ({}). Skipping generation.", bet.getId(), bet.getTicketCode());
-        return;
-      }
-
-      bet.setTicketCode(generateTicketCode(bet.getRoundId()));
-      bet.setStatus(Bet.PaymentStatus.PAID);
-      betRepository.save(bet);
-      log.info("Ticket generated for bet {}: {}", bet.getId(), bet.getTicketCode());
-    });
-
-    eventPublisher.publishEvent(new PaymentApprovedEvent(this,
-        payment.getExternalId(), payment.getBetId(), payment.getPaidAt()));
-
-    log.info("Payment {} approved and event published", payment.getExternalId());
-  }
-
-  private String generateTicketCode(Long roundId) {
-    String uuid = UUID.randomUUID().toString().substring(0, 6).toUpperCase();
-    return String.format("%d-%s", roundId, uuid);
   }
 
   private String extractResourceId(Map<String, Object> payload) {
@@ -127,10 +112,13 @@ public class HandlePaymentWebhookUseCase {
     return switch (status.toLowerCase()) {
       case "approved", "paid" -> PaymentStatus.APPROVED;
       case "expired" -> PaymentStatus.EXPIRED;
-      case "rejected", "rejected_by_bank" -> PaymentStatus.REJECTED;
+      case "rejected", "rejected_by_bank", "cancelled" -> PaymentStatus.REJECTED;
       case "refunded", "charged_back" -> PaymentStatus.REFUNDED;
-      case "cancelled" -> PaymentStatus.REJECTED;
-      default -> PaymentStatus.PENDING;
+      case "pending", "in_process", "in_mediation" -> PaymentStatus.PENDING;
+      default -> {
+        log.info("Unknown MP status '{}' mapped to PENDING", status);
+        yield PaymentStatus.PENDING;
+      }
     };
   }
 }

@@ -42,14 +42,25 @@ public class MercadoPagoPaymentProvider implements PaymentProvider {
         .installments(1)
         .build();
 
+    // Idempotency key is mandatory for MP production since Jan 2024
+    String idempotencyKey = UUID.randomUUID().toString();
+    Map<String, String> headers = new HashMap<>();
+    headers.put("X-Idempotency-Key", idempotencyKey);
+
+    MPRequestOptions requestOptions = MPRequestOptions.builder()
+        .customHeaders(headers)
+        .build();
+
     try {
-      Payment payment = new PaymentClient().create(createRequest);
+      Payment payment = new PaymentClient().create(createRequest, requestOptions);
+      log.info("PIX generated successfully. ID: {}, IdempotencyKey: {}", payment.getId(), idempotencyKey);
       return mapToResponse(payment);
     } catch (MPApiException e) {
-      log.error("MP API Error - Status: {}, Content: {}", e.getStatusCode(), e.getApiResponse().getContent());
+      log.error("MP API Error - Status: {}, Content: {}, IdempotencyKey: {}",
+          e.getStatusCode(), e.getApiResponse().getContent(), idempotencyKey);
       throw new RuntimeException("Payment Gateway Error: " + e.getApiResponse().getContent());
     } catch (MPException e) {
-      log.error("MP SDK Error: {}", e.getMessage());
+      log.error("MP SDK Error: {}, IdempotencyKey: {}", e.getMessage(), idempotencyKey);
       throw new RuntimeException("Payment Gateway Error: " + e.getMessage());
     }
   }

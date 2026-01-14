@@ -1,19 +1,20 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { roundService } from "@/shared/services/round.service";
 import { Zap, Trophy, Users, MoveRight } from "lucide-react";
-import { formatCurrency } from "@/shared/lib/utils";
 import { useBettingModalState } from "@/shared/providers/betting-modal-provider";
+import { useActiveRoundCta } from "./hooks";
 
 export function ActiveRoundCTA() {
   const { openModal } = useBettingModalState();
-  const { data: activeRound, isLoading } = useQuery({
-    queryKey: ["activeRound"],
-    queryFn: () => roundService.getActiveRound(),
-  });
+  const {
+    title,
+    prizePool,
+    totalTickets,
+    hasActiveRound,
+    isLoading
+  } = useActiveRoundCta();
 
-  if (isLoading || !activeRound) return null;
+  if (isLoading || !hasActiveRound) return null;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-10 mb-20">
@@ -28,7 +29,7 @@ export function ActiveRoundCTA() {
 
             <div className="space-y-2">
               <h2 className="text-4xl sm:text-6xl font-black uppercase italic tracking-tighter text-black leading-none">
-                {activeRound.title}
+                {title}
               </h2>
               <p className="text-gray-500 font-bold uppercase tracking-widest text-xs sm:text-sm">
                 Não fique de fora! A disputa já começou e o prêmio não para de crescer.
@@ -42,7 +43,7 @@ export function ActiveRoundCTA() {
                 </div>
                 <div>
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none">PRÊMIO ESTIMADO</p>
-                  <p className="text-2xl font-black text-black leading-none mt-1">{formatCurrency(activeRound.prizePool)}</p>
+                  <p className="text-2xl font-black text-black leading-none mt-1">{prizePool}</p>
                 </div>
               </div>
 
@@ -52,7 +53,7 @@ export function ActiveRoundCTA() {
                 </div>
                 <div>
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none">PALPITES REGISTRADOS</p>
-                  <p className="text-2xl font-black text-black leading-none mt-1">{activeRound.totalTickets}</p>
+                  <p className="text-2xl font-black text-black leading-none mt-1">{totalTickets}</p>
                 </div>
               </div>
             </div>

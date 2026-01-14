@@ -23,7 +23,7 @@ export function MatchRow({ jogo, form }: MatchRowProps) {
           <div className="w-12 h-12 bg-gray-50 flex items-center justify-center p-2">
             <img src={jogo.timeCasaImg} alt={jogo.timeCasa} className="w-full h-full object-contain" />
           </div>
-          <span className="text-xs font-black uppercase italic text-black text-center leading-none truncate max-w-full">
+          <span className="text-[10px] sm:text-xs font-black uppercase italic text-black text-center leading-none max-w-[80px] sm:max-w-[100px] break-words">
             {jogo.timeCasa}
           </span>
         </div>
@@ -38,7 +38,7 @@ export function MatchRow({ jogo, form }: MatchRowProps) {
           <div className="w-12 h-12 bg-gray-50 flex items-center justify-center p-2">
             <img src={jogo.timeVisitanteImg} alt={jogo.timeVisitante} className="w-full h-full object-contain" />
           </div>
-          <span className="text-xs font-black uppercase italic text-black text-center leading-none truncate max-w-full">
+          <span className="text-[10px] sm:text-xs font-black uppercase italic text-black text-center leading-none max-w-[80px] sm:max-w-[100px] break-words">
             {jogo.timeVisitante}
           </span>
         </div>

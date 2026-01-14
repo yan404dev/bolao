@@ -22,7 +22,7 @@ export function TickerBanner() {
     );
   }
 
-  const text = `🔥 ${ticketsSold} APOSTAS REALIZADAS • 💰 PRÊMIO ESTIMADO: ${prizePool} • 🚀 RODADA ABERTA • `;
+  const text = `${ticketsSold} APOSTAS REGISTRADAS • PRÊMIO ESTIMADO: ${prizePool} • RODADA ABERTA • `;
 
   return (
     <div className="w-full bg-yellow-400 text-black py-2 overflow-hidden border-b-2 border-black">
@@ -33,13 +33,13 @@ export function TickerBanner() {
           x: {
             repeat: Infinity,
             repeatType: "loop",
-            duration: 20,
+            duration: 45, // Much slower
             ease: "linear",
           },
         }}
       >
-        {[...Array(6)].map((_, i) => (
-          <span key={i} className="text-xs font-black uppercase italic tracking-wider mx-6 flex items-center gap-2">
+        {[...Array(8)].map((_, i) => (
+          <span key={i} className="text-[10px] font-bold uppercase tracking-[0.2em] mx-10">
             {text}
           </span>
         ))}

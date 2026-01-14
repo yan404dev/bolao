@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useBettingQueries, useBetStatus } from "./use-betting-queries";
 import { useBettingForm } from "./use-betting-form";
 import { BettingFormData } from "../betting-modal.schema";
@@ -63,9 +64,16 @@ export function useBettingModal(onClose: () => void) {
     }
   };
 
+  const router = useRouter();
+
   const handleClose = () => {
     setCopiedTicket(false);
     setCopiedPix(false);
+
+    if (activeRound?.id) {
+      router.push(`/rodada/${activeRound.id}`);
+    }
+
     onClose();
   };
 

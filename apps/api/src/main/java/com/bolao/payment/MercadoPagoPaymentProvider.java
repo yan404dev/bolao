@@ -42,7 +42,6 @@ public class MercadoPagoPaymentProvider implements PaymentProvider {
         .installments(1)
         .build();
 
-    // Idempotency key is mandatory for MP production since Jan 2024
     String idempotencyKey = UUID.randomUUID().toString();
     Map<String, String> headers = new HashMap<>();
     headers.put("X-Idempotency-Key", idempotencyKey);

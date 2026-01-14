@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { useAdmin } from "../_hooks/use-admin";
-import { getStatusConfig } from "../admin.utils";
+import { useRoundManagementTable } from "./hooks/use-round-management-table";
+import { getStatusConfig } from "@/app/admin/admin.utils";
 import { Card, CardHeader, CardTitle, CardContent } from "@/shared/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/components/ui/table";
 import { Button } from "@/shared/components/ui/button";
@@ -8,28 +7,21 @@ import { Trophy, Calendar, Globe, CheckSquare, Square, XCircle, PlayCircle, Load
 import { Skeleton } from "@/shared/components/ui/skeleton";
 
 export function RoundManagementTable() {
-  const { rounds, isLoadingRounds, calculate, isCalculating, updateStatus, isUpdatingStatus, batchAction, isBatchProcessing } = useAdmin();
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
-
-  const toggleAll = () => {
-    if (selectedIds.length === rounds.length) {
-      setSelectedIds([]);
-    } else {
-      setSelectedIds(rounds.map(r => r.id));
-    }
-  };
-
-  const toggleOne = (id: number) => {
-    setSelectedIds(prev =>
-      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
-    );
-  };
-
-  const handleBatch = async (action: string) => {
-    if (selectedIds.length === 0) return;
-    await batchAction({ ids: selectedIds, action });
-    setSelectedIds([]);
-  };
+  const {
+    rounds,
+    isLoadingRounds,
+    selectedIds,
+    isAllSelected,
+    toggleAll,
+    toggleOne,
+    clearSelection,
+    handleBatch,
+    calculate,
+    isCalculating,
+    updateStatus,
+    isUpdatingStatus,
+    isBatchProcessing,
+  } = useRoundManagementTable();
 
   if (isLoadingRounds) {
     return (
@@ -64,7 +56,7 @@ export function RoundManagementTable() {
                     onClick={toggleAll}
                     className="flex items-center justify-center text-black hover:text-yellow-600 transition-colors"
                   >
-                    {selectedIds.length === rounds.length && rounds.length > 0 ? (
+                    {isAllSelected ? (
                       <CheckSquare className="h-4 w-4" />
                     ) : (
                       <Square className="h-4 w-4" />
@@ -169,7 +161,7 @@ export function RoundManagementTable() {
                 {selectedIds.length} Rodadas Selecionadas
               </span>
               <button
-                onClick={() => setSelectedIds([])}
+                onClick={clearSelection}
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <XCircle className="h-4 w-4" />

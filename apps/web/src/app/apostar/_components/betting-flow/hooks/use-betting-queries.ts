@@ -22,3 +22,16 @@ export function useBettingQueries() {
     createBetMutation,
   };
 }
+
+export function useBetStatus(betId?: number) {
+  return useQuery({
+    queryKey: ["betStatus", betId],
+    queryFn: () => (betId ? betService.getById(betId) : null),
+    enabled: !!betId,
+    refetchInterval: (query) => {
+      const bet = query.state.data;
+      if (bet && bet.ticketCode) return false;
+      return 3000;
+    },
+  });
+}

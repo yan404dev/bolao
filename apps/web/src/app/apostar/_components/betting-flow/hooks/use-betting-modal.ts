@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useBettingQueries } from "./use-betting-queries";
+import { useBettingQueries, useBetStatus } from "./use-betting-queries";
 import { useBettingForm } from "./use-betting-form";
 import { BettingFormData } from "../betting-modal.schema";
 import { MatchEntity } from "@/shared/entities";
@@ -14,6 +14,14 @@ export function useBettingModal(onClose: () => void) {
     isLoadingRound,
     createBetMutation
   } = useBettingQueries();
+
+  const betId = createBetMutation.data?.bet?.id;
+  const { data: updatedBet } = useBetStatus(betId);
+
+  const betResult = createBetMutation.data ? {
+    ...createBetMutation.data,
+    bet: updatedBet || createBetMutation.data.bet
+  } : null;
 
   const matches = activeRound?.matches ?? [];
 
@@ -76,7 +84,7 @@ export function useBettingModal(onClose: () => void) {
     isLoadingRound,
     isSubmitting: createBetMutation.isPending,
     isSuccess: createBetMutation.isSuccess,
-    betResult: createBetMutation.data,
+    betResult,
     copiedTicket,
     copiedPix,
     handleCopyTicket,

@@ -23,6 +23,11 @@ public class BetService {
   }
 
   @Transactional(readOnly = true)
+  public Optional<Bet> findById(Long id) {
+    return betRepository.findById(id);
+  }
+
+  @Transactional(readOnly = true)
   public List<Bet> findByRoundId(Long roundId) {
     return betRepository.findByRoundId(roundId);
   }

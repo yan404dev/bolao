@@ -16,7 +16,7 @@ export function useUserActions() {
   const actions: ActionCard[] = [
     {
       id: 1,
-      title: "Apostar",
+      title: "Jogar",
       subtitle: "Faça seus palpites",
       onClick: (e) => {
         e?.preventDefault();

@@ -29,7 +29,7 @@ export const columns: ColumnDef<BettorEntity>[] = [
   },
   {
     accessorKey: "name",
-    header: () => <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">APOSTADOR</span>,
+    header: () => <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">PARTICIPANTE</span>,
     cell: ({ row }) => {
       const bettor = row.original;
       return (
@@ -41,7 +41,7 @@ export const columns: ColumnDef<BettorEntity>[] = [
   },
   {
     accessorKey: "ticketCode",
-    header: () => <div className="text-center text-[10px] font-black uppercase tracking-widest text-gray-500">BILHETE</div>,
+    header: () => <div className="text-center text-[10px] font-black uppercase tracking-widest text-gray-500">CÓDIGO</div>,
     cell: ({ row }) => {
       return (
         <div className="text-center">

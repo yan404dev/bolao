@@ -50,7 +50,7 @@ export function ActiveRoundCTA() {
                   <Users className="w-6 h-6 text-black" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none">BILHETES VENDIDOS</p>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none">PALPITES REGISTRADOS</p>
                   <p className="text-2xl font-black text-black leading-none mt-1">{activeRound.totalTickets}</p>
                 </div>
               </div>
@@ -64,7 +64,7 @@ export function ActiveRoundCTA() {
             >
               <div className="flex flex-col items-center">
                 <span className="text-3xl font-black uppercase italic tracking-tighter text-black group-hover:text-yellow-400 transition-colors">
-                  APOSTAR AGORA
+                  JOGAR AGORA
                 </span>
                 <span className="flex items-center gap-2 text-[10px] font-bold text-black group-hover:text-yellow-400 tracking-widest uppercase">
                   CLIQUE AQUI <MoveRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />

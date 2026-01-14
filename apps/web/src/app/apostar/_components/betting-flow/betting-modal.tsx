@@ -72,7 +72,7 @@ export function BettingModal({ isOpen, onClose }: BettingModalProps) {
             disabled={!isValid || isSubmitting}
           >
             {isSubmitting && <Loader2 className="w-6 h-6 mr-3 animate-spin" />}
-            {isSubmitting ? "ENVIANDO..." : isValid ? "FINALIZAR APOSTA" : `FALTAM PALPITES (${progresso})`}
+            {isSubmitting ? "ENVIANDO..." : isValid ? "ENVIAR PALPITES" : `FALTAM PALPITES (${progresso})`}
           </Button>
           <p className="text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center justify-center gap-2">
             <ShieldCheck className="w-4 h-4 text-black" />

@@ -22,7 +22,7 @@ export function TickerBanner() {
     );
   }
 
-  const text = `${ticketsSold} APOSTAS REGISTRADAS • PRÊMIO ESTIMADO: ${prizePool} • RODADA ABERTA • `;
+  const text = `${ticketsSold} PALPITES REGISTRADOS • PRÊMIO ESTIMADO: ${prizePool} • RODADA ABERTA • `;
 
   return (
     <div className="w-full bg-yellow-400 text-black py-2 overflow-hidden border-b-2 border-black">

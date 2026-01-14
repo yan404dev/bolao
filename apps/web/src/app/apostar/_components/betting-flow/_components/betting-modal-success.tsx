@@ -45,7 +45,7 @@ export function BettingModalSuccess({
               REGISTRADO, {betResult.bet.name.split(' ')[0].toUpperCase()}!
             </h3>
             <p className="text-xs font-bold text-gray-400 uppercase tracking-widest leading-none">
-              PAGUE O PIX PARA VALIDAR SUA APOSTA.
+              PAGUE O PIX PARA VALIDAR SEU JOGO.
             </p>
           </div>
         </div>
@@ -67,7 +67,7 @@ export function BettingModalSuccess({
             </div>
 
             <div className="text-center sm:text-left space-y-3">
-              <p className="inline-block text-xs font-black bg-black text-white px-3 py-1 uppercase tracking-widest leading-normal">VALOR DA APOSTA</p>
+              <p className="inline-block text-xs font-black bg-black text-white px-3 py-1 uppercase tracking-widest leading-normal">VALOR DO JOGO</p>
               <div className="space-y-1">
                 <div className="flex items-baseline gap-2 whitespace-nowrap">
                   <span className="text-3xl font-black text-black">R$</span>
@@ -98,7 +98,7 @@ export function BettingModalSuccess({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-4">
           <div className="bg-yellow-400 border border-black p-5 rotate-1 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-center">
-            <p className="text-xs font-black text-black uppercase tracking-widest mb-1 text-left">STATUS DO BILHETE</p>
+            <p className="text-xs font-black text-black uppercase tracking-widest mb-1 text-left">ESTADO DO COMPROVANTE</p>
             <div className="flex items-center justify-between bg-white border border-black px-4 py-2">
               {betResult.bet.ticketCode ? (
                 <>

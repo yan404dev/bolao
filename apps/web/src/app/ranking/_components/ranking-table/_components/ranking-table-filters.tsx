@@ -40,7 +40,7 @@ export function RankingTableFilters({
             <Search className="w-4 h-4 text-black" />
           </div>
           <Input
-            placeholder="BUSCAR POR NOME OU BILHETE..."
+            placeholder="BUSCAR POR NOME OU CÓDIGO..."
             value={filters.search}
             onChange={(e) => onFiltersChange({ ...filters, search: e.target.value.toUpperCase() })}
             className="pl-14 brutalist-input-height bg-white border border-black font-black uppercase italic placeholder:text-gray-300 focus-visible:ring-0 focus-visible:bg-yellow-50 transition-all rounded-none"

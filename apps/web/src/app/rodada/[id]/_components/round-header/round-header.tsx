@@ -65,7 +65,7 @@ export function RoundHeader({ roundId }: RoundHeaderProps) {
               </div>
             )}
             <div className="text-[10px] font-black uppercase tracking-widest text-black bg-yellow-400 px-3 py-1 border border-black italic">
-              {round.totalTickets} Apostas
+              {round.totalTickets} Palpites
             </div>
           </div>
         </div>

@@ -62,7 +62,7 @@ export function RoundCard({ round, index }: RoundCardProps) {
 
           <div className="flex items-center gap-3 text-sm font-bold uppercase tracking-tighter text-gray-600">
             <Users className="w-4 h-4 text-black" />
-            <span>{round.totalTickets} Apostas Realizadas</span>
+            <span>{round.totalTickets} Palpites Registrados</span>
           </div>
 
           <div className="pt-4 flex items-center gap-2">

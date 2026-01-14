@@ -19,7 +19,7 @@ export function BettingModalEmpty({ isOpen, onClose }: BettingModalEmptyProps) {
         <div className="space-y-4">
           <h3 className="text-3xl font-black uppercase italic tracking-tighter text-black leading-none">NENHUMA RODADA ABERTA</h3>
           <p className="text-sm font-bold text-gray-500 uppercase tracking-widest leading-relaxed">
-            NÃO HÁ RODADA DISPONÍVEL PARA APOSTAS NO MOMENTO. VOLTE MAIS TARDE PARA O JOGO!
+            NÃO HÁ RODADA DISPONÍVEL PARA PALPITES NO MOMENTO. VOLTE MAIS TARDE PARA O JOGO!
           </p>
         </div>
         <Button

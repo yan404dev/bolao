@@ -68,7 +68,7 @@ public class SubmitBetUseCase {
     Payment payment = generatePaymentUseCase.execute(
         savedBet.getId(),
         round.getTicketPrice() != null ? round.getTicketPrice() : 10.0,
-        "Aposta Bolão: " + savedBet.getTicketCode());
+        "Bolão JC: " + savedBet.getTicketCode());
 
     statsService.updateRoundStats(savedBet.getRoundId());
 

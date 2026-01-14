@@ -59,7 +59,7 @@ export function ClosedRounds() {
                   <div className="grid grid-cols-2 gap-4 pt-6 border-t border-dashed border-black mt-4">
                     <div className="flex flex-col">
                       <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">
-                        Apostas
+                        Palpites
                       </span>
                       <span className="text-xl font-black text-black italic">
                         {round.totalTickets || 0}

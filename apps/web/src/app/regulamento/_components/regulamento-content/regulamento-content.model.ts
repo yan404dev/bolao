@@ -45,7 +45,7 @@ export function useRegulamentoContentModel() {
       titulo: "Acúmulo do Prêmio",
       conteudo: [
         "Caso nenhum participante atinja a pontuação mínima de **15 pontos** em uma rodada normal, o valor destinado ao prêmio acumula para a rodada seguinte.",
-        "**Validade do Bilhete:** Os bilhetes são válidos exclusivamente para a rodada em que foram comprados. Caso o prêmio acumule, o participante deve adquirir um novo bilhete para concorrer ao prêmio acumulado na rodada seguinte.",
+        "**Validade da Participação:** As participações são válidas exclusivamente para a rodada em que foram adquiridas. Caso o prêmio acumule, o participante deve adquirir uma nova participação para concorrer ao prêmio acumulado na rodada seguinte.",
         "**Regra da Rodada Acumulada:** Na rodada com prêmio acumulado, **não há pontuação mínima** para vencer. Quem fizer a maior pontuação entre os participantes da rodada leva o prêmio total (valor acumulado + valor arrecadado na rodada atual).",
         "O prêmio acumula **apenas uma vez** consecutiva. Se houver empate na maior pontuação, o prêmio é dividido.",
       ],
@@ -61,7 +61,7 @@ export function useRegulamentoContentModel() {
     },
   ];
 
-  const observacao = "O bilhete é válido apenas para a rodada em que foi comprado. Em caso de acúmulo, é necessário um novo bilhete.";
+  const observacao = "A participação é válida apenas para a rodada em que foi adquirida. Em caso de acúmulo, é necessária uma nova participação.";
 
   return { secoes, observacao };
 }

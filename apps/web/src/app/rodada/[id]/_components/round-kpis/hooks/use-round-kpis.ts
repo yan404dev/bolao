@@ -11,7 +11,7 @@ export function useRoundKpis(roundId: number) {
   const { round, isLoading } = useRoundQueries(roundId);
 
   const kpis: KpiItem[] = round ? [
-    { label: "APOSTAS", value: String(round.totalTickets || 0), icon: "🎫" },
+    { label: "PALPITES", value: String(round.totalTickets || 0), icon: "🎫" },
     { label: "PRÊMIO ESTIMADO", value: formatCurrency(round.prizePool || 0), icon: "💰" },
     { label: "PARTIDAS", value: String(round.matches?.length || 0), icon: "⚽" },
   ] : [];

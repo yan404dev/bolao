@@ -108,21 +108,51 @@ interface Bet {
 
 ### Services
 
-Funcoes cliente de API usando fetch:
+Cliente de API usando Axios com service objects:
 
 ```typescript
-export async function getRounds(): Promise<Round[]> {
-  const response = await fetch(`${API_URL}/rounds`);
-  return response.json();
-}
+// shared/lib/api.ts - Instância Axios configurada
+import axios from "axios";
 
-export async function submitBet(data: CreateBetDto): Promise<BetResponse> {
-  const response = await fetch(`${API_URL}/bets`, {
-    method: 'POST',
-    body: JSON.stringify(data),
-  });
-  return response.json();
-}
+export const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api/v1",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+// shared/services/round.service.ts
+export const roundService = {
+  getAll: async (filters?: RoundFilters): Promise<RoundEntity[]> => {
+    const { data } = await api.get<{ data: RoundEntity[] }>("/rounds", {
+      params: filters,
+    });
+    return data.data;
+  },
+
+  getById: async (roundId: number): Promise<RoundEntity> => {
+    const { data } = await api.get<{ data: RoundEntity }>(`/rounds/${roundId}`);
+    return data.data;
+  },
+
+  getActiveRound: async (): Promise<RoundEntity | null> => {
+    const rounds = await roundService.getAll({ status: "OPEN" });
+    return rounds.length > 0 ? rounds[0] : null;
+  },
+};
+
+// shared/services/bet.service.ts
+export const betService = {
+  create: async (payload: CreateBetPayload): Promise<CreateBetResponse> => {
+    const { data } = await api.post<{ data: CreateBetResponse }>("/bets", payload);
+    return data.data;
+  },
+
+  getByTicketCode: async (ticketCode: string): Promise<BetEntity> => {
+    const { data } = await api.get<{ data: BetEntity }>(`/bets/code/${ticketCode}`);
+    return data.data;
+  },
+};
 ```
 
 ### Schemas
@@ -175,13 +205,22 @@ feature/
 
 ### Integracao com API
 
-React Query gerencia o estado do servidor:
+React Query gerencia o estado do servidor usando os service objects:
 
 ```typescript
-function useRounds() {
+import { roundService } from "@/shared/services/round.service";
+
+function useRounds(filters?: RoundFilters) {
   return useQuery({
-    queryKey: ['rounds'],
-    queryFn: getRounds,
+    queryKey: ['rounds', filters],
+    queryFn: () => roundService.getAll(filters),
+  });
+}
+
+function useActiveRound() {
+  return useQuery({
+    queryKey: ['rounds', 'active'],
+    queryFn: () => roundService.getActiveRound(),
   });
 }
 ```

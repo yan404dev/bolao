@@ -8,21 +8,13 @@ export const betService = {
     return data.data;
   },
 
-  getById: async (id: number): Promise<BetEntity | null> => {
-    try {
-      const { data } = await api.get<{ data: BetEntity }>(`/bets/${id}`);
-      return data.data;
-    } catch {
-      return null;
-    }
+  getById: async (id: number): Promise<BetEntity> => {
+    const { data } = await api.get<{ data: BetEntity }>(`/bets/${id}`);
+    return data.data;
   },
 
-  getByTicketCode: async (ticketCode: string): Promise<BetEntity | null> => {
-    try {
-      const { data } = await api.get<{ data: BetEntity }>(`/bets/code/${ticketCode}`);
-      return data.data;
-    } catch {
-      return null;
-    }
+  getByTicketCode: async (ticketCode: string): Promise<BetEntity> => {
+    const { data } = await api.get<{ data: BetEntity }>(`/bets/code/${ticketCode}`);
+    return data.data;
   },
 };

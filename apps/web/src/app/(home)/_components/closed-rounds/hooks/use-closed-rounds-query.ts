@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { closedRoundsService } from "../closed-rounds.service";
+import { roundService } from "@/shared/services/round.service";
 
 export function useClosedRoundsQuery() {
   return useQuery({
     queryKey: ["rounds", "closed"],
-    queryFn: closedRoundsService.getAll,
+    queryFn: () => roundService.getClosedRounds(4),
   });
 }

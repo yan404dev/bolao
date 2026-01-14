@@ -14,8 +14,6 @@ export function useRankingFilterState() {
     page,
     size: 20
   }), [search, minPoints, page]);
-
-  // Reset page when search or points change
   useEffect(() => {
     setPage(0);
   }, [search, minPoints, setPage]);

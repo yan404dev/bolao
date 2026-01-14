@@ -33,7 +33,7 @@ export function TickerBanner() {
           x: {
             repeat: Infinity,
             repeatType: "loop",
-            duration: 45, // Much slower
+            duration: 45,
             ease: "linear",
           },
         }}

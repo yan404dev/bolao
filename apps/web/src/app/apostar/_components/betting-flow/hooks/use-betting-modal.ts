@@ -1,15 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useBettingQueries, useBetStatus } from "./use-betting-queries";
 import { useBettingForm } from "./use-betting-form";
 import { BettingFormData } from "../betting-modal.schema";
 import { MatchEntity } from "@/shared/entities";
 
+const mapMatchToJogo = (match: MatchEntity) => ({
+  id: match.id,
+  timeCasa: match.homeTeam,
+  timeCasaImg: match.homeTeamLogo || "/placeholder-team.png",
+  timeVisitante: match.awayTeam,
+  timeVisitanteImg: match.awayTeamLogo || "/placeholder-team.png",
+});
+
 export function useBettingModal(onClose: () => void) {
+  const router = useRouter();
   const [copiedTicket, setCopiedTicket] = useState(false);
   const [copiedPix, setCopiedPix] = useState(false);
+
   const {
     activeRound,
     isLoadingRound,
@@ -26,7 +36,9 @@ export function useBettingModal(onClose: () => void) {
 
   const matches = activeRound?.matches ?? [];
 
-  const handleCreateBet = async (data: BettingFormData) => {
+  const jogos = useMemo(() => matches.map(mapMatchToJogo), [matches]);
+
+  const handleCreateBet = useCallback(async (data: BettingFormData) => {
     if (!activeRound) return;
 
     await createBetMutation.mutateAsync({
@@ -39,34 +51,32 @@ export function useBettingModal(onClose: () => void) {
         awayScore: parseInt(scores.visitante),
       })),
     });
-  };
+  }, [activeRound, createBetMutation]);
 
   const formHook = useBettingForm({
     matches,
     onSubmit: handleCreateBet,
   });
 
-  const handleCopyTicket = async () => {
+  const handleCopyTicket = useCallback(async () => {
     const ticketCode = createBetMutation.data?.bet?.ticketCode;
     if (ticketCode) {
       await navigator.clipboard.writeText(ticketCode);
       setCopiedTicket(true);
       setTimeout(() => setCopiedTicket(false), 2000);
     }
-  };
+  }, [createBetMutation.data?.bet?.ticketCode]);
 
-  const handleCopyPix = async () => {
+  const handleCopyPix = useCallback(async () => {
     const pixCode = createBetMutation.data?.payment?.pixCopyPaste;
     if (pixCode) {
       await navigator.clipboard.writeText(pixCode);
       setCopiedPix(true);
       setTimeout(() => setCopiedPix(false), 2000);
     }
-  };
+  }, [createBetMutation.data?.payment?.pixCopyPaste]);
 
-  const router = useRouter();
-
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setCopiedTicket(false);
     setCopiedPix(false);
 
@@ -75,19 +85,11 @@ export function useBettingModal(onClose: () => void) {
     }
 
     onClose();
-  };
-
-  const mapMatchToJogo = (match: MatchEntity) => ({
-    id: match.id,
-    timeCasa: match.homeTeam,
-    timeCasaImg: match.homeTeamLogo || "/placeholder-team.png",
-    timeVisitante: match.awayTeam,
-    timeVisitanteImg: match.awayTeamLogo || "/placeholder-team.png",
-  });
+  }, [activeRound?.id, router, onClose]);
 
   return {
     ...formHook,
-    jogos: matches.map(mapMatchToJogo),
+    jogos,
     activeRound,
     isLoadingRound,
     isSubmitting: createBetMutation.isPending,

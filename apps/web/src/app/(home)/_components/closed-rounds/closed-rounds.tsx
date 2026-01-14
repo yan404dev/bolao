@@ -3,27 +3,28 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/shared/components/ui/card";
 import Link from "next/link";
 import { useClosedRounds } from "./hooks/use-closed-rounds";
-import { formatDate } from "@/shared/lib/utils";
+import { formatDate, formatCurrencyCents } from "@/shared/lib/utils";
 import { Skeleton } from "@/shared/components/ui/skeleton";
+
+function ClosedRoundsLoading() {
+  return (
+    <section className="w-full py-12 px-4">
+      <div className="max-w-7xl mx-auto">
+        <Skeleton className="h-10 w-64 mb-8 bg-gray-200" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-56 w-full rounded-2xl bg-gray-100" />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export function ClosedRounds() {
   const { rounds, isLoading } = useClosedRounds();
 
-  if (isLoading) {
-    return (
-      <section className="w-full py-12 px-4">
-        <div className="max-w-7xl mx-auto">
-          <Skeleton className="h-10 w-64 mb-8 bg-gray-200" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-56 w-full rounded-2xl bg-gray-100" />
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  }
-
+  if (isLoading) return <ClosedRoundsLoading />;
   if (rounds.length === 0) return null;
 
   return (
@@ -70,10 +71,7 @@ export function ClosedRounds() {
                         Prêmio Total
                       </span>
                       <span className="text-xl font-black text-yellow-500 italic">
-                        {new Intl.NumberFormat("pt-BR", {
-                          style: "currency",
-                          currency: "BRL",
-                        }).format((round.prizePool || 0) / 100)}
+                        {formatCurrencyCents(round.prizePool || 0)}
                       </span>
                     </div>
                   </div>

@@ -12,6 +12,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
 
+import com.mercadopago.core.MPRequestOptions;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -38,7 +42,7 @@ public class MercadoPagoPaymentProvider implements PaymentProvider {
         .transactionAmount(new BigDecimal(amount.toString()))
         .description(description)
         .paymentMethodId("pix")
-        .payer(PaymentPayerRequest.builder().email("pagador@bolao.com.br").build()) // Required by MP
+        .payer(PaymentPayerRequest.builder().email("pagador@bolao.com.br").build())
         .installments(1)
         .build();
 
@@ -80,7 +84,7 @@ public class MercadoPagoPaymentProvider implements PaymentProvider {
           throw new RuntimeException("Gateway Connectivity Error after " + maxRetries + " attempts: " + e.getMessage());
         }
         try {
-          Thread.sleep(1000 * attempt); // exponential backoff simple
+          Thread.sleep(1000 * attempt);
         } catch (InterruptedException ie) {
           Thread.currentThread().interrupt();
           throw new RuntimeException("Interrupted during retry backoff", ie);

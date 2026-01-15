@@ -1,6 +1,7 @@
 "use client";
 
-import { TickerBanner, BackButton } from "@/shared/components";
+import { TickerBanner } from "@/shared/components/ticker-banner/ticker-banner";
+import { BackButton } from "@/shared/components/back-button/back-button";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { Calendar, Trophy } from "lucide-react";
 import { RoundCard } from "./_components";

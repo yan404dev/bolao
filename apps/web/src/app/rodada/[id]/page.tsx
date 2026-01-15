@@ -1,7 +1,8 @@
 "use client";
 
 import { RoundHeader, RoundKpis, RoundMatches, RoundRanking, StandingsTable } from "./_components";
-import { TickerBanner, BackButton } from "@/shared/components";
+import { TickerBanner } from "@/shared/components/ticker-banner/ticker-banner";
+import { BackButton } from "@/shared/components/back-button/back-button";
 import { Zap } from "lucide-react";
 import { useBettingModalState } from "@/shared/providers/betting-modal-provider";
 import { use } from "react";

@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { RankingTable, RankingKpis, RankingTableLoader } from "./_components";
-import { TickerBanner, BackButton } from "@/shared/components";
+import { TickerBanner } from "@/shared/components/ticker-banner/ticker-banner";
+import { BackButton } from "@/shared/components/back-button/back-button";
 import { Trophy, Zap } from "lucide-react";
 
 export default function RankingPage() {

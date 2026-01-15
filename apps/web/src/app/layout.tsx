@@ -4,7 +4,7 @@ import { NuqsAdapter } from "nuqs/adapters/next";
 import { Toaster } from "sonner";
 import { QueryProvider } from "@/shared/providers/query-provider";
 import { BettingModalProvider } from "@/shared/providers/betting-modal-provider";
-import { Footer } from "@/shared/components/footer";
+import { Footer } from "@/shared/components/footer/footer";
 import { GlobalBettingModal } from "@/shared/components/global-betting-modal";
 import "./globals.css";
 

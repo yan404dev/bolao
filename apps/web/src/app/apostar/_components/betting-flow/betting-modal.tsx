@@ -76,7 +76,7 @@ export function BettingModal({ isOpen, onClose }: BettingModalProps) {
           </Button>
           <p className="text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center justify-center gap-2">
             <ShieldCheck className="w-4 h-4 text-black" />
-            SEUS DADOS ESTÃO PROTEGIDOS PELO BOLÃOJC
+            SEUS DADOS ESTÃO PROTEGIDOS PELA ARENA DE ELITE
           </p>
         </div>
       }

@@ -5,12 +5,19 @@ import { UserActions } from "./_components/user-actions/user-actions";
 import { ClosedRounds } from "./_components/closed-rounds/closed-rounds";
 import { ActiveRoundCTA } from "./_components/active-round-cta/active-round-cta";
 
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Mestria no Futebol | Domine a Tática e Vença pelo Conhecimento",
+  description: "Analise o desempenho dos clubes, aplique sua estratégia tática e junte-se à elite da inteligência futebolística. Onde a visão de jogo encontra a glória.",
+};
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-gray-50">
       <TickerBanner />
       <Image
-        src="/hero.png"
+        src="/hero.webp"
         alt="Hero"
         width={1920}
         height={1080}

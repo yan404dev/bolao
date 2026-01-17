@@ -1,9 +1,16 @@
 import { RegulamentoContent } from "./_components";
-import { TickerBanner } from "@/shared/components/ticker-banner";
+import { TickerBanner } from "@/shared/components/ticker-banner/ticker-banner";
 import { ChevronLeft, FileText, Info } from "lucide-react";
 import Link from "next/link";
+import { BackButton } from "@/shared/components/back-button/back-button";
+import { Metadata } from "next";
 
-export default function RegulamentoPage() {
+export const metadata: Metadata = {
+  title: "Diretrizes | Respeito e Mérito na Competição",
+  description: "Conheça os pilares da nossa arena. Regras claras para uma competição justa, baseada exclusivamente em mérito e competência analítica.",
+};
+
+export default function RegulationPage() {
   return (
     <main className="min-h-screen bg-white pb-12">
       <TickerBanner />
@@ -22,7 +29,7 @@ export default function RegulamentoPage() {
                 <FileText className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-yellow-500" />
                 Regulamento <span className="text-yellow-400">Oficial</span>
               </h1>
-              <p className="text-gray-500 font-bold uppercase tracking-widest text-xs mt-2 ml-1">Como funciona o nosso bolão</p>
+              <p className="text-gray-500 font-bold uppercase tracking-widest text-xs mt-2 ml-1">Como funciona a nossa arena</p>
             </div>
           </div>
 

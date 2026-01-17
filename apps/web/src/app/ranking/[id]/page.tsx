@@ -1,5 +1,5 @@
 import { RankingTable, RankingKpis } from "../_components";
-import { TickerBanner } from "@/shared/components/ticker-banner";
+import { TickerBanner } from "@/shared/components/ticker-banner/ticker-banner";
 import { ChevronLeft, Zap, Trophy } from "lucide-react";
 import Link from "next/link";
 

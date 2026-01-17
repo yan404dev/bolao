@@ -1,20 +1,33 @@
-"use client";
-
-import { RoundHeader, RoundKpis, RoundMatches, RoundRanking, StandingsTable } from "./_components";
+import { RoundHeader, RoundKpis, RoundMatches, RoundRanking, StandingsTable, RoundPlayButton } from "./_components";
 import { TickerBanner } from "@/shared/components/ticker-banner/ticker-banner";
 import { BackButton } from "@/shared/components/back-button/back-button";
 import { Zap } from "lucide-react";
-import { useBettingModalState } from "@/shared/providers/betting-modal-provider";
-import { use } from "react";
+import { Metadata } from "next";
+import { roundService } from "@/shared/services/round.service";
 
 interface RoundPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default function RoundPage({ params }: RoundPageProps) {
-  const { id } = use(params);
+export async function generateMetadata({ params }: RoundPageProps): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const round = await roundService.getById(parseInt(id));
+    return {
+      title: `Análise Tática da Rodada de Futebol #${id} — ${round.title}`,
+      description: `Mergulhe na análise técnica dos jogos da Rodada #${id}. Compare estatísticas, demonstre sua visão de jogo e posicione-se entre os melhores especialistas na Arena de Elite.`,
+    };
+  } catch (error) {
+    return {
+      title: `Rodada de Futebol #${id} | Inteligência Esportiva`,
+      description: `Dashboard de análise para as partidas da Rodada #${id}. Prepare seus prognósticos técnicos na Arena de Elite.`,
+    };
+  }
+}
+
+export default async function RoundPage({ params }: RoundPageProps) {
+  const { id } = await params;
   const roundId = parseInt(id);
-  const { openModal } = useBettingModalState();
 
   return (
     <main className="min-h-screen bg-white pb-12">
@@ -38,13 +51,7 @@ export default function RoundPage({ params }: RoundPageProps) {
           </div>
 
           <div className="flex gap-4">
-            <button
-              onClick={openModal}
-              className="px-8 py-4 bg-yellow-400 text-black border-2 border-black font-black uppercase italic tracking-tighter text-xl hover:bg-black hover:text-white transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none translate-y-[-2px] hover:translate-y-0 flex items-center gap-3"
-            >
-              <Zap className="w-6 h-6 fill-current" />
-              JOGAR AGORA
-            </button>
+            <RoundPlayButton />
           </div>
         </div>
 

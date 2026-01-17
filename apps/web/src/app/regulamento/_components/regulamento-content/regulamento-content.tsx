@@ -23,7 +23,7 @@ export function RegulamentoContent() {
     <div className="space-y-4">
       <div className="p-8 bg-black border border-black mb-8">
         <p className="text-white font-black uppercase italic tracking-widest text-lg">
-          Regulamento Oficial do Bolão
+          Regulamento Oficial da Arena de Elite
         </p>
         <p className="text-gray-400 text-sm mt-2">
           Leia atentamente todas as regras antes de participar.
@@ -116,7 +116,7 @@ export function RegulamentoContent() {
         </div>
         <p className="text-xs text-gray-500 mt-4 italic leading-relaxed">
           * A taxa de organização destina-se exclusivamente ao custeio de: hospedagem do sistema, taxas bancárias para
-          transferências PIX e demais despesas operacionais, não gerando lucro à administração do JC Bolão.
+          transferências PIX e demais despesas operacionais, não gerando lucro à administração da Arena de Elite.
         </p>
       </div>
     </div>

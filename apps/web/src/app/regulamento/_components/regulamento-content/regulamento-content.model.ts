@@ -4,11 +4,11 @@ export function useRegulamentoContentModel() {
   const secoes: Secao[] = [
     {
       id: 1,
-      titulo: "Sobre o Bolão",
+      titulo: "Sobre a Arena de Elite",
       conteudo: [
-        "Este bolão tem caráter exclusivamente recreativo e colaborativo.",
+        "Esta plataforma tem caráter exclusivamente recreativo e colaborativo.",
         "A participação é voluntária e entre pessoas conhecidas.",
-        "A administração do JC Bolão não obtém lucro sobre a premiação, recebendo apenas uma taxa fixa pelos custos de organização.",
+        "A administração da Arena de Elite não obtém lucro sobre a premiação, recebendo apenas uma taxa fixa pelos custos de organização.",
         "Esta iniciativa não configura casa de apostas, loteria ou qualquer modalidade de exploração de jogos de azar prevista na legislação brasileira.",
       ],
     },

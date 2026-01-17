@@ -3,6 +3,12 @@ import { RankingTable, RankingKpis, RankingTableLoader } from "./_components";
 import { TickerBanner } from "@/shared/components/ticker-banner/ticker-banner";
 import { BackButton } from "@/shared/components/back-button/back-button";
 import { Trophy, Zap } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Analistas de Precisão | Ranking de Inteligência no Futebol",
+  description: "Acompanhe os maiores estrategistas do cenário esportivo. Veja quem lidera a arena através da competência tática e leitura técnica das partidas.",
+};
 
 export default function RankingPage() {
   return (

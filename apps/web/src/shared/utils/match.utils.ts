@@ -29,16 +29,16 @@ export function getScoreBoxStyle(status: string): string {
 }
 
 export function formatMatchStatusLabel(match: MatchEntity): string {
-  const { status, kickoffTime, estimatedEndTime } = match;
-  const start = dayjs(kickoffTime).format("DD/MM HH:mm");
-  const end = estimatedEndTime ? dayjs(estimatedEndTime).format("HH:mm") : null;
+  const { status } = match;
 
   switch (status) {
     case "FINISHED":
-      return `ENCERRADO • ${start}`;
+      return "ENCERRADO";
     case "LIVE":
       return "🔴 AO VIVO";
+    case "POSTPONED":
+      return "ADIADO";
     default:
-      return end ? `${start} - ${end}` : start;
+      return "AGENDADO";
   }
 }

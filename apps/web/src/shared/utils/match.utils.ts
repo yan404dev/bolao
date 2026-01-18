@@ -37,6 +37,7 @@ export function formatMatchStatusLabel(match: MatchEntity): string {
     case "LIVE":
       return "🔴 AO VIVO";
     default:
-      return "AGENDADO";
+      // return "AGENDADO";
+      return "";
   }
 }

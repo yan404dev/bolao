@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/shared/components/ui
 import Link from "next/link";
 import { MoveRight } from "lucide-react";
 import { useClosedRounds } from "./hooks/use-closed-rounds";
-import { formatDate, formatCurrencyCents } from "@/shared/lib/utils";
+import { formatDate, formatCurrency } from "@/shared/lib/utils";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 
 function ClosedRoundsLoading() {
@@ -31,7 +31,6 @@ export function ClosedRounds() {
 
   return (
     <section className="w-full py-16 px-4 bg-white relative overflow-hidden">
-      {/* Background decoration */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-400/5 -rotate-12 translate-x-32 -translate-y-32" />
 
       <div className="max-w-7xl mx-auto relative">
@@ -77,7 +76,7 @@ export function ClosedRounds() {
                     <div className="flex flex-col">
                       <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Prêmio Estimado</span>
                       <span className="text-2xl font-black text-black italic leading-none">
-                        {formatCurrencyCents(round.prizePool || 0)}
+                        {formatCurrency(round.prizePool || 0)}
                       </span>
                     </div>
                     <div className="w-12 h-12 bg-black flex items-center justify-center group-hover:bg-yellow-400 transition-colors">

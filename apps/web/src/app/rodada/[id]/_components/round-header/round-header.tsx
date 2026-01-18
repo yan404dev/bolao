@@ -42,16 +42,16 @@ export function RoundHeader({ roundId }: RoundHeaderProps) {
           <h1 className="text-4xl font-black uppercase italic tracking-tighter text-gray-900 leading-none">
             {round.title}
           </h1>
-          <div className="mt-4 flex flex-col sm:flex-row gap-3">
-            <div className="inline-flex items-center gap-2 bg-white border-2 border-black px-4 py-2">
-              <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">INÍCIO</span>
-              <span className="text-base font-black italic text-black">
+          <div className="mt-6 flex flex-col sm:flex-row gap-4">
+            <div className="inline-flex items-center gap-3 bg-white border-2 border-black px-5 py-3">
+              <span className="text-xs font-black uppercase tracking-widest text-gray-500">INÍCIO</span>
+              <span className="text-xl font-black italic text-black">
                 {dayjs(round.startDate).format("DD/MM/YYYY")}
               </span>
             </div>
-            <div className="inline-flex items-center gap-2 bg-yellow-400 border-2 border-black px-4 py-2">
-              <span className="text-[10px] font-black uppercase tracking-widest text-black">🏆 RESULTADO</span>
-              <span className="text-base font-black italic text-black">
+            <div className="inline-flex items-center gap-3 bg-yellow-400 border-2 border-black px-5 py-3">
+              <span className="text-xs font-black uppercase tracking-widest text-black">🏆 RESULTADO</span>
+              <span className="text-xl font-black italic text-black">
                 {round.endDate ? dayjs(round.endDate).format("DD/MM/YYYY") : "A DEFINIR"}
               </span>
             </div>

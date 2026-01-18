@@ -61,13 +61,11 @@ function MatchCard({ match }: MatchCardProps) {
   return (
     <div className="brutalist-card p-6 bg-white hover:border-yellow-400">
       <div className="flex items-center justify-between gap-4">
-        {/* Time da Casa */}
         <TeamDisplay
           name={match.homeTeam}
           logo={match.homeTeamLogo}
         />
 
-        {/* Placar */}
         <div className="flex flex-col items-center gap-3">
           <div className="flex items-center gap-3">
             <span className={`brutalist-score-box ${scoreBoxStyle}`}>
@@ -78,9 +76,11 @@ function MatchCard({ match }: MatchCardProps) {
               {match.awayScore ?? "-"}
             </span>
           </div>
-          <div className={`brutalist-badge-sm ${statusBadgeStyle}`}>
-            {formatMatchStatusLabel(match)}
-          </div>
+          {formatMatchStatusLabel(match) && (
+            <div className={`brutalist-badge-sm ${statusBadgeStyle}`}>
+              {formatMatchStatusLabel(match)}
+            </div>
+          )}
         </div>
 
         <TeamDisplay

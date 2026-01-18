@@ -1,7 +1,6 @@
-import { RoundHeader, RoundKpis, RoundMatches, RoundRanking, StandingsTable, RoundPlayButton } from "./_components";
+import { RoundHeader, RoundKpis, RoundMatches, RoundRanking, StandingsTable, RoundPlayButton, RoundTitle } from "./_components";
 import { TickerBanner } from "@/shared/components/ticker-banner/ticker-banner";
 import { BackButton } from "@/shared/components/back-button/back-button";
-import { Zap } from "lucide-react";
 import { Metadata } from "next";
 import { roundService } from "@/shared/services/round.service";
 
@@ -13,9 +12,10 @@ export async function generateMetadata({ params }: RoundPageProps): Promise<Meta
   const { id } = await params;
   try {
     const round = await roundService.getById(parseInt(id));
+    const roundNumber = round.externalRoundId?.match(/(\d+)$/)?.[1] || id;
     return {
-      title: `Análise Tática da Rodada de Futebol #${id} — ${round.title}`,
-      description: `Mergulhe na análise técnica dos jogos da Rodada #${id}. Compare estatísticas, demonstre sua visão de jogo e posicione-se entre os melhores especialistas na Arena de Elite.`,
+      title: `Análise Tática da Rodada de Futebol #${roundNumber} — ${round.title}`,
+      description: `Mergulhe na análise técnica dos jogos da Rodada #${roundNumber}. Compare estatísticas, demonstre sua visão de jogo e posicione-se entre os melhores especialistas na Arena de Elite.`,
     };
   } catch (error) {
     return {
@@ -40,13 +40,7 @@ export default async function RoundPage({ params }: RoundPageProps) {
               <BackButton />
             </div>
             <div className="flex-1 min-w-0">
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black uppercase italic tracking-tighter text-gray-900 leading-tight sm:leading-none flex flex-wrap items-center gap-2 sm:gap-3">
-                <Zap className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-yellow-500 shrink-0" />
-                Rodada <span className="text-yellow-400 whitespace-nowrap">#{id}</span>
-              </h1>
-              <p className="text-gray-500 font-bold uppercase tracking-widest text-[10px] sm:text-xs mt-1 sm:mt-2 ml-0 sm:ml-1 line-clamp-1 sm:line-clamp-none">
-                Detalhes e classificação
-              </p>
+              <RoundTitle roundId={roundId} />
             </div>
           </div>
 

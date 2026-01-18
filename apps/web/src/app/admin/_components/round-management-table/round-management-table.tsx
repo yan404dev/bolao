@@ -66,6 +66,7 @@ export function RoundManagementTable() {
                 <TableHead className="text-black font-black uppercase text-[10px] tracking-widest italic">Info</TableHead>
                 <TableHead className="text-black font-black uppercase text-[10px] tracking-widest italic text-center">Status</TableHead>
                 <TableHead className="text-black font-black uppercase text-[10px] tracking-widest italic text-center">Início</TableHead>
+                <TableHead className="text-black font-black uppercase text-[10px] tracking-widest italic text-center">Fim</TableHead>
                 <TableHead className="text-black font-black uppercase text-[10px] tracking-widest italic text-right">Ação</TableHead>
               </TableRow>
             </TableHeader>
@@ -101,7 +102,10 @@ export function RoundManagementTable() {
                       </div>
                     </TableCell>
                     <TableCell className="text-center text-[10px] font-black text-gray-400 font-mono">
-                      {new Date(round.startDate).toLocaleDateString("pt-BR")}
+                      {new Date(round.startDate).toLocaleString("pt-BR", { dateStyle: 'short', timeStyle: 'short' })}
+                    </TableCell>
+                    <TableCell className="text-center text-[10px] font-black text-gray-400 font-mono">
+                      {round.endDate ? new Date(round.endDate).toLocaleString("pt-BR", { dateStyle: 'short', timeStyle: 'short' }) : "-"}
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
@@ -143,7 +147,7 @@ export function RoundManagementTable() {
               })}
               {rounds.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-20">
+                  <TableCell colSpan={6} className="text-center py-20">
                     <div className="flex flex-col items-center gap-2 text-gray-300">
                       <Globe className="h-10 w-10" />
                       <p className="font-black uppercase italic tracking-widest text-xs">Vazio</p>

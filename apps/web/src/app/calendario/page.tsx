@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function CalendarPage() {
   return (
-    <main className="min-h-screen bg-gray-50 pb-12 text-black">
+    <main className="min-h-screen bg-white pb-12 text-black">
       <TickerBanner />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8">

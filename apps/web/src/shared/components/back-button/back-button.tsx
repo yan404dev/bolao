@@ -9,11 +9,11 @@ export function BackButton() {
 
   return (
     <Button
-      variant="ghost"
+      variant="outline"
       onClick={() => router.back()}
-      className="p-3 hover:bg-white rounded-full transition-all duration-300 border-2 border-transparent hover:border-black shadow-none group active:scale-95"
+      className="w-12 h-12 p-0 bg-white border-2 border-black rounded-none transition-all duration-300 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 group flex items-center justify-center"
     >
-      <ArrowLeft className="w-8 h-8 text-black group-hover:-translate-x-1 transition-transform" />
+      <ArrowLeft className="w-6 h-6 text-black group-hover:-translate-x-0.5 transition-transform" />
     </Button>
   );
 }

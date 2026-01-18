@@ -6,6 +6,7 @@ import { QueryProvider } from "@/shared/providers/query-provider";
 import { BettingModalProvider } from "@/shared/providers/betting-modal-provider";
 import { Footer } from "@/shared/components/footer/footer";
 import { GlobalBettingModal } from "@/shared/components/global-betting-modal";
+import { MobileNav } from "@/shared/components/mobile-nav";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -94,10 +95,11 @@ export default function RootLayout({
                   }),
                 }}
               />
-              <main className="flex-1">
+              <main className="flex-1 pb-20 md:pb-0">
                 {children}
               </main>
               <Footer />
+              <MobileNav />
               <GlobalBettingModal />
             </BettingModalProvider>
           </QueryProvider>

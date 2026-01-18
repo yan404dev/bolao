@@ -20,7 +20,7 @@ export function UserActions() {
     useUserActions(openModal);
 
   return (
-    <section id="acoes" className="w-full py-12 px-4 sm:px-6">
+    <section id="acoes" className="w-full py-12 px-4 sm:px-6 hidden md:block">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-3 mb-8">
           <div className="h-10 w-2 bg-yellow-400" />

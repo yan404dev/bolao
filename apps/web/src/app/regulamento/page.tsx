@@ -18,12 +18,7 @@ export default function RegulationPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="flex items-center gap-4">
-            <Link
-              href="/"
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors border border-transparent hover:border-black"
-            >
-              <ChevronLeft className="w-6 h-6 text-gray-900" />
-            </Link>
+            <BackButton />
             <div>
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase italic tracking-tighter text-gray-900 leading-none flex items-center gap-3">
                 <FileText className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-yellow-500" />

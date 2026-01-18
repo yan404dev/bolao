@@ -4,6 +4,7 @@ import com.bolao.bet.entities.Bet;
 import com.bolao.bet.repositories.BetRepository;
 import com.bolao.round.entities.Round;
 import com.bolao.round.repositories.RoundRepository;
+import com.bolao.round.services.RoundStatsService;
 import com.bolao.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ public class ConfirmBetPaymentUseCase {
 
   private final BetRepository betRepository;
   private final RoundRepository roundRepository;
+  private final RoundStatsService statsService;
 
   @Transactional
   public void execute(Long betId, LocalDateTime paidAt) {
@@ -43,6 +45,10 @@ public class ConfirmBetPaymentUseCase {
     }
 
     betRepository.save(bet);
+
+    if (bet.getStatus() == Bet.PaymentStatus.PAID) {
+      statsService.updateRoundStats(bet.getRoundId());
+    }
   }
 
   private boolean isPaymentLate(Round round, LocalDateTime paidAt) {

@@ -17,6 +17,7 @@ public interface BetRepository extends BaseRepository<Bet, Long> {
   Optional<Bet> findByTicketCode(String ticketCode);
 
   long countByRoundId(Long roundId);
+  long countPaidByRoundId(Long roundId);
 
   List<Bet> findByRoundIdAndStatus(Long roundId, Bet.PaymentStatus status);
 

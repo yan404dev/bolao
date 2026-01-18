@@ -120,6 +120,12 @@ public class BetRepositoryImpl implements BetRepository {
 
   @Override
   @Transactional(readOnly = true)
+  public long countPaidByRoundId(Long roundId) {
+    return jpaRepository.countPaidByRoundId(roundId);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
   public Page<Bet> findByRoundIdWithFilters(Long roundId, String search, Integer minPoints, Pageable pageable) {
     return jpaRepository.findByRoundIdWithFilters(roundId, search, minPoints, pageable)
         .map(betMapper::toDomain);

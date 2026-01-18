@@ -28,7 +28,7 @@ public class RoundStatsService {
     Round round = roundRepository.findById(roundId)
         .orElseThrow(() -> new NotFoundException("Round not found: " + roundId));
 
-    long ticketCount = betRepository.countByRoundId(roundId);
+    long ticketCount = betRepository.countPaidByRoundId(roundId);
     double currentRevenue = ticketCount * (round.getTicketPrice() != null ? round.getTicketPrice() : 0.0);
     double accumulatedValue = 0.0;
 

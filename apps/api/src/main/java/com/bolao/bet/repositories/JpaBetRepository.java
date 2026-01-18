@@ -33,6 +33,6 @@ public interface JpaBetRepository extends JpaRepository<BetEntity, Long>, JpaSpe
 
   long countByRoundId(Long roundId);
 
-  @org.springframework.data.jpa.repository.Query("SELECT MAX(b.points) FROM BetEntity b WHERE b.round.id = :roundId")
+  @org.springframework.data.jpa.repository.Query("SELECT MAX(b.points) FROM BetEntity b WHERE b.roundId = :roundId")
   Integer findMaxPointsByRoundId(@org.springframework.data.repository.query.Param("roundId") Long roundId);
 }

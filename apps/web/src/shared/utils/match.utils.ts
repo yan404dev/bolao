@@ -36,8 +36,6 @@ export function formatMatchStatusLabel(match: MatchEntity): string {
       return "ENCERRADO";
     case "LIVE":
       return "🔴 AO VIVO";
-    case "POSTPONED":
-      return "ADIADO";
     default:
       return "AGENDADO";
   }

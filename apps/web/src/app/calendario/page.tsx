@@ -15,11 +15,11 @@ export default function CalendarPage() {
       <TickerBanner />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8">
-        <div className="flex items-center gap-4 mb-8">
-          <BackButton />
-          <Calendar className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-yellow-500 shrink-0" />
-          <h1 className="text-xl sm:text-3xl md:text-4xl font-black uppercase italic tracking-tight text-black">Calendário</h1>
-        </div>
+        <PageHeader
+          title="Calendário"
+          highlightedTitle="2026"
+          subtitle="Explore o cronograma de desafios táticos"
+        />
 
         <CalendarContent />
       </div>

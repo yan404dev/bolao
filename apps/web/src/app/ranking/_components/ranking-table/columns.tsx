@@ -41,7 +41,7 @@ export const columns: ColumnDef<BettorEntity>[] = [
   },
   {
     accessorKey: "ticketCode",
-    header: () => <div className="text-center text-[10px] font-black uppercase tracking-widest text-gray-500">CÓDIGO</div>,
+    header: () => <div className="text-center text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-gray-500">CÓDIGO</div>,
     cell: ({ row }) => {
       return (
         <div className="text-center">
@@ -54,7 +54,7 @@ export const columns: ColumnDef<BettorEntity>[] = [
   },
   {
     accessorKey: "exactScores",
-    header: () => <div className="text-center text-[10px] font-black uppercase tracking-widest text-gray-500">EXATOS</div>,
+    header: () => <div className="text-center text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-gray-500">EXATOS</div>,
     cell: ({ row }) => (
       <div className="text-center">
         <span className="text-sm font-black text-yellow-600">{row.original.exactScores}</span>
@@ -63,7 +63,7 @@ export const columns: ColumnDef<BettorEntity>[] = [
   },
   {
     accessorKey: "winnerScores",
-    header: () => <div className="text-center text-[10px] font-black uppercase tracking-widest text-gray-500">VENCEDOR</div>,
+    header: () => <div className="text-center text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-gray-500">VENCEDOR</div>,
     cell: ({ row }) => (
       <div className="text-center">
         <span className="text-sm font-black text-gray-400">{row.original.winnerScores}</span>
@@ -72,12 +72,12 @@ export const columns: ColumnDef<BettorEntity>[] = [
   },
   {
     accessorKey: "points",
-    header: () => <div className="text-right text-[10px] font-black uppercase tracking-widest text-gray-500">PONTOS</div>,
+    header: () => <div className="text-right text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-gray-500">PONTOS</div>,
     cell: ({ row }) => {
       const bettor = row.original;
       return (
         <div className="text-right">
-          <span className={`font-black text-lg italic ${bettor.position === 1
+          <span className={`font-black text-sm sm:text-lg italic whitespace-nowrap ${bettor.position === 1
             ? "text-yellow-500"
             : bettor.position <= 3
               ? "text-gray-900"

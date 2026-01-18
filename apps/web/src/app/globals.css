@@ -107,11 +107,16 @@
   }
 
   .brutalist-badge-sm {
-    @apply px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.2em] border border-black;
+    @apply px-3 py-1 text-[10px] font-black uppercase tracking-widest border-2 border-black italic;
+  }
+
+  .brutalist-badge-xs {
+    @apply px-2 py-0.5 text-[8px] font-black uppercase tracking-widest border border-black italic;
   }
 
   .brutalist-score-box {
     @apply w-12 h-14 flex items-center justify-center text-3xl font-black border border-black;
+    @apply flex items-center justify-center border-2 border-black font-black italic bg-white transition-colors duration-300 text-3xl sm:text-4xl md:text-5xl whitespace-nowrap;
   }
 
   .brutalist-position-badge {

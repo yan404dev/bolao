@@ -29,25 +29,32 @@ export default async function RoundPage({ params }: RoundPageProps) {
   const { id } = await params;
   const roundId = parseInt(id);
 
+  let roundNumber = id;
+  try {
+    const round = await roundService.getById(roundId);
+    roundNumber = round.externalRoundId?.match(/(\d+)$/)?.[1] || id;
+  } catch (error) {
+    console.error("Failed to fetch round data for PageHeader:", error);
+  }
+
   return (
     <main className="min-h-screen bg-white pb-12">
       <TickerBanner />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8 text-black">
-        <div className="mb-8 sm:mb-12 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-          <div className="flex items-start sm:items-center gap-3 sm:gap-4">
-            <div className="mt-1 sm:mt-0">
-              <BackButton />
+        <PageHeader
+          title={`Rodada #${roundNumber}`}
+          subtitle="Detalhes e classificação em tempo real"
+          badge={
+            <div className="flex flex-wrap items-center gap-6">
+              <div className="flex items-center gap-2">
+                <Zap className="w-4 h-4 text-yellow-500" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-black">Insights Táticos</span>
+              </div>
+              <RoundPlayButton roundId={roundId} />
             </div>
-            <div className="flex-1 min-w-0">
-              <RoundTitle roundId={roundId} />
-            </div>
-          </div>
-
-          <div className="flex gap-4">
-            <RoundPlayButton />
-          </div>
-        </div>
+          }
+        />
 
         <div className="space-y-12">
           <RoundHeader roundId={roundId} />

@@ -37,13 +37,13 @@ export function DesktopHeader() {
                   href={item.href}
                   className={cn(
                     "relative px-4 py-2 flex items-center gap-2 group",
-                    "text-xs font-black uppercase tracking-widest transition-all",
-                    isActive ? "text-black" : "text-gray-400 hover:text-black"
+                    "text-[11px] font-black uppercase tracking-widest transition-all",
+                    isActive ? "text-black" : "text-black/60 hover:text-black"
                   )}
                 >
                   <item.icon className={cn(
                     "w-4 h-4 transition-colors",
-                    isActive ? "text-yellow-500" : "text-gray-300 group-hover:text-yellow-500"
+                    isActive ? "text-yellow-500" : "text-black/40 group-hover:text-yellow-500"
                   )} />
                   {item.label}
                   {isActive && (

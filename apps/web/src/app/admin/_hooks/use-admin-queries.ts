@@ -56,6 +56,25 @@ export function useAdminQueries() {
     onError: () => toast.error("Erro ao processar ação em lote."),
   });
 
+  const updateRoundMutation = useMutation({
+    mutationFn: ({ roundId, data }: { roundId: number; data: { endDate?: string } }) =>
+      roundService.update(roundId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["rounds"] });
+      toast.success("Rodada atualizada com sucesso!");
+    },
+    onError: () => toast.error("Erro ao atualizar rodada."),
+  });
+
+  const deleteMatchMutation = useMutation({
+    mutationFn: (matchId: number) => roundService.deleteMatch(matchId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["rounds"] });
+      toast.success("Partida removida com sucesso!");
+    },
+    onError: () => toast.error("Erro ao remover partida."),
+  });
+
   return {
     rounds,
     isLoadingRounds,
@@ -71,5 +90,9 @@ export function useAdminQueries() {
     isUpdatingStatus: updateStatusMutation.isPending,
     batchAction: batchActionMutation.mutate,
     isBatchProcessing: batchActionMutation.isPending,
+    updateRound: updateRoundMutation.mutate,
+    isUpdatingRound: updateRoundMutation.isPending,
+    deleteMatch: deleteMatchMutation.mutate,
+    isDeletingMatch: deleteMatchMutation.isPending,
   };
 }

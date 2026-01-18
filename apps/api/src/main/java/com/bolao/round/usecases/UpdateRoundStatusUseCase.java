@@ -23,6 +23,26 @@ public class UpdateRoundStatusUseCase {
         .orElseThrow(() -> new NotFoundException("Round not found: " + roundId));
 
     round.setStatus(status);
-    return roundRepository.save(round);
+    Round savedRound = roundRepository.save(round);
+
+    if (status == Round.Status.CALCULATED) {
+      log.info("Round {} calculated. Checking for next round to open...", roundId);
+      openNextRound(savedRound);
+    }
+
+    return savedRound;
+  }
+
+  private void openNextRound(Round currentRound) {
+    roundRepository.findFirstByExternalLeagueIdAndExternalSeasonAndStartDateGreaterThanOrderByStartDateAsc(
+        currentRound.getExternalLeagueId(),
+        currentRound.getExternalSeason(),
+        currentRound.getStartDate()).ifPresent(nextRound -> {
+          if (nextRound.getStatus() == Round.Status.CLOSED) {
+            log.info("Opening next round: {}", nextRound.getId());
+            nextRound.setStatus(Round.Status.OPEN);
+            roundRepository.save(nextRound);
+          }
+        });
   }
 }

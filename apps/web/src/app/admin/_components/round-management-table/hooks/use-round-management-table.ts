@@ -11,6 +11,10 @@ export function useRoundManagementTable() {
     isUpdatingStatus,
     batchAction,
     isBatchProcessing,
+    updateRound,
+    isUpdatingRound,
+    deleteMatch,
+    isDeletingMatch,
   } = useAdmin();
 
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
@@ -56,5 +60,9 @@ export function useRoundManagementTable() {
     updateStatus,
     isUpdatingStatus,
     isBatchProcessing,
+    updateRound,
+    isUpdatingRound,
+    deleteMatch,
+    isDeletingMatch,
   };
 }

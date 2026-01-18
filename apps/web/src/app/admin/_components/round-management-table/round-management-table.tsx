@@ -3,8 +3,11 @@ import { getStatusConfig } from "@/app/admin/admin.utils";
 import { Card, CardHeader, CardTitle, CardContent } from "@/shared/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/components/ui/table";
 import { Button } from "@/shared/components/ui/button";
-import { Trophy, Calendar, Globe, CheckSquare, Square, XCircle, PlayCircle, Loader2 } from "lucide-react";
+import { Trophy, Calendar, Globe, CheckSquare, Square, XCircle, PlayCircle, Loader2, Edit3, Trash2, Settings } from "lucide-react";
 import { Skeleton } from "@/shared/components/ui/skeleton";
+import { Modal } from "@/shared/components/ui/modal";
+import { Input } from "@/shared/components/ui/input";
+import { useState } from "react";
 
 export function RoundManagementTable() {
   const {
@@ -21,7 +24,14 @@ export function RoundManagementTable() {
     updateStatus,
     isUpdatingStatus,
     isBatchProcessing,
+    updateRound,
+    isUpdatingRound,
+    deleteMatch,
+    isDeletingMatch,
   } = useRoundManagementTable();
+
+  const [managedRoundId, setManagedRoundId] = useState<number | null>(null);
+  const managedRound = rounds.find(r => r.id === managedRoundId);
 
   if (isLoadingRounds) {
     return (
@@ -140,6 +150,14 @@ export function RoundManagementTable() {
                         >
                           {round.status === "CALCULATED" ? "Calculado" : "Calcular Pontos"}
                         </Button>
+
+                        <Button
+                          size="sm"
+                          onClick={() => setManagedRoundId(round.id)}
+                          className="h-8 w-8 p-0 rounded-none border-2 border-black bg-white text-black hover:bg-black hover:text-white transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5"
+                        >
+                          <Settings className="w-4 h-4" />
+                        </Button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -158,6 +176,98 @@ export function RoundManagementTable() {
             </TableBody>
           </Table>
         </div>
+
+        {/* Modal de Gerenciamento da Rodada */}
+        <Modal
+          isOpen={managedRoundId !== null}
+          onClose={() => setManagedRoundId(null)}
+          title="Gerenciar Rodada"
+          size="2xl"
+        >
+          {managedRound && (
+            <div className="p-8 space-y-10">
+              {/* Edição de Data */}
+              <div className="space-y-4">
+                <h3 className="font-black uppercase italic tracking-tighter text-xl flex items-center gap-2">
+                  <Edit3 className="w-5 h-5 text-yellow-500" />
+                  Editar Rodada
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Data de Encerramento (ISO)</label>
+                    <Input
+                      type="datetime-local"
+                      defaultValue={managedRound.endDate ? new Date(managedRound.endDate).toISOString().slice(0, 16) : ""}
+                      className="brutalist-input h-12"
+                      onChange={(e) => {
+                        // Implement inline update or wait for Save
+                      }}
+                      id="round-end-date-input"
+                    />
+                  </div>
+                  <Button
+                    onClick={() => {
+                      const input = document.getElementById('round-end-date-input') as HTMLInputElement;
+                      if (input.value) {
+                        updateRound({ roundId: managedRound.id, data: { endDate: input.value } });
+                      }
+                    }}
+                    disabled={isUpdatingRound}
+                    className="brutalist-btn-primary h-12 text-sm"
+                  >
+                    {isUpdatingRound ? "SALVANDO..." : "ATUALIZAR DATA"}
+                  </Button>
+                </div>
+              </div>
+
+              {/* Lista de Partidas para Remoção */}
+              <div className="space-y-4">
+                <h3 className="font-black uppercase italic tracking-tighter text-xl flex items-center gap-2">
+                  <PlayCircle className="w-5 h-5 text-yellow-500" />
+                  Partidas da Rodada
+                </h3>
+                <div className="border-4 border-black divide-y-2 divide-black">
+                  {managedRound.matches.length > 0 ? managedRound.matches.map(match => (
+                    <div key={match.id} className="p-4 flex items-center justify-between bg-white hover:bg-gray-50 group">
+                      <div className="flex items-center gap-4">
+                        <div className="flex flex-col items-center">
+                          <img src={match.homeTeamLogo || ""} className="w-6 h-6 object-contain" />
+                          <span className="text-[10px] font-black">{match.homeTeam}</span>
+                        </div>
+                        <span className="font-black italic text-gray-400">VS</span>
+                        <div className="flex flex-col items-center">
+                          <img src={match.awayTeamLogo || ""} className="w-6 h-6 object-contain" />
+                          <span className="text-[10px] font-black">{match.awayTeam}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <span className="text-[10px] font-mono font-bold text-gray-400">
+                          {new Date(match.kickoffTime).toLocaleString()}
+                        </span>
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            if (confirm("Tem certeza que deseja remover esta partida? Isso pode afetar apostas existentes.")) {
+                              deleteMatch(match.id);
+                            }
+                          }}
+                          disabled={isDeletingMatch}
+                          className="h-8 w-8 p-0 rounded-none border-2 border-red-600 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all shadow-[2px_2px_0px_0px_rgba(220,38,38,1)]"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  )) : (
+                    <div className="p-8 text-center text-gray-400 font-black uppercase tracking-widest text-xs">
+                      SEM PARTIDAS
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </Modal>
         {selectedIds.length > 0 && (
           <div className="bg-black text-white p-3 flex items-center justify-between border-t-2 border-black animate-in slide-in-from-bottom-2">
             <div className="flex items-center gap-2">

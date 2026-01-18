@@ -26,4 +26,7 @@ public interface JpaRoundRepository extends JpaRepository<RoundEntity, Long>, Jp
   List<RoundEntity> findByStatusSorted(RoundEntity.Status status);
 
   Optional<RoundEntity> findFirstByStartDateBeforeOrderByStartDateDesc(java.time.LocalDateTime date);
+
+  Optional<RoundEntity> findFirstByExternalLeagueIdAndExternalSeasonAndStartDateGreaterThanOrderByStartDateAsc(
+      Integer leagueId, Integer season, java.time.LocalDateTime startDate);
 }

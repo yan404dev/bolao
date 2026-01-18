@@ -27,7 +27,6 @@ export function RoundMatches({ roundId }: RoundMatchesProps) {
   }
 
   const matches = round?.matches || [];
-  const groupedMatches = round?.groupedMatches || [];
 
   if (matches.length === 0) {
     return (
@@ -41,22 +40,12 @@ export function RoundMatches({ roundId }: RoundMatchesProps) {
   }
 
   return (
-    <div className="space-y-8">
-      {groupedMatches.map(group => (
-        <div key={group.date} className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="h-6 w-1 bg-yellow-400" />
-            <h2 className="brutalist-section-header text-gray-900">
-              {group.formattedDate}
-            </h2>
-          </div>
-          <div className="grid gap-4">
-            {group.matches.map((match) => (
-              <MatchCard key={match.id} match={match} />
-            ))}
-          </div>
-        </div>
-      ))}
+    <div className="space-y-4">
+      <div className="grid gap-4">
+        {matches.map((match) => (
+          <MatchCard key={match.id} match={match} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -94,7 +83,6 @@ function MatchCard({ match }: MatchCardProps) {
           </div>
         </div>
 
-        {/* Time Visitante */}
         <TeamDisplay
           name={match.awayTeam}
           logo={match.awayTeamLogo}

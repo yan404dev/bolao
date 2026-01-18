@@ -77,4 +77,13 @@ export const roundService = {
   batchAction: async (ids: number[], action: string): Promise<void> => {
     await api.post("/admin/rounds/batch", { ids, action });
   },
+
+  update: async (roundId: number, data: { endDate?: string }): Promise<RoundEntity> => {
+    const { data: response } = await api.patch<{ data: RoundEntity }>(`/rounds/${roundId}`, data);
+    return response.data;
+  },
+
+  deleteMatch: async (matchId: number): Promise<void> => {
+    await api.delete(`/matches/${matchId}`);
+  },
 };

@@ -38,7 +38,7 @@ export function CalendarContent() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {rounds?.map((round, index) => (
-            <RoundCard key={round.id} round={round} index={index} />
+            <RoundCard key={round.externalRoundId} round={round} index={index} />
           ))}
         </div>
       )}

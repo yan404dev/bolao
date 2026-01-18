@@ -1,18 +1,9 @@
 package com.bolao.round;
 
-import com.bolao.round.dtos.MatchGroup;
 import com.bolao.round.entities.Match;
 import com.bolao.round.entities.MatchEntity;
 import com.bolao.round.entities.Round;
 import com.bolao.round.entities.RoundEntity;
-
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -32,6 +23,7 @@ public class RoundMapper {
         .status(Round.Status.valueOf(entity.getStatus().name()))
         .startDate(entity.getStartDate())
         .endDate(entity.getEndDate())
+        .accumulated(entity.isAccumulated())
         .totalTickets(entity.getTotalTickets())
         .prizePool(entity.getPrizePool())
         .ticketPrice(entity.getTicketPrice())
@@ -41,32 +33,7 @@ public class RoundMapper {
         .externalLeagueId(entity.getExternalLeagueId())
         .externalSeason(entity.getExternalSeason())
         .matches(matches)
-        .groupedMatches(groupMatches(matches))
         .build();
-  }
-
-  private List<MatchGroup> groupMatches(List<Match> matches) {
-    if (matches == null || matches.isEmpty()) {
-      return new ArrayList<>();
-    }
-
-    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd 'DE' MMMM", Locale.forLanguageTag("pt-BR"));
-
-    // TreeMap mantém as datas ordenadas
-    Map<String, List<Match>> groupedMap = matches.stream()
-        .collect(Collectors.groupingBy(
-            match -> match.getKickoffTime().format(dateFormatter),
-            TreeMap::new,
-            Collectors.toList()));
-
-    return groupedMap.entrySet().stream()
-        .map(entry -> MatchGroup.builder()
-            .date(entry.getKey())
-            .formattedDate(java.time.LocalDate.parse(entry.getKey()).format(displayFormatter).toUpperCase())
-            .matches(entry.getValue())
-            .build())
-        .toList();
   }
 
   public Match toMatchDomain(MatchEntity entity) {
@@ -94,6 +61,7 @@ public class RoundMapper {
         .status(RoundEntity.Status.valueOf(round.getStatus().name()))
         .startDate(round.getStartDate())
         .endDate(round.getEndDate())
+        .accumulated(round.isAccumulated())
         .totalTickets(round.getTotalTickets())
         .prizePool(round.getPrizePool())
         .ticketPrice(round.getTicketPrice())

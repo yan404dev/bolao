@@ -16,4 +16,7 @@ public interface RoundRepository extends BaseRepository<Round, Long> {
   List<Round> findByStatusSorted(Round.Status status);
 
   Optional<Round> findPreviousRound(java.time.LocalDateTime date);
+
+  Optional<Round> findFirstByExternalLeagueIdAndExternalSeasonAndStartDateGreaterThanOrderByStartDateAsc(
+      Integer leagueId, Integer season, java.time.LocalDateTime startDate);
 }

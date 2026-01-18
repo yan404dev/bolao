@@ -107,6 +107,9 @@ public class FootballDataMatchResponse {
     match.setAwayTeam(data.getAwayTeam() != null ? data.getAwayTeam().getName() : "TBD");
     match.setAwayTeamLogo(data.getAwayTeam() != null ? data.getAwayTeam().getCrest() : null);
     match.setKickoffTime(data.getUtcDate() != null ? data.getUtcDate().toLocalDateTime() : null);
+    if (match.getKickoffTime() != null) {
+      match.setEstimatedEndTime(match.getKickoffTime().plusMinutes(105));
+    }
     match.setStatus(mapStatus(data.getStatus()));
     match.setExternalMatchId(String.valueOf(data.getId()));
 

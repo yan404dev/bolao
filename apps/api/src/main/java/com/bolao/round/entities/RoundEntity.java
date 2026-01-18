@@ -48,6 +48,10 @@ public class RoundEntity {
   @Column(name = "end_date")
   private LocalDateTime endDate;
 
+  @Column(name = "accumulated")
+  @Builder.Default
+  private boolean accumulated = false;
+
   @Column(name = "total_tickets")
   private Integer totalTickets;
 

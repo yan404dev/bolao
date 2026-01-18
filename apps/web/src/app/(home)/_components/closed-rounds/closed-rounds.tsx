@@ -40,8 +40,8 @@ export function ClosedRounds() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {rounds.map((round) => (
             <Link
-              key={round.id}
-              href={`/rodada/${round.id}`}
+              key={round.externalRoundId}
+              href={`/rodada/${round.externalRoundId}`}
               className="group"
             >
               <Card className="h-full brutalist-card overflow-hidden">

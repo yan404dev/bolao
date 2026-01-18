@@ -30,7 +30,7 @@ export function RoundCard({ round, index }: RoundCardProps) {
   };
 
   return (
-    <Link href={`/rodada/${round.id}`}>
+    <Link href={`/rodada/${round.externalRoundId}`}>
       <Card
         className="group relative overflow-hidden border-4 border-black rounded-none hover:bg-yellow-50 transition-all duration-300 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] bg-white cursor-pointer h-full"
       >

@@ -5,6 +5,7 @@ import com.bolao.round.entities.Round;
 import com.bolao.round.usecases.GetRoundByIdUseCase;
 import com.bolao.round.usecases.GetRoundRankingUseCase;
 import com.bolao.round.usecases.ListRoundsUseCase;
+import com.bolao.round.usecases.UpdateRoundUseCase;
 import com.bolao.shared.dtos.ApiResponse;
 import com.bolao.shared.entities.ResultEntity;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,20 @@ public class RoundController {
   private final ListRoundsUseCase listRoundsUseCase;
   private final GetRoundByIdUseCase getRoundByIdUseCase;
   private final GetRoundRankingUseCase getRoundRankingUseCase;
+  private final UpdateRoundUseCase updateRoundUseCase;
+
+  @PatchMapping("/{id}")
+  public ResponseEntity<ApiResponse<Round>> update(
+      @PathVariable Long id,
+      @RequestBody java.util.Map<String, Object> body) {
+
+    java.time.LocalDateTime endDate = null;
+    if (body.containsKey("endDate") && body.get("endDate") != null) {
+      endDate = java.time.LocalDateTime.parse(body.get("endDate").toString());
+    }
+
+    return ResponseEntity.ok(ApiResponse.ok(updateRoundUseCase.execute(id, endDate)));
+  }
 
   @GetMapping
   public ResponseEntity<ApiResponse<List<Round>>> findAll(

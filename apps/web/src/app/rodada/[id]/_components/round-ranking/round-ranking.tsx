@@ -41,7 +41,12 @@ export function RoundRanking({ roundId }: RoundRankingProps) {
   return (
     <div className="space-y-6 text-black">
       {isClosed && winner && (
-        <div className="bg-yellow-400 border border-black p-6 text-center">
+        <div className="bg-yellow-400 border border-black p-6 text-center relative overflow-hidden">
+          {round?.accumulated && (
+            <div className="absolute top-0 right-0 bg-black text-yellow-400 text-[8px] font-black uppercase px-2 py-1 rotate-45 translate-x-4 translate-y-2 w-32 border-b border-yellow-400">
+              ACUMULADA
+            </div>
+          )}
           <Trophy className="w-12 h-12 text-black mx-auto mb-3" />
           <p className="text-[10px] font-black uppercase tracking-[0.3em] font-black mb-2 text-black/60">VENCEDOR DA RODADA</p>
           <p className="text-3xl font-black italic uppercase tracking-tighter text-black leading-none">{winner.name}</p>
@@ -50,9 +55,20 @@ export function RoundRanking({ roundId }: RoundRankingProps) {
             <span className="w-1.5 h-1.5 bg-black rounded-full" />
             <span>{winner.points} PONTOS</span>
           </div>
-          <div className="mt-6 bg-black text-yellow-400 py-3 text-2xl font-black italic tracking-tighter uppercase">
-            {formatCurrency(round?.prizePool || 0)}
-          </div>
+
+          {round?.accumulated ? (
+            <div className="mt-6 border-4 border-black p-4 space-y-2">
+              <p className="text-xs font-black uppercase italic tracking-tighter text-black">RODADA ACUMULADA!</p>
+              <p className="text-[9px] font-bold text-black/60 uppercase">O vencedor não atingiu o mínimo de 15 pontos.</p>
+              <div className="bg-black text-yellow-400 py-2 text-xl font-black italic tracking-tighter uppercase">
+                PRÊMIO ACUMULADO PARA A PRÓXIMA
+              </div>
+            </div>
+          ) : (
+            <div className="mt-6 bg-black text-yellow-400 py-3 text-2xl font-black italic tracking-tighter uppercase">
+              {formatCurrency(round?.prizePool || 0)}
+            </div>
+          )}
         </div>
       )}
 

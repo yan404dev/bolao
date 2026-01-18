@@ -4,7 +4,6 @@ import { roundService } from '@/shared/services/round.service'
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://arenadeelite.com.br'
 
-  // Páginas Estáticas
   const routes = ['', '/ranking', '/calendario', '/regulamento'].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
@@ -12,11 +11,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: route === '' ? 1 : 0.8,
   }))
 
-  // Páginas Dinâmicas (Rodadas)
   try {
     const rounds = await roundService.getAll()
     const roundRoutes = rounds.map((round) => ({
-      url: `${baseUrl}/rodada/${round.id}`,
+      url: `${baseUrl}/rodada/${round.externalRoundId}`,
       lastModified: new Date(round.createdAt),
       changeFrequency: 'weekly' as const,
       priority: 0.6,

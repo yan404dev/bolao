@@ -132,4 +132,14 @@ public class RoundRepositoryImpl implements RoundRepository {
     return jpaRepository.findFirstByStartDateBeforeOrderByStartDateDesc(date)
         .map(roundMapper::toDomain);
   }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Optional<Round> findFirstByExternalLeagueIdAndExternalSeasonAndStartDateGreaterThanOrderByStartDateAsc(
+      Integer leagueId, Integer season, java.time.LocalDateTime startDate) {
+    return jpaRepository
+        .findFirstByExternalLeagueIdAndExternalSeasonAndStartDateGreaterThanOrderByStartDateAsc(leagueId, season,
+            startDate)
+        .map(roundMapper::toDomain);
+  }
 }

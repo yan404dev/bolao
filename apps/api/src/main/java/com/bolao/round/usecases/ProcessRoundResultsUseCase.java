@@ -6,6 +6,7 @@ import com.bolao.round.entities.Round;
 import com.bolao.round.repositories.RoundRepository;
 import com.bolao.round.services.RoundScoringService;
 import com.bolao.round.services.RoundStatsService;
+import com.bolao.bet.repositories.BetRepository;
 import com.bolao.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ public class ProcessRoundResultsUseCase {
   private final MatchSyncService matchSyncService;
   private final RoundScoringService scoringService;
   private final RoundStatsService statsService;
+  private final BetRepository betRepository;
 
   @Transactional
   public void execute(Long roundId) {
@@ -37,8 +39,14 @@ public class ProcessRoundResultsUseCase {
     List<Match> matches = matchSyncService.fetchAndSyncMatches(leagueId, season, roundId, round.getExternalRoundId());
 
     scoringService.calculateScores(roundId, matches);
-
     statsService.updateRoundStats(roundId);
+
+    Integer maxPoints = betRepository.findMaxPointsByRoundId(roundId);
+    if (maxPoints != null && maxPoints < 15) {
+      log.info("Accumulation Rule Triggered: max points {} < 15. Marking round {} as accumulated.", maxPoints, roundId);
+      round.setAccumulated(true);
+      roundRepository.save(round);
+    }
 
     log.info("Successfully processed results for round: {}", roundId);
   }

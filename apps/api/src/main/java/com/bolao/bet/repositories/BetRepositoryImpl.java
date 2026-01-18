@@ -132,4 +132,10 @@ public class BetRepositoryImpl implements BetRepository {
         .map(betMapper::toDomain)
         .toList();
   }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Integer findMaxPointsByRoundId(Long roundId) {
+    return jpaRepository.findMaxPointsByRoundId(roundId);
+  }
 }

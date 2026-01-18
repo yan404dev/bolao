@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncForm } from "../_hooks/use-sync-form";
+import { useSyncForm } from "../../_hooks/use-sync-form";
 import { Card, CardHeader, CardTitle, CardContent } from "@/shared/components/ui/card";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";

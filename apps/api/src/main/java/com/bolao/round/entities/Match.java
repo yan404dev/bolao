@@ -26,6 +26,8 @@ public class Match {
   private Integer awayScore;
   @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm")
   private LocalDateTime kickoffTime;
+  @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+  private LocalDateTime estimatedEndTime;
   private Status status;
   private String externalRoundId;
   private String externalMatchId;

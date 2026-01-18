@@ -2,8 +2,10 @@ package com.bolao.fixture;
 
 import com.bolao.fixture.dtos.ApiFootballFixtureResponse;
 import com.bolao.fixture.dtos.ApiFootballLeagueResponse;
+import com.bolao.fixture.dtos.ApiFootballRoundResponse;
 import com.bolao.fixture.dtos.ApiFootballStringResponse;
 import com.bolao.fixture.dtos.MatchResponseWrapper;
+import com.bolao.fixture.entities.RoundDetails;
 import com.bolao.round.entities.Match;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,15 +51,14 @@ public class ApiFootballProvider implements ExternalMatchProvider {
   @Override
   public MatchResponseWrapper fetchAllMatchesForSeason(int leagueId, int season) {
     log.info("Fetching all matches for league {}, season {}", leagueId, season);
-    List<String> rounds = fetchAvailableRounds(leagueId, season);
-    List<Match> allMatches = new ArrayList<>();
-
     String champName = getChampionshipName(leagueId);
     String champLogo = getChampionshipLogo(leagueId);
+    List<RoundDetails> rounds = fetchAvailableRounds(leagueId, season);
+    List<Match> allMatches = new ArrayList<>();
 
-    for (String round : rounds) {
-      List<Match> matches = fetchMatchesByRound(leagueId, season, round);
-      matches.forEach(m -> m.setExternalRoundId(round));
+    for (RoundDetails round : rounds) {
+      List<Match> matches = fetchMatchesByRound(leagueId, season, round.getName());
+      matches.forEach(m -> m.setExternalRoundId(round.getName()));
       allMatches.addAll(matches);
     }
 
@@ -65,28 +66,38 @@ public class ApiFootballProvider implements ExternalMatchProvider {
         .matches(allMatches)
         .championshipName(champName)
         .championshipLogo(champLogo)
+        .roundDetails(rounds)
         .build();
   }
 
   @Override
-  public List<String> fetchAvailableRounds(int leagueId, int season) {
+  public List<RoundDetails> fetchAvailableRounds(int leagueId, int season) {
     log.info("Fetching available rounds for league {}, season {}", leagueId, season);
     log.debug("Using API key: {}...", apiKey != null && apiKey.length() > 10 ? apiKey.substring(0, 10) : "NULL");
     try {
-      String uri = BASE_URL + "/fixtures/rounds?league=" + leagueId + "&season=" + season;
+      String uri = BASE_URL + "/fixtures/rounds?league=" + leagueId + "&season=" + season + "&dates=true";
       log.info("Calling API: {}", uri);
-      ApiFootballStringResponse response = restClient.get()
+      ApiFootballRoundResponse response = restClient.get()
           .uri(uri)
           .headers(h -> h.addAll(createHeaders()))
           .retrieve()
-          .body(ApiFootballStringResponse.class);
+          .body(ApiFootballRoundResponse.class);
 
       log.info("API response: results={}, errors={}, rounds={}",
           response != null ? response.getResults() : "null",
           response != null ? response.getErrors() : "null",
           response != null ? response.getResponse().size() : 0);
 
-      return response != null ? response.getResponse() : new ArrayList<>();
+      if (response == null || response.getResponse() == null) {
+        return new ArrayList<>();
+      }
+
+      return response.getResponse().stream()
+          .map(item -> RoundDetails.builder()
+              .name(item.getRound())
+              .dates(item.getDates())
+              .build())
+          .toList();
     } catch (Exception e) {
       log.error("Error fetching rounds from API-Football: {}", e.getMessage());
       return new ArrayList<>();

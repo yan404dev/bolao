@@ -10,5 +10,6 @@ export interface MatchEntity {
   awayTeamLogo: string | null;
   awayScore: number | null;
   kickoffTime: string;
+  estimatedEndTime: string | null;
   status: MatchStatus;
 }

@@ -81,6 +81,7 @@ public class FootballDataProvider implements ExternalMatchProvider {
         .matches(matches)
         .championshipName(champName)
         .championshipLogo(champLogo)
+        .roundDetails(fetchAvailableRounds(leagueId, season))
         .build();
   }
 
@@ -117,7 +118,7 @@ public class FootballDataProvider implements ExternalMatchProvider {
   }
 
   @Override
-  public List<String> fetchAvailableRounds(int leagueId, int season) {
+  public List<com.bolao.fixture.entities.RoundDetails> fetchAvailableRounds(int leagueId, int season) {
     log.info("Fetching available rounds for league {}, season {}", leagueId, season);
 
     String code = getCompetitionCode(leagueId);
@@ -139,7 +140,10 @@ public class FootballDataProvider implements ExternalMatchProvider {
         .orElse(0);
 
     return IntStream.rangeClosed(1, maxMatchday)
-        .mapToObj(String::valueOf)
+        .mapToObj(i -> com.bolao.fixture.entities.RoundDetails.builder()
+            .name(String.valueOf(i))
+            .dates(new ArrayList<>())
+            .build())
         .toList();
   }
 

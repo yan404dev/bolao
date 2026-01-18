@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -61,9 +62,14 @@ public class MatchSyncService {
         .collect(Collectors.groupingBy(Match::getExternalRoundId));
 
     List<Round> syncedRounds = new ArrayList<>();
+    var roundDetailsMap = wrapper.getRoundDetails() != null
+        ? wrapper.getRoundDetails().stream()
+            .collect(Collectors.toMap(com.bolao.fixture.entities.RoundDetails::getName, rd -> rd))
+        : Map.of();
 
     for (var entry : matchesByRound.entrySet()) {
-      syncedRounds.add(processRound(entry.getKey(), entry.getValue(), leagueId, season, champName, champLogo));
+      var details = (com.bolao.fixture.entities.RoundDetails) roundDetailsMap.get(entry.getKey());
+      syncedRounds.add(processRound(entry.getKey(), entry.getValue(), leagueId, season, champName, champLogo, details));
     }
 
     log.info("Smart Sync complete: {} rounds processed", syncedRounds.size());
@@ -71,18 +77,18 @@ public class MatchSyncService {
   }
 
   private Round processRound(String extRoundId, List<Match> roundMatches, int leagueId, int season, String champName,
-      String champLogo) {
+      String champLogo, com.bolao.fixture.entities.RoundDetails details) {
     Round round = roundRepository.findByExternalRoundId(extRoundId).orElse(null);
 
     if (round == null) {
-      return createNewRound(extRoundId, roundMatches, leagueId, season, champName, champLogo);
+      return createNewRound(extRoundId, roundMatches, leagueId, season, champName, champLogo, details);
     }
 
-    return updateExistingRound(round, roundMatches, champName, champLogo);
+    return updateExistingRound(round, roundMatches, champName, champLogo, details);
   }
 
   private Round createNewRound(String extRoundId, List<Match> roundMatches, int leagueId, int season, String champName,
-      String champLogo) {
+      String champLogo, com.bolao.fixture.entities.RoundDetails details) {
     double ticketPrice = pricingService.calculateInitialTicketPrice(roundMatches.get(0).getKickoffTime());
 
     Round round = Round.builder()
@@ -97,7 +103,7 @@ public class MatchSyncService {
         .totalTickets(0)
         .ticketPrice(ticketPrice)
         .startDate(roundMatches.get(0).getKickoffTime())
-        .endDate(findLatestKickoff(roundMatches))
+        .endDate(calculateRoundEndDate(roundMatches, details))
         .createdAt(LocalDateTime.now())
         .build();
 
@@ -106,12 +112,13 @@ public class MatchSyncService {
     return round;
   }
 
-  private Round updateExistingRound(Round round, List<Match> roundMatches, String champName, String champLogo) {
+  private Round updateExistingRound(Round round, List<Match> roundMatches, String champName, String champLogo,
+      com.bolao.fixture.entities.RoundDetails details) {
 
     round.setChampionshipTitle(champName);
     round.setChampionshipLogo(champLogo);
     round.setTitle(champName + " - Rodada " + round.getExternalRoundId());
-    round.setEndDate(findLatestKickoff(roundMatches));
+    round.setEndDate(calculateRoundEndDate(roundMatches, details));
     Round savedRound = roundRepository.save(round);
 
     updateMatches(roundMatches);
@@ -121,6 +128,7 @@ public class MatchSyncService {
   private void saveMatches(List<Match> matches, Long roundId) {
     for (Match match : matches) {
       match.setRoundId(roundId);
+      match.setEstimatedEndTime(match.getKickoffTime() != null ? match.getKickoffTime().plusMinutes(105) : null);
       matchRepository.save(match);
     }
   }
@@ -138,12 +146,37 @@ public class MatchSyncService {
       existingMatch.setAwayScore(externalMatch.getAwayScore());
       existingMatch.setStatus(externalMatch.getStatus());
       existingMatch.setKickoffTime(externalMatch.getKickoffTime());
+      existingMatch.setEstimatedEndTime(
+          externalMatch.getKickoffTime() != null ? externalMatch.getKickoffTime().plusMinutes(105) : null);
       matchRepository.save(existingMatch);
     }
   }
 
+  private LocalDateTime calculateRoundEndDate(List<Match> roundMatches,
+      com.bolao.fixture.entities.RoundDetails details) {
+    if (details != null && details.getDates() != null && !details.getDates().isEmpty()) {
+      try {
+        String lastDateStr = details.getDates().get(details.getDates().size() - 1);
+        LocalDate lastDate = LocalDate.parse(lastDateStr);
+        // We'll set it to the end of that day as a fallback or the latest match time if
+        // it's on that day
+        LocalDateTime latestKickoff = findLatestKickoff(roundMatches);
+        if (latestKickoff != null && latestKickoff.toLocalDate().isEqual(lastDate)) {
+          return latestKickoff.plusMinutes(105);
+        }
+        return lastDate.atTime(23, 59);
+      } catch (Exception e) {
+        log.warn("Error parsing round dates: {}", e.getMessage());
+      }
+    }
+    LocalDateTime latest = findLatestKickoff(roundMatches);
+    return latest != null ? latest.plusMinutes(105) : null;
+  }
+
   public List<String> fetchAvailableRounds(int leagueId, int season) {
-    return matchProvider.fetchAvailableRounds(leagueId, season);
+    return matchProvider.fetchAvailableRounds(leagueId, season).stream()
+        .map(com.bolao.fixture.entities.RoundDetails::getName)
+        .toList();
   }
 
   public void syncLiveScores() {

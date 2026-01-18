@@ -10,7 +10,6 @@ interface RoundTitleProps {
 export function RoundTitle({ roundId }: RoundTitleProps) {
   const { round, isLoading } = useRoundQueries(roundId);
 
-  // Extract round number from externalRoundId (e.g., "Regular Season - 1" -> "1")
   const getRoundNumber = () => {
     if (!round?.externalRoundId) return roundId.toString();
     const match = round.externalRoundId.match(/(\d+)$/);

@@ -7,10 +7,10 @@ export const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="text-center md:text-left">
             <h3 className="text-3xl font-black uppercase italic tracking-tighter text-white">
-              BOLÃO<span className="text-yellow-400">JC</span>
+              ARENA<span className="text-yellow-400"> DE ELITE</span>
             </h3>
             <p className="text-sm font-bold text-gray-400 uppercase tracking-widest mt-2">
-              O bolão dos amigos • 2026
+              Onde especialistas se destacam • 2026
             </p>
           </div>
 
@@ -34,7 +34,7 @@ export const Footer = () => {
 
         <div className="border-t border-white/10 mt-12 pt-8 text-center">
           <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">
-            © 2026 BOLÃOJC • ALL RIGHTS RESERVED
+            © 2026 ARENA DE ELITE • ALL RIGHTS RESERVED
           </p>
         </div>
       </div>

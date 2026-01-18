@@ -7,6 +7,7 @@ import { BettingModalProvider } from "@/shared/providers/betting-modal-provider"
 import { Footer } from "@/shared/components/footer/footer";
 import { GlobalBettingModal } from "@/shared/components/global-betting-modal";
 import { MobileNav } from "@/shared/components/mobile-nav";
+import { DesktopHeader } from "@/shared/components/desktop-header";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -95,6 +96,7 @@ export default function RootLayout({
                   }),
                 }}
               />
+              <DesktopHeader />
               <main className="flex-1 pb-20 md:pb-0">
                 {children}
               </main>

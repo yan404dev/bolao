@@ -3,6 +3,7 @@
 import { useRoundQueries } from "@/app/rodada/[id]/hooks";
 import { roundStatusStyles, roundStatusLabels } from "@/shared/constants";
 import { formatCurrency } from "@/shared/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import dayjs from "dayjs";
 
 interface RoundHeaderProps {
@@ -29,15 +30,17 @@ export function RoundHeader({ roundId }: RoundHeaderProps) {
       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 sm:gap-6">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-            <span className={`px-2 py-0.5 sm:px-3 sm:py-1 text-[8px] sm:text-[10px] font-black uppercase tracking-widest ${roundStatusStyles[round.status] || roundStatusStyles.CLOSED}`}>
-              {roundStatusLabels[round.status] || "ENCERRADA"}
-            </span>
-            {round.championshipLogo && (
-              <img src={round.championshipLogo} alt={round.championshipTitle} className="w-4 h-4 sm:w-6 sm:h-6 object-contain grayscale brightness-0" />
-            )}
-            <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-black/40 italic truncate">
-              {round.championshipTitle}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className={cn(
+                "px-2 py-0.5 text-[8px] sm:text-[10px] font-black uppercase tracking-widest border border-black italic",
+                round.status === 'OPEN' ? "bg-yellow-400 text-black" : "bg-black text-white"
+              )}>
+                # {roundStatusLabels[round.status] || "DESAFIO TÁTICO"}
+              </span>
+              <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-black/30 truncate">
+                {round.championshipTitle}
+              </span>
+            </div>
           </div>
           <h1 className="text-xl sm:text-4xl font-black uppercase italic tracking-tighter text-gray-900 leading-none break-words">
             {round.title}

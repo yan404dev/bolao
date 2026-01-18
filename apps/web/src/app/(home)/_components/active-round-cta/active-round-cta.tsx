@@ -22,19 +22,16 @@ export function ActiveRoundCTA() {
         <div className="border-2 border-black p-6 sm:p-12 flex flex-col md:flex-row items-center gap-8 sm:gap-16">
 
           <div className="flex-1 space-y-5 sm:space-y-8 text-center md:text-left">
-            <div className="inline-flex items-center gap-2 bg-black text-yellow-400 px-3 py-1.5 sm:px-5 sm:py-2.5 font-black uppercase italic tracking-tighter text-[10px] sm:text-base">
-              <Zap className="w-4 h-4 fill-current animate-pulse" />
-              Rodada em Alta
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-1 lg:h-2 w-10 bg-yellow-400" />
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Destaques da Rodada</span>
             </div>
-
-            <div className="space-y-2 sm:space-y-4">
-              <h2 className="text-3xl sm:text-7xl font-black uppercase italic tracking-tighter text-black leading-none break-words">
-                {title}
-              </h2>
-              <p className="text-gray-500 font-bold uppercase tracking-widest text-[10px] sm:text-lg opacity-90">
-                A disputa de elite já começou.
-              </p>
-            </div>
+            <h2 className="text-3xl sm:text-6xl font-black uppercase italic tracking-tighter text-black leading-none mb-4">
+              {title}
+            </h2>
+            <p className="text-gray-500 font-bold uppercase tracking-widest text-[10px] sm:text-lg opacity-90">
+              A disputa de elite já começou.
+            </p>
 
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 sm:gap-12">
               <div className="flex items-center gap-3 sm:gap-4">

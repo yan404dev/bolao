@@ -34,6 +34,13 @@ export const roundService = {
     return data.data;
   },
 
+  getUpcomingRounds: async (limit: number = 4): Promise<RoundEntity[]> => {
+    const { data } = await api.get<{ data: RoundEntity[] }>("/rounds", {
+      params: { status: "OPEN", limit },
+    });
+    return data.data;
+  },
+
   getRanking: async (roundId: number, filters?: RankingFilters): Promise<RankingResponse> => {
     const { data } = await api.get<{ data: RankingResponse }>(`/rounds/${roundId}/ranking`, {
       params: filters,

@@ -21,7 +21,7 @@ export default function Home() {
         alt="Hero"
         width={1920}
         height={1080}
-        className="w-full h-[220px] sm:h-[400px] md:h-auto object-cover"
+        className="w-full h-[220px] sm:h-[400px] md:h-auto object-cover object-[80%_center] sm:object-center"
         priority
       />
       <Suspense fallback={null}>

@@ -49,7 +49,7 @@ public class PaymentApprovalService {
   }
 
   private String generateTicketCode(Long roundId) {
-    String uuid = UUID.randomUUID().toString().substring(0, 6).toUpperCase();
-    return String.format("%d-%s", roundId, uuid);
+    int code = (int) (Math.random() * 900000) + 100000;
+    return String.valueOf(code);
   }
 }

@@ -1,4 +1,9 @@
 import { PageHeader } from "@/shared/components/page-header";
+import { Suspense } from "react";
+import { RankingTable, RankingKpis, RankingTableLoader } from "./_components";
+import { TickerBanner } from "@/shared/components/ticker-banner/ticker-banner";
+import { Zap } from "lucide-react";
+import { Metadata } from "next";
 
 export default function RankingPage() {
   return (
@@ -11,9 +16,9 @@ export default function RankingPage() {
           highlightedTitle="Geral"
           subtitle="Acompanhe os líderes da temporada"
           badge={
-            <div className="flex bg-black px-4 sm:px-6 py-2 sm:py-3 border border-yellow-400 items-center gap-3 w-fit sm:w-auto">
-              <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 fill-yellow-400 shrink-0" />
-              <span className="text-white font-black uppercase italic text-[10px] sm:text-sm tracking-widest">Real-Time</span>
+            <div className="flex bg-black px-4 sm:px-6 py-2 sm:py-3 border border-yellow-400 items-center gap-3">
+              <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" />
+              <span className="text-white font-black uppercase italic text-[10px] sm:text-xs tracking-[0.2em]">Real-Time</span>
             </div>
           }
         />

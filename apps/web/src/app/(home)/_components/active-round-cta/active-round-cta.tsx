@@ -17,59 +17,59 @@ export function ActiveRoundCTA() {
   if (isLoading || !hasActiveRound) return null;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 sm:-mt-12 relative z-10 mb-12 sm:mb-20">
-      <div className="bg-white border-4 border-black p-0.5 sm:p-1 shadow-[8px_8px_0px_0px_rgba(251,191,36,1)] sm:shadow-[12px_12px_0px_0px_rgba(251,191,36,1)]">
-        <div className="border-2 border-black p-5 sm:p-10 flex flex-col md:flex-row items-center gap-6 sm:gap-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 sm:-mt-20 relative z-10 mb-12 sm:mb-20">
+      <div className="bg-white border-4 border-black p-0.5 sm:p-1 shadow-[8px_8px_0px_0px_rgba(251,191,36,1)] sm:shadow-[16px_16px_0px_0px_rgba(251,191,36,1)]">
+        <div className="border-2 border-black p-6 sm:p-12 flex flex-col md:flex-row items-center gap-8 sm:gap-16">
 
-          <div className="flex-1 space-y-4 sm:space-y-6 text-center md:text-left">
-            <div className="inline-flex items-center gap-2 bg-black text-yellow-400 px-3 py-1.5 sm:px-4 sm:py-2 font-black uppercase italic tracking-tighter text-[10px] sm:text-sm">
-              <Zap className="w-3.5 h-3.5 fill-current" />
-              Rodada Ativa
+          <div className="flex-1 space-y-5 sm:space-y-8 text-center md:text-left">
+            <div className="inline-flex items-center gap-2 bg-black text-yellow-400 px-3 py-1.5 sm:px-5 sm:py-2.5 font-black uppercase italic tracking-tighter text-[10px] sm:text-base">
+              <Zap className="w-4 h-4 fill-current animate-pulse" />
+              Rodada em Alta
             </div>
 
-            <div className="space-y-1 sm:space-y-2">
-              <h2 className="text-2xl sm:text-6xl font-black uppercase italic tracking-tighter text-black leading-none break-words">
+            <div className="space-y-2 sm:space-y-4">
+              <h2 className="text-3xl sm:text-7xl font-black uppercase italic tracking-tighter text-black leading-none break-words">
                 {title}
               </h2>
-              <p className="text-gray-500 font-bold uppercase tracking-widest text-[9px] sm:text-sm opacity-80 sm:opacity-100">
-                A disputa já começou. Entre para a elite.
+              <p className="text-gray-500 font-bold uppercase tracking-widest text-[10px] sm:text-lg opacity-90">
+                A disputa de elite já começou.
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 sm:gap-10">
-              <div className="flex items-center gap-2 sm:gap-3">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-400 border-2 border-black flex items-center justify-center rotate-3 scale-90 sm:scale-100">
-                  <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-black" />
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 sm:gap-12">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="w-10 h-10 sm:w-16 sm:h-16 bg-yellow-400 border-2 border-black flex items-center justify-center rotate-3 sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                  <Trophy className="w-5 h-5 sm:w-8 sm:h-8 text-black" />
                 </div>
                 <div>
-                  <p className="text-[8px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none">PRÊMIO</p>
-                  <p className="text-lg sm:text-2xl font-black text-black leading-none mt-1 whitespace-nowrap">{prizePool}</p>
+                  <p className="text-[8px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest leading-none">PRÊMIO</p>
+                  <p className="text-xl sm:text-3xl font-black text-black leading-none mt-1 whitespace-nowrap">{prizePool}</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 sm:gap-3">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white border-2 border-black flex items-center justify-center -rotate-3 scale-90 sm:scale-100">
-                  <Users className="w-5 h-5 sm:w-6 sm:h-6 text-black" />
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="w-10 h-10 sm:w-16 sm:h-16 bg-white border-2 border-black flex items-center justify-center -rotate-3 sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                  <Users className="w-5 h-5 sm:w-8 sm:h-8 text-black" />
                 </div>
                 <div>
-                  <p className="text-[8px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none">PALPITES</p>
-                  <p className="text-lg sm:text-2xl font-black text-black leading-none mt-1">{totalTickets}</p>
+                  <p className="text-[8px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest leading-none">PALPITES</p>
+                  <p className="text-xl sm:text-3xl font-black text-black leading-none mt-1">{totalTickets}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="w-full md:w-auto shrink-0">
+          <div className="w-full md:w-auto shrink-0 mt-4 md:mt-0">
             <button
               onClick={openModal}
-              className="group relative flex items-center justify-center w-full md:w-[280px] h-[70px] sm:h-[100px] bg-yellow-400 border-4 border-black hover:bg-black transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-none translate-y-[-2px] sm:translate-y-[-4px] hover:translate-y-0"
+              className="group relative flex items-center justify-center w-full md:w-[320px] h-[75px] sm:h-[120px] bg-yellow-400 border-4 border-black hover:bg-black transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sm:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:shadow-none translate-y-[-4px] sm:translate-y-[-6px] hover:translate-y-0"
             >
               <div className="flex flex-col items-center">
-                <span className="text-xl sm:text-3xl font-black uppercase italic tracking-tighter text-black group-hover:text-yellow-400 transition-colors">
+                <span className="text-2xl sm:text-4xl font-black uppercase italic tracking-tighter text-black group-hover:text-yellow-400 transition-colors">
                   JOGAR AGORA
                 </span>
-                <span className="flex items-center gap-2 text-[8px] sm:text-[10px] font-bold text-black group-hover:text-yellow-400 tracking-widest uppercase">
-                  CLIQUE AQUI <MoveRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                <span className="flex items-center gap-2 text-[9px] sm:text-[12px] font-bold text-black group-hover:text-yellow-400 tracking-widest uppercase">
+                  ENTRAR NA ARENA <MoveRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1.5 transition-transform" />
                 </span>
               </div>
             </button>

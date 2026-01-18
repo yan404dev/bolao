@@ -1,8 +1,7 @@
 import { RegulamentoContent } from "./_components";
 import { TickerBanner } from "@/shared/components/ticker-banner/ticker-banner";
-import { ChevronLeft, FileText, Info } from "lucide-react";
-import Link from "next/link";
-import { BackButton } from "@/shared/components/back-button/back-button";
+import { Info } from "lucide-react";
+import { PageHeader } from "@/shared/components/page-header";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

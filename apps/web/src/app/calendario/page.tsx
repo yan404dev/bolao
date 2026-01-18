@@ -1,17 +1,16 @@
 import { TickerBanner } from "@/shared/components/ticker-banner/ticker-banner";
-import { BackButton } from "@/shared/components/back-button/back-button";
-import { Calendar } from "lucide-react";
+import { PageHeader } from "@/shared/components/page-header";
 import { CalendarContent } from "./_components/calendar-content";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Agenda de Jogos | Cronograma de Desafios Táticos",
-  description: "Planeje suas análises para as próximas partidas. Fique por dentro de todos os confrontos programados e maximize sua performance em cada rodada.",
+  description: "Fique por dentro de todos os confrontos da elite. Analise o calendário e planeje suas próximas jogadas.",
 };
 
-export default function CalendarPage() {
+export default function CalendarioPage() {
   return (
-    <main className="min-h-screen bg-white pb-12 text-black">
+    <main className="min-h-screen bg-white">
       <TickerBanner />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8">

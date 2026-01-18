@@ -1,8 +1,16 @@
-import { RoundHeader, RoundKpis, RoundMatches, RoundRanking, StandingsTable, RoundPlayButton, RoundTitle } from "./_components";
+import {
+  RoundHeader,
+  RoundKpis,
+  RoundMatches,
+  RoundRanking,
+  RoundPlayButton,
+  StandingsTable,
+} from "./_components";
 import { TickerBanner } from "@/shared/components/ticker-banner/ticker-banner";
-import { BackButton } from "@/shared/components/back-button/back-button";
+import { PageHeader } from "@/shared/components/page-header";
 import { Metadata } from "next";
 import { roundService } from "@/shared/services/round.service";
+import { Zap } from "lucide-react";
 
 interface RoundPageProps {
   params: Promise<{ id: string }>;
@@ -48,10 +56,10 @@ export default async function RoundPage({ params }: RoundPageProps) {
           badge={
             <div className="flex flex-wrap items-center gap-6">
               <div className="flex items-center gap-2">
-                <Zap className="w-4 h-4 text-yellow-500" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-black">Insights Táticos</span>
+                <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-black/50">Insights Táticos</span>
               </div>
-              <RoundPlayButton roundId={roundId} />
+              <RoundPlayButton />
             </div>
           }
         />

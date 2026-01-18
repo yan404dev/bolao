@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import com.bolao.round.dtos.MatchGroup;
 
 @Data
 @Builder
@@ -32,6 +34,7 @@ public class Round {
   private Double ticketPrice;
   private LocalDateTime createdAt;
   private List<Match> matches;
+  private List<MatchGroup> groupedMatches;
 
   public boolean isOpen() {
     boolean isStatusOpen = status == Status.OPEN;

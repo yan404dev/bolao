@@ -3,6 +3,10 @@
 import { useRoundQueries } from "@/app/rodada/[id]/hooks";
 import { MatchEntity } from "@/shared/entities";
 import { getMatchStatusBadgeStyle, getScoreBoxStyle, formatMatchStatusLabel } from "@/shared/utils";
+import dayjs from "dayjs";
+import "dayjs/locale/pt-br";
+
+dayjs.locale("pt-br");
 
 interface RoundMatchesProps {
   roundId: number;
@@ -23,6 +27,7 @@ export function RoundMatches({ roundId }: RoundMatchesProps) {
   }
 
   const matches = round?.matches || [];
+  const groupedMatches = round?.groupedMatches || [];
 
   if (matches.length === 0) {
     return (
@@ -36,16 +41,22 @@ export function RoundMatches({ roundId }: RoundMatchesProps) {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <div className="h-6 w-1 bg-yellow-400" />
-        <h2 className="brutalist-section-header text-gray-900">Partidas</h2>
-      </div>
-      <div className="grid gap-4">
-        {matches.map((match) => (
-          <MatchCard key={match.id} match={match} />
-        ))}
-      </div>
+    <div className="space-y-8">
+      {groupedMatches.map(group => (
+        <div key={group.date} className="space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="h-6 w-1 bg-yellow-400" />
+            <h2 className="brutalist-section-header text-gray-900">
+              {group.formattedDate}
+            </h2>
+          </div>
+          <div className="grid gap-4">
+            {group.matches.map((match) => (
+              <MatchCard key={match.id} match={match} />
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

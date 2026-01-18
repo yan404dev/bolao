@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: RoundPageProps): Promise<Meta
   const { id } = await params;
   try {
     const round = await roundService.getById(parseInt(id));
-    const roundNumber = round.externalRoundId?.match(/(\d+)$/)?.[1] || id;
+    const roundNumber = id;
     return {
       title: `Análise Tática da Rodada de Futebol #${roundNumber} — ${round.title}`,
       description: `Mergulhe na análise técnica dos jogos da Rodada #${roundNumber}. Compare estatísticas, demonstre sua visão de jogo e posicione-se entre os melhores especialistas na Arena de Elite.`,
@@ -37,13 +37,7 @@ export default async function RoundPage({ params }: RoundPageProps) {
   const { id } = await params;
   const roundId = parseInt(id);
 
-  let roundNumber = id;
-  try {
-    const round = await roundService.getById(roundId);
-    roundNumber = round.externalRoundId?.match(/(\d+)$/)?.[1] || id;
-  } catch (error) {
-    console.error("Failed to fetch round data for PageHeader:", error);
-  }
+  const roundNumber = id;
 
   return (
     <main className="min-h-screen bg-white pb-12">

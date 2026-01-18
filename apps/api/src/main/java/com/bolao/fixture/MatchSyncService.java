@@ -158,8 +158,7 @@ public class MatchSyncService {
       try {
         String lastDateStr = details.getDates().get(details.getDates().size() - 1);
         LocalDate lastDate = LocalDate.parse(lastDateStr);
-        // We'll set it to the end of that day as a fallback or the latest match time if
-        // it's on that day
+
         LocalDateTime latestKickoff = findLatestKickoff(roundMatches);
         if (latestKickoff != null && latestKickoff.toLocalDate().isEqual(lastDate)) {
           return latestKickoff.plusMinutes(105);

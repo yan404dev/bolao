@@ -43,7 +43,7 @@ export function RoundHeader({ roundId }: RoundHeaderProps) {
             </div>
           </div>
           <h1 className="text-xl sm:text-4xl font-black uppercase italic tracking-tighter text-gray-900 leading-none break-words">
-            {round.title}
+            {round.championshipTitle} - Rodada #{round.id}
           </h1>
           <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
             <div className="inline-flex items-center gap-2 sm:gap-3 bg-white border-2 border-black px-3 py-2 sm:px-5 sm:py-3">

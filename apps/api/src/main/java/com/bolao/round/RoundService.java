@@ -48,6 +48,14 @@ public class RoundService {
   }
 
   @Transactional(readOnly = true)
+  public Round findByExternalRoundId(String externalId) {
+    Round round = roundRepository.findByExternalRoundId(externalId)
+        .orElseThrow(() -> new NotFoundException("Round not found: " + externalId));
+    loadMatches(round);
+    return round;
+  }
+
+  @Transactional(readOnly = true)
   public ResultEntity<RankingDto> getRanking(Long roundId, String search, Integer minPoints, Pageable pageable) {
     return rankingService.getRanking(roundId, search, minPoints, pageable);
   }

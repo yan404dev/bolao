@@ -3,6 +3,7 @@ package com.bolao.round;
 import com.bolao.round.dtos.RankingDto;
 import com.bolao.round.entities.Round;
 import com.bolao.round.usecases.GetRoundByIdUseCase;
+import com.bolao.round.usecases.GetRoundByExternalIdUseCase;
 import com.bolao.round.usecases.GetRoundRankingUseCase;
 import com.bolao.round.usecases.ListRoundsUseCase;
 import com.bolao.round.usecases.UpdateRoundUseCase;
@@ -23,6 +24,7 @@ public class RoundController {
 
   private final ListRoundsUseCase listRoundsUseCase;
   private final GetRoundByIdUseCase getRoundByIdUseCase;
+  private final GetRoundByExternalIdUseCase getRoundByExternalIdUseCase;
   private final GetRoundRankingUseCase getRoundRankingUseCase;
   private final UpdateRoundUseCase updateRoundUseCase;
 
@@ -49,6 +51,24 @@ public class RoundController {
   @GetMapping("/{id}")
   public ResponseEntity<ApiResponse<Round>> findById(@PathVariable Long id) {
     return ResponseEntity.ok(ApiResponse.ok(getRoundByIdUseCase.execute(id)));
+  }
+
+  @GetMapping("/external/{externalId}")
+  public ResponseEntity<ApiResponse<Round>> findByExternalId(@PathVariable String externalId) {
+    return ResponseEntity.ok(ApiResponse.ok(getRoundByExternalIdUseCase.execute(externalId)));
+  }
+
+  @GetMapping("/external/{externalId}/ranking")
+  public ResponseEntity<ApiResponse<ResultEntity<RankingDto>>> getRankingByExternalId(
+      @PathVariable String externalId,
+      @RequestParam(required = false) String search,
+      @RequestParam(required = false) Integer minPoints,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "50") int size) {
+    Round round = getRoundByExternalIdUseCase.execute(externalId);
+    PageRequest pageable = PageRequest.of(page, size, Sort.by("points").descending());
+    return ResponseEntity
+        .ok(ApiResponse.ok(getRoundRankingUseCase.execute(round.getId(), search, minPoints, pageable)));
   }
 
   @GetMapping("/{id}/ranking")

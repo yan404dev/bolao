@@ -21,9 +21,7 @@ public class RoundStatsService {
     if (round == null)
       return;
 
-    long paidCount = betRepository.findAll().stream()
-        .filter(b -> b.getRoundId().equals(roundId) && b.getStatus() == Bet.PaymentStatus.PAID)
-        .count();
+    long paidCount = betRepository.findByRoundIdAndStatus(roundId, Bet.PaymentStatus.PAID).size();
 
     double ticketPrice = round.getTicketPrice() != null ? round.getTicketPrice() : 10.0;
 

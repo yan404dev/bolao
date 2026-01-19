@@ -20,7 +20,7 @@ interface RoundPageProps {
 export async function generateMetadata({ params }: RoundPageProps): Promise<Metadata> {
   const { id } = await params;
   try {
-    const round = await roundService.getById(parseInt(id));
+    const round = await roundService.getByExternalId(id);
     const roundNumber = extractRoundNumber(round.externalRoundId);
     return {
       title: `Análise Tática da Rodada de Futebol ${roundNumber} — ${round.title}`,
@@ -36,9 +36,20 @@ export async function generateMetadata({ params }: RoundPageProps): Promise<Meta
 
 export default async function RoundPage({ params }: RoundPageProps) {
   const { id } = await params;
-  const roundId = parseInt(id);
 
-  const round = await roundService.getById(roundId);
+  let round;
+  try {
+    round = await roundService.getByExternalId(id);
+  } catch (error) {
+    // Fallback for legacy database IDs in URLs
+    if (!isNaN(parseInt(id))) {
+      round = await roundService.getById(parseInt(id));
+    } else {
+      throw error;
+    }
+  }
+
+  const roundId = round.id;
   const roundNumber = extractRoundNumber(round.externalRoundId);
 
   return (

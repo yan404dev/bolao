@@ -80,8 +80,8 @@ export function useBettingModal(onClose: () => void) {
     setCopiedTicket(false);
     setCopiedPix(false);
 
-    if (activeRound?.id) {
-      router.push(`/rodada/${activeRound.id}`);
+    if (activeRound?.externalRoundId) {
+      router.push(`/rodada/${activeRound.externalRoundId}`);
     }
 
     onClose();

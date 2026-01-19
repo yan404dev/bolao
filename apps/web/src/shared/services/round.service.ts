@@ -22,6 +22,11 @@ export const roundService = {
     return data.data;
   },
 
+  getByExternalId: async (externalId: string): Promise<RoundEntity> => {
+    const { data } = await api.get<{ data: RoundEntity }>(`/rounds/external/${externalId}`);
+    return data.data;
+  },
+
   getActiveRound: async (): Promise<RoundEntity | null> => {
     const rounds = await roundService.getAll({ status: "OPEN" });
     return rounds.length > 0 ? rounds[0] : null;

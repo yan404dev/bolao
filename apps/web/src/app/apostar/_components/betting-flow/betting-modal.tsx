@@ -69,10 +69,10 @@ export function BettingModal({ isOpen, onClose }: BettingModalProps) {
             type="submit"
             form="aposta-form"
             className="w-full h-16 text-2xl font-black uppercase italic tracking-tighter bg-yellow-400 text-black border border-black hover:bg-black hover:text-white transition-all disabled:opacity-50 rounded-none"
-            disabled={!isValid || isSubmitting}
+            disabled={!isValid || isSubmitting || activeRound.status !== 'OPEN'}
           >
             {isSubmitting && <Loader2 className="w-6 h-6 mr-3 animate-spin" />}
-            {isSubmitting ? "ENVIANDO..." : isValid ? "ENVIAR PALPITES" : `FALTAM PALPITES (${progresso})`}
+            {activeRound.status !== 'OPEN' ? "APOSTAS ENCERRADAS" : isSubmitting ? "ENVIANDO..." : isValid ? "ENVIAR PALPITES" : `FALTAM PALPITES (${progresso})`}
           </Button>
           <p className="text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center justify-center gap-2">
             <ShieldCheck className="w-4 h-4 text-black" />

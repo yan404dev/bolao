@@ -8,14 +8,12 @@ import com.bolao.payment.services.PaymentApprovalService;
 import com.bolao.payment.services.WebhookSecurityService;
 import com.bolao.shared.exceptions.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class HandlePaymentWebhookUseCase {
@@ -33,8 +31,6 @@ public class HandlePaymentWebhookUseCase {
     String resourceId = extractResourceId(payload);
     String type = String.valueOf(payload.get("type"));
 
-    log.info("Webhook received: type={}, resourceId={}", type, resourceId);
-
     validateSecurity(signature, requestId, resourceId);
 
     if (!"payment".equals(type)) {
@@ -47,10 +43,7 @@ public class HandlePaymentWebhookUseCase {
 
     return findPaymentWithRetry(resourceId)
         .map(this::processStatusUpdate)
-        .orElseGet(() -> {
-          log.info("Payment record not found locally after retries (likely test or delayed): {}", resourceId);
-          return new Result("Payment record not found", null);
-        });
+        .orElseGet(() -> new Result("Payment record not found", null));
   }
 
   private Optional<Payment> findPaymentWithRetry(String resourceId) {
@@ -59,7 +52,6 @@ public class HandlePaymentWebhookUseCase {
       if (payment.isPresent()) {
         return payment;
       }
-      log.info("Payment {} not found, retrying in 1s... ({}/3)", resourceId, i + 1);
       try {
         Thread.sleep(1000);
       } catch (InterruptedException e) {
@@ -72,7 +64,6 @@ public class HandlePaymentWebhookUseCase {
 
   private void validateSecurity(String signature, String requestId, String resourceId) {
     if (!securityService.isValidSignature(signature, requestId, resourceId)) {
-      log.warn("Security check failed for webhook notification: {}", resourceId);
       throw new UnauthorizedException("Invalid signature or missing headers");
     }
   }
@@ -85,8 +76,6 @@ public class HandlePaymentWebhookUseCase {
     String externalId = payment.getExternalId();
     String providerStatus = paymentProvider.getPaymentStatus(externalId);
     PaymentStatus newStatus = mapStatus(providerStatus);
-
-    log.info("Payment {}: provider reported '{}', mapped to {}", externalId, providerStatus, newStatus);
 
     if (newStatus == PaymentStatus.APPROVED) {
       approvalService.approve(payment);
@@ -115,10 +104,7 @@ public class HandlePaymentWebhookUseCase {
       case "rejected", "rejected_by_bank", "cancelled" -> PaymentStatus.REJECTED;
       case "refunded", "charged_back" -> PaymentStatus.REFUNDED;
       case "pending", "in_process", "in_mediation" -> PaymentStatus.PENDING;
-      default -> {
-        log.info("Unknown MP status '{}' mapped to PENDING", status);
-        yield PaymentStatus.PENDING;
-      }
+      default -> PaymentStatus.PENDING;
     };
   }
 }

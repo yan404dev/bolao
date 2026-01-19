@@ -19,6 +19,7 @@ export function RoundCard({ round, index }: RoundCardProps) {
     CLOSED: "bg-gray-900 text-white",
     CALCULATED: "bg-blue-600 text-white",
     CANCELLED: "bg-red-100 text-red-600",
+    SCHEDULED: "bg-purple-600 text-white",
   };
 
   const statusLabels = {
@@ -27,6 +28,7 @@ export function RoundCard({ round, index }: RoundCardProps) {
     CLOSED: "Encerrada",
     CALCULATED: "Finalizada",
     CANCELLED: "Cancelada",
+    SCHEDULED: "Agendada",
   };
 
   // Extract round number from externalRoundId for display (e.g., "Regular Season - 1" -> "1")

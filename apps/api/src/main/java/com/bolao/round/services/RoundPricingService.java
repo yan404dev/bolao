@@ -5,13 +5,11 @@ import com.bolao.round.entities.Round;
 import com.bolao.round.repositories.RoundRepository;
 import com.bolao.shared.entities.ResultEntity;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RoundPricingService {
@@ -35,18 +33,14 @@ public class RoundPricingService {
 
   private double determinePriceBasedOnPrevious(Round previousRound) {
     if (wasAccumulated(previousRound)) {
-      log.info("Round {}: Resetting price (Previous was accumulated)", previousRound.getId());
       return STANDARD_PRICE;
     }
 
-    // Só acumula se a rodada anterior já encerrou de fato
     if (previousRound.getStatus() != Round.Status.CLOSED && previousRound.getStatus() != Round.Status.CALCULATED) {
       return STANDARD_PRICE;
     }
 
     if (!hasWinner(previousRound)) {
-      log.info("Round {}: Accumulating price (No winner with >= {} pts)", previousRound.getId(),
-          WINNING_SCORE_THRESHOLD);
       return ACCUMULATED_PRICE;
     }
 
@@ -62,8 +56,6 @@ public class RoundPricingService {
       int topScore = getTopScore(round);
       return topScore >= WINNING_SCORE_THRESHOLD;
     } catch (Exception e) {
-      log.error("Failed to check winner for round {}. Assuming winner to prevent error accumulation.", round.getId(),
-          e);
       return true;
     }
   }

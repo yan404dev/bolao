@@ -9,13 +9,11 @@ import com.bolao.round.services.RoundStatsService;
 import com.bolao.bet.repositories.BetRepository;
 import com.bolao.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ProcessRoundResultsUseCase {
@@ -28,8 +26,6 @@ public class ProcessRoundResultsUseCase {
 
   @Transactional
   public void execute(Long roundId) {
-    log.info("Starting ProcessRoundResultsUseCase for round: {}", roundId);
-
     Round round = roundRepository.findById(roundId)
         .orElseThrow(() -> new NotFoundException("Round not found: " + roundId));
 
@@ -43,11 +39,8 @@ public class ProcessRoundResultsUseCase {
 
     Integer maxPoints = betRepository.findMaxPointsByRoundId(roundId);
     if (maxPoints != null && maxPoints < 15) {
-      log.info("Accumulation Rule Triggered: max points {} < 15. Marking round {} as accumulated.", maxPoints, roundId);
       round.setAccumulated(true);
       roundRepository.save(round);
     }
-
-    log.info("Successfully processed results for round: {}", roundId);
   }
 }

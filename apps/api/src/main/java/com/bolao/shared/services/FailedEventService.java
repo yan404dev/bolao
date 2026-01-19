@@ -5,14 +5,12 @@ import com.bolao.shared.repositories.JpaFailedEventRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FailedEventService {
@@ -34,10 +32,8 @@ public class FailedEventService {
           .build();
 
       repository.save(failedEvent);
-      log.warn("Registered failed event: type={}, error={}", eventType, error);
 
     } catch (JsonProcessingException e) {
-      log.error("Failed to serialize event payload: {}", e.getMessage());
     }
   }
 
@@ -56,21 +52,12 @@ public class FailedEventService {
   public void markAsResolved(FailedEventEntity event) {
     event.markAsResolved();
     repository.save(event);
-    log.info("Event resolved successfully: id={}, type={}", event.getId(), event.getEventType());
   }
 
   @Transactional
   public void registerRetryFailure(FailedEventEntity event, String error) {
     event.incrementAttemptsWithBackoff(error);
     repository.save(event);
-
-    if (event.getStatus() == FailedEventEntity.Status.DEAD) {
-      log.error("Event moved to Dead Letter Queue: id={}, type={}, attempts={}",
-          event.getId(), event.getEventType(), event.getAttempts());
-    } else {
-      log.warn("Event retry scheduled: id={}, type={}, attempt={}, nextRetry={}",
-          event.getId(), event.getEventType(), event.getAttempts(), event.getNextRetryAt());
-    }
   }
 
   @Transactional(readOnly = true)

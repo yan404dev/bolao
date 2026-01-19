@@ -1,6 +1,6 @@
 import { MatchEntity } from "./match.entity";
 
-export type RoundStatus = "OPEN" | "LIVE" | "CLOSED" | "CALCULATED" | "CANCELLED";
+export type RoundStatus = "OPEN" | "LIVE" | "CLOSED" | "CALCULATED" | "CANCELLED" | "SCHEDULED";
 
 export interface RoundEntity {
   id: number;

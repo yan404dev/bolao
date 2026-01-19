@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Round {
   public enum Status {
-    OPEN, LIVE, CLOSED, CALCULATED, CANCELLED
+    OPEN, LIVE, CLOSED, CALCULATED, CANCELLED, SCHEDULED
   }
 
   private Long id;

@@ -6,6 +6,7 @@ export const roundStatusStyles: Record<RoundStatus, string> = {
   CLOSED: "bg-gray-900 text-white",
   CALCULATED: "bg-blue-600 text-white",
   CANCELLED: "bg-gray-400 text-gray-600",
+  SCHEDULED: "bg-purple-600 text-white",
 };
 
 export const roundStatusLabels: Record<RoundStatus, string> = {
@@ -14,4 +15,5 @@ export const roundStatusLabels: Record<RoundStatus, string> = {
   CLOSED: "ENCERRADA",
   CALCULATED: "FINALIZADA",
   CANCELLED: "CANCELADA",
+  SCHEDULED: "AGENDADA",
 };

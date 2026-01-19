@@ -3,12 +3,10 @@ package com.bolao.fixture;
 import com.bolao.fixture.dtos.ApiFootballFixtureResponse;
 import com.bolao.fixture.dtos.ApiFootballLeagueResponse;
 import com.bolao.fixture.dtos.ApiFootballRoundResponse;
-import com.bolao.fixture.dtos.ApiFootballStringResponse;
 import com.bolao.fixture.dtos.MatchResponseWrapper;
 import com.bolao.fixture.entities.RoundDetails;
 import com.bolao.round.entities.Match;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -17,7 +15,6 @@ import org.springframework.web.client.RestClient;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ApiFootballProvider implements ExternalMatchProvider {
@@ -37,7 +34,6 @@ public class ApiFootballProvider implements ExternalMatchProvider {
 
   @Override
   public List<Match> fetchMatchesByRound(int leagueId, int season, String externalRoundId) {
-    log.info("Fetching matches for league {}, season {}, round {}", leagueId, season, externalRoundId);
     ApiFootballFixtureResponse response = restClient.get()
         .uri(BASE_URL + "/fixtures?league={leagueId}&season={season}&round={round}",
             leagueId, season, externalRoundId)
@@ -50,7 +46,6 @@ public class ApiFootballProvider implements ExternalMatchProvider {
 
   @Override
   public MatchResponseWrapper fetchAllMatchesForSeason(int leagueId, int season) {
-    log.info("Fetching all matches for league {}, season {}", leagueId, season);
     String champName = getChampionshipName(leagueId);
     String champLogo = getChampionshipLogo(leagueId);
     List<RoundDetails> rounds = fetchAvailableRounds(leagueId, season);
@@ -72,21 +67,13 @@ public class ApiFootballProvider implements ExternalMatchProvider {
 
   @Override
   public List<RoundDetails> fetchAvailableRounds(int leagueId, int season) {
-    log.info("Fetching available rounds for league {}, season {}", leagueId, season);
-    log.debug("Using API key: {}...", apiKey != null && apiKey.length() > 10 ? apiKey.substring(0, 10) : "NULL");
     try {
       String uri = BASE_URL + "/fixtures/rounds?league=" + leagueId + "&season=" + season + "&dates=true";
-      log.info("Calling API: {}", uri);
       ApiFootballRoundResponse response = restClient.get()
           .uri(uri)
           .headers(h -> h.addAll(createHeaders()))
           .retrieve()
           .body(ApiFootballRoundResponse.class);
-
-      log.info("API response: results={}, errors={}, rounds={}",
-          response != null ? response.getResults() : "null",
-          response != null ? response.getErrors() : "null",
-          response != null ? response.getResponse().size() : 0);
 
       if (response == null || response.getResponse() == null) {
         return new ArrayList<>();
@@ -99,7 +86,6 @@ public class ApiFootballProvider implements ExternalMatchProvider {
               .build())
           .toList();
     } catch (Exception e) {
-      log.error("Error fetching rounds from API-Football: {}", e.getMessage());
       return new ArrayList<>();
     }
   }
@@ -129,7 +115,6 @@ public class ApiFootballProvider implements ExternalMatchProvider {
 
   @Override
   public List<com.bolao.fixture.entities.League> fetchLeagues(String country) {
-    log.info("Fetching leagues for country: {}", country);
     String uri = BASE_URL + "/leagues?country=" + country;
 
     ApiFootballLeagueResponse response = restClient.get()

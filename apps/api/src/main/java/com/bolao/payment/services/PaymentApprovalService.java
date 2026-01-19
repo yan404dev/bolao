@@ -6,15 +6,12 @@ import com.bolao.payment.entities.Payment;
 import com.bolao.payment.events.PaymentApprovedEvent;
 import com.bolao.payment.repositories.PaymentRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PaymentApprovalService {
@@ -26,7 +23,6 @@ public class PaymentApprovalService {
   @Transactional
   public void approve(Payment payment) {
     if (payment.isPaid()) {
-      log.info("Payment {} already marked as paid", payment.getExternalId());
       return;
     }
 
@@ -38,14 +34,11 @@ public class PaymentApprovalService {
         bet.setTicketCode(generateTicketCode(bet.getRoundId()));
         bet.setStatus(Bet.PaymentStatus.PAID);
         betRepository.save(bet);
-        log.info("Ticket generated for bet {}: {}", bet.getId(), bet.getTicketCode());
       }
     });
 
     eventPublisher.publishEvent(new PaymentApprovedEvent(this,
         payment.getExternalId(), payment.getBetId(), payment.getPaidAt()));
-
-    log.info("Payment {} approval sequence completed", payment.getExternalId());
   }
 
   private String generateTicketCode(Long roundId) {

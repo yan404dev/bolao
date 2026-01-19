@@ -7,7 +7,6 @@ import com.bolao.round.repositories.MatchRepository;
 import com.bolao.round.repositories.RoundRepository;
 import com.bolao.round.services.RoundPricingService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MatchSyncService {
@@ -29,7 +27,6 @@ public class MatchSyncService {
   private final RoundPricingService pricingService;
 
   public List<Match> fetchAndSyncMatches(int leagueId, int season, Long roundId, String externalRoundId) {
-
     List<Match> externalMatches = matchProvider.fetchMatchesByRound(leagueId, season, externalRoundId);
 
     if (roundId != null && !externalMatches.isEmpty()) {
@@ -44,13 +41,10 @@ public class MatchSyncService {
 
   @Transactional
   public List<Round> syncAllRounds(int leagueId, int season) {
-    log.info("Starting smart sync for league {} season {}...", leagueId, season);
-
     MatchResponseWrapper wrapper = matchProvider.fetchAllMatchesForSeason(leagueId, season);
     List<Match> allMatches = wrapper.getMatches();
 
     if (allMatches.isEmpty()) {
-      log.warn("No matches returned from provider for league {} season {}", leagueId, season);
       return new ArrayList<>();
     }
 
@@ -72,7 +66,6 @@ public class MatchSyncService {
       syncedRounds.add(processRound(entry.getKey(), entry.getValue(), leagueId, season, champName, champLogo, details));
     }
 
-    log.info("Smart Sync complete: {} rounds processed", syncedRounds.size());
     return syncedRounds;
   }
 
@@ -98,7 +91,7 @@ public class MatchSyncService {
         .externalSeason(season)
         .championshipTitle(champName)
         .championshipLogo(champLogo)
-        .status(Round.Status.CLOSED)
+        .status(determineRoundStatus(roundMatches))
         .prizePool(0.0)
         .totalTickets(0)
         .ticketPrice(ticketPrice)
@@ -118,7 +111,13 @@ public class MatchSyncService {
     round.setChampionshipTitle(champName);
     round.setChampionshipLogo(champLogo);
     round.setTitle(champName + " - Rodada " + round.getExternalRoundId());
+    round.setStartDate(findEarliestKickoff(roundMatches));
     round.setEndDate(calculateRoundEndDate(roundMatches, details));
+
+    if (round.getStatus() != Round.Status.CALCULATED && round.getStatus() != Round.Status.CANCELLED) {
+      round.setStatus(determineRoundStatus(roundMatches));
+    }
+
     Round savedRound = roundRepository.save(round);
 
     updateMatches(roundMatches);
@@ -165,7 +164,6 @@ public class MatchSyncService {
         }
         return lastDate.atTime(23, 59);
       } catch (Exception e) {
-        log.warn("Error parsing round dates: {}", e.getMessage());
       }
     }
     LocalDateTime latest = findLatestKickoff(roundMatches);
@@ -179,12 +177,11 @@ public class MatchSyncService {
   }
 
   public void syncLiveScores() {
-    log.info("Live scores sync skipped (no providers configured)");
   }
 
   private Round.Status determineRoundStatus(List<Match> matches) {
     if (matches.isEmpty()) {
-      return Round.Status.OPEN;
+      return Round.Status.SCHEDULED;
     }
 
     boolean allFinished = matches.stream()
@@ -199,7 +196,22 @@ public class MatchSyncService {
       return Round.Status.LIVE;
     }
 
-    return Round.Status.OPEN;
+    // Find the earliest kickoff time
+    LocalDateTime earliestKickoff = matches.stream()
+        .map(Match::getKickoffTime)
+        .filter(t -> t != null)
+        .min(LocalDateTime::compareTo)
+        .orElse(null);
+
+    if (earliestKickoff != null) {
+      LocalDateTime now = LocalDateTime.now();
+      // If we are within 2 days of kickoff, open the round
+      if (now.isAfter(earliestKickoff.minusDays(2))) {
+        return Round.Status.OPEN;
+      }
+    }
+
+    return Round.Status.SCHEDULED;
   }
 
   private LocalDateTime findLatestKickoff(List<Match> matches) {
@@ -207,6 +219,14 @@ public class MatchSyncService {
         .map(Match::getKickoffTime)
         .filter(t -> t != null)
         .max(LocalDateTime::compareTo)
+        .orElse(null);
+  }
+
+  private LocalDateTime findEarliestKickoff(List<Match> matches) {
+    return matches.stream()
+        .map(Match::getKickoffTime)
+        .filter(t -> t != null)
+        .min(LocalDateTime::compareTo)
         .orElse(null);
   }
 }

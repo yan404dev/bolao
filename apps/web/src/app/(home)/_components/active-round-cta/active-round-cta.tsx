@@ -7,6 +7,7 @@ import { useActiveRoundCta } from "./hooks";
 export function ActiveRoundCTA() {
   const { openModal } = useBettingModalState();
   const {
+    activeRound,
     title,
     prizePool,
     totalTickets,
@@ -59,14 +60,16 @@ export function ActiveRoundCTA() {
           <div className="w-full md:w-auto shrink-0 mt-4 md:mt-0">
             <button
               onClick={openModal}
-              className="group relative flex items-center justify-center w-full md:w-[320px] h-[75px] sm:h-[120px] bg-yellow-400 border-4 border-black hover:bg-black transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sm:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:shadow-none translate-y-[-4px] sm:translate-y-[-6px] hover:translate-y-0"
+              disabled={activeRound?.status !== 'OPEN'}
+              className="group relative flex items-center justify-center w-full md:w-[320px] h-[75px] sm:h-[120px] bg-yellow-400 border-4 border-black hover:bg-black transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sm:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:shadow-none translate-y-[-4px] sm:translate-y-[-6px] hover:translate-y-0 disabled:bg-gray-200 disabled:shadow-none disabled:translate-y-0 disabled:cursor-not-allowed"
             >
               <div className="flex flex-col items-center">
                 <span className="text-2xl sm:text-4xl font-black uppercase italic tracking-tighter text-black group-hover:text-yellow-400 transition-colors">
-                  JOGAR AGORA
+                  {activeRound?.status === 'LIVE' ? 'RODADA AO VIVO' : activeRound?.status === 'SCHEDULED' ? 'EM BREVE' : 'JOGAR AGORA'}
                 </span>
                 <span className="flex items-center gap-2 text-[9px] sm:text-[12px] font-bold text-black group-hover:text-yellow-400 tracking-widest uppercase">
-                  ENTRAR NA ARENA <MoveRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1.5 transition-transform" />
+                  {activeRound?.status === 'OPEN' ? 'ENTRAR NA ARENA' : 'APOSTAS ENCERRADAS'}
+                  <MoveRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1.5 transition-transform" />
                 </span>
               </div>
             </button>

@@ -15,7 +15,6 @@ import com.bolao.round.repositories.RoundRepository;
 import com.bolao.round.services.RoundStatsService;
 import com.bolao.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +22,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class SubmitBetUseCase {
@@ -38,8 +35,6 @@ public class SubmitBetUseCase {
 
   @Transactional
   public BetResponseDto execute(CreateBetDto dto) {
-    log.info("Executing SubmitBetUseCase for round: {} and user: {}", dto.getRoundId(), dto.getName());
-
     Round round = roundRepository.findById(dto.getRoundId())
         .orElseThrow(() -> new NotFoundException("Round not found: " + dto.getRoundId()));
 
@@ -71,8 +66,6 @@ public class SubmitBetUseCase {
         "Bolão JC: " + savedBet.getTicketCode());
 
     statsService.updateRoundStats(savedBet.getRoundId());
-
-    log.info("Bet submitted and payment generated for ticket: {}", savedBet.getTicketCode());
 
     return BetResponseDto.builder()
         .bet(savedBet)

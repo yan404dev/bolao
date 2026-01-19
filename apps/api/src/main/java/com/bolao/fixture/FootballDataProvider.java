@@ -6,7 +6,6 @@ import com.bolao.fixture.dtos.MatchResponseWrapper;
 import com.bolao.fixture.entities.League;
 import com.bolao.round.entities.Match;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpHeaders;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-@Slf4j
 @Service
 @Primary
 @RequiredArgsConstructor
@@ -32,8 +30,6 @@ public class FootballDataProvider implements ExternalMatchProvider {
 
   @Override
   public List<Match> fetchMatchesByRound(int leagueId, int season, String externalRoundId) {
-    log.info("Fetching matches for league {}, season {}, matchday {}", leagueId, season, externalRoundId);
-
     String code = getCompetitionCode(leagueId);
     String url = BASE_URL + "/competitions/" + code + "/matches?matchday=" + externalRoundId + "&season=" + season;
 
@@ -48,8 +44,6 @@ public class FootballDataProvider implements ExternalMatchProvider {
 
   @Override
   public MatchResponseWrapper fetchAllMatchesForSeason(int leagueId, int season) {
-    log.info("Fetching ALL matches for league {}, season {} (single call)", leagueId, season);
-
     String code = getCompetitionCode(leagueId);
     String url = BASE_URL + "/competitions/" + code + "/matches?season=" + season;
 
@@ -119,8 +113,6 @@ public class FootballDataProvider implements ExternalMatchProvider {
 
   @Override
   public List<com.bolao.fixture.entities.RoundDetails> fetchAvailableRounds(int leagueId, int season) {
-    log.info("Fetching available rounds for league {}, season {}", leagueId, season);
-
     String code = getCompetitionCode(leagueId);
     String url = BASE_URL + "/competitions/" + code + "/matches?season=" + season;
 
@@ -161,7 +153,6 @@ public class FootballDataProvider implements ExternalMatchProvider {
 
   @Override
   public List<League> fetchLeagues(String country) {
-
     String url = BASE_URL + "/competitions";
 
     FootballDataCompetitionResponse response = restClient.get()
@@ -198,24 +189,23 @@ public class FootballDataProvider implements ExternalMatchProvider {
 
       return response;
     } catch (Exception e) {
-      log.error("Error fetching competition {}: {}", leagueId, e.getMessage());
     }
     return null;
   }
 
   private String getCompetitionCode(int leagueId) {
     return switch (leagueId) {
-      case 2013 -> "BSA"; // Brasileirão Série A
-      case 2029 -> "BSB"; // Brasileirão Série B
-      case 2037 -> "CDB"; // Copa do Brasil
-      case 2021 -> "PL"; // Premier League
-      case 2014 -> "PD"; // La Liga
-      case 2002 -> "BL1"; // Bundesliga
-      case 2019 -> "SA"; // Serie A (Italy)
-      case 2015 -> "FL1"; // Ligue 1
-      case 2003 -> "DED"; // Eredivisie
-      case 2017 -> "PPL"; // Primeira Liga
-      case 2001 -> "CL"; // Champions League
+      case 2013 -> "BSA";
+      case 2029 -> "BSB";
+      case 2037 -> "CDB";
+      case 2021 -> "PL";
+      case 2014 -> "PD";
+      case 2002 -> "BL1";
+      case 2019 -> "SA";
+      case 2015 -> "FL1";
+      case 2003 -> "DED";
+      case 2017 -> "PPL";
+      case 2001 -> "CL";
       default -> String.valueOf(leagueId);
     };
   }

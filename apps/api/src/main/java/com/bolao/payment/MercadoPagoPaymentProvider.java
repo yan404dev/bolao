@@ -7,7 +7,6 @@ import com.mercadopago.client.payment.PaymentPayerRequest;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.payment.Payment;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,6 @@ import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-@Slf4j
 @Component
 @ConditionalOnExpression("!'${mercadopago.access.token:}'.isEmpty()")
 public class MercadoPagoPaymentProvider implements PaymentProvider {
@@ -32,7 +30,6 @@ public class MercadoPagoPaymentProvider implements PaymentProvider {
   public void init() {
     if (accessToken != null && !accessToken.isEmpty()) {
       MercadoPagoConfig.setAccessToken(accessToken);
-      log.info("Mercado Pago SDK initialized");
     }
   }
 
@@ -56,14 +53,10 @@ public class MercadoPagoPaymentProvider implements PaymentProvider {
 
     try {
       Payment payment = new PaymentClient().create(createRequest, requestOptions);
-      log.info("PIX generated successfully. ID: {}, IdempotencyKey: {}", payment.getId(), idempotencyKey);
       return mapToResponse(payment);
     } catch (MPApiException e) {
-      log.error("MP API Error - Status: {}, Content: {}, IdempotencyKey: {}",
-          e.getStatusCode(), e.getApiResponse().getContent(), idempotencyKey);
       throw new RuntimeException("Payment Gateway Error: " + e.getApiResponse().getContent());
     } catch (MPException e) {
-      log.error("MP SDK Error: {}, IdempotencyKey: {}", e.getMessage(), idempotencyKey);
       throw new RuntimeException("Payment Gateway Error: " + e.getMessage());
     }
   }
@@ -79,7 +72,6 @@ public class MercadoPagoPaymentProvider implements PaymentProvider {
         return payment.getStatus();
       } catch (MPException | MPApiException e) {
         attempt++;
-        log.warn("Attempt {}/{} failed to fetch MP status for {}: {}", attempt, maxRetries, externalId, e.getMessage());
         if (attempt >= maxRetries) {
           throw new RuntimeException("Gateway Connectivity Error after " + maxRetries + " attempts: " + e.getMessage());
         }

@@ -5,13 +5,11 @@ import com.bolao.payment.entities.Payment;
 import com.bolao.payment.entities.PaymentStatus;
 import com.bolao.payment.repositories.PaymentRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class GeneratePaymentUseCase {
@@ -21,8 +19,6 @@ public class GeneratePaymentUseCase {
 
   @Transactional
   public Payment execute(Long betId, Double amount, String description) {
-    log.info("Generating PIX payment for bet: {} with amount: {}", betId, amount);
-
     PaymentProvider.PaymentResponse response = paymentProvider.generatePix(amount, description);
 
     Payment payment = Payment.builder()
@@ -37,9 +33,6 @@ public class GeneratePaymentUseCase {
         .build();
 
     payment = paymentRepository.save(payment);
-
-    log.info("Payment generated successfully with ID: {} and External ID: {}", payment.getId(),
-        payment.getExternalId());
     return payment;
   }
 }

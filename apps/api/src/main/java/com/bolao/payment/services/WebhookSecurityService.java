@@ -1,6 +1,5 @@
 package com.bolao.payment.services;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,6 @@ import java.util.HexFormat;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 public class WebhookSecurityService {
 
@@ -27,7 +25,6 @@ public class WebhookSecurityService {
 
   public boolean isValidSignature(String signature, String requestId, String resourceId) {
     if (secret == null || secret.isEmpty()) {
-      log.warn("Webhook secret not configured. Skipping validation.");
       return true;
     }
 
@@ -47,20 +44,14 @@ public class WebhookSecurityService {
       long ts = Long.parseLong(tsStr);
       long now = Instant.now().getEpochSecond();
       if (Math.abs(now - ts) > TIME_TOLERANCE_SECONDS) {
-        log.warn("Webhook security: timestamp expired (ts={}, now={}). Replay attack suspected.", ts, now);
         return false;
       }
 
       String manifest = String.format("id:%s;request-id:%s;ts:%s;", resourceId, requestId, tsStr);
       String generatedHash = generateHmac(manifest);
 
-      boolean isValid = generatedHash.equals(v1);
-      if (!isValid) {
-        log.warn("Webhook security: signature mismatch for resourceId={}. Check webhook secret.", resourceId);
-      }
-      return isValid;
+      return generatedHash.equals(v1);
     } catch (Exception e) {
-      log.error("Webhook security: unexpected error during validation for resourceId={}", resourceId, e);
       return false;
     }
   }

@@ -6,7 +6,6 @@ import com.bolao.round.entities.Round;
 import com.bolao.round.repositories.MatchRepository;
 import com.bolao.round.repositories.RoundRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class CreateRoundUseCase {
@@ -31,9 +29,6 @@ public class CreateRoundUseCase {
 
   @Transactional
   public Round execute(String title, String externalRoundId, Double ticketPrice, Integer leagueId, Integer season) {
-    log.info("Executing CreateRoundUseCase for: {}", title);
-
-    // Default fallbacks if not provided
     int targetLeagueId = leagueId != null ? leagueId : defaultLeagueId;
     int targetSeason = season != null ? season : defaultSeason;
 
@@ -64,7 +59,6 @@ public class CreateRoundUseCase {
     }
 
     round.setMatches(matches);
-    log.info("Successfully created round with ID: {}", round.getId());
     return round;
   }
 }

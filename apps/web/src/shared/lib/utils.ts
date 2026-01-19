@@ -23,3 +23,8 @@ export function formatCurrency(value: number): string {
 export function formatCurrencyCents(valueInCents: number): string {
   return formatCurrency(valueInCents / 100);
 }
+
+export function extractRoundNumber(externalRoundId: string): string {
+  const match = externalRoundId?.match(/(\d+)$/);
+  return match ? match[1] : externalRoundId;
+}

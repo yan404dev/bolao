@@ -5,7 +5,7 @@ import { RoundEntity } from "@/shared/entities";
 import Link from "next/link";
 import { Trophy, Calendar as CalendarIcon, Users } from "lucide-react";
 import dayjs from "dayjs";
-import { formatCurrency } from "@/shared/lib/utils";
+import { formatCurrency, extractRoundNumber } from "@/shared/lib/utils";
 
 interface RoundCardProps {
   round: RoundEntity;
@@ -31,11 +31,7 @@ export function RoundCard({ round, index }: RoundCardProps) {
     SCHEDULED: "Agendada",
   };
 
-  // Extract round number from externalRoundId for display (e.g., "Regular Season - 1" -> "1")
-  const getRoundNumber = () => {
-    const match = round.externalRoundId?.match(/(\d+)$/);
-    return match ? match[1] : round.externalRoundId;
-  };
+  const roundNumber = extractRoundNumber(round.externalRoundId);
 
   return (
     <Link href={`/rodada/${round.id}`}>
@@ -43,7 +39,7 @@ export function RoundCard({ round, index }: RoundCardProps) {
         className="group relative overflow-hidden border-4 border-black rounded-none hover:bg-yellow-50 transition-all duration-300 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] bg-white cursor-pointer h-full"
       >
         <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
-          <span className="text-7xl font-black italic">{getRoundNumber()}</span>
+          <span className="text-7xl font-black italic">{roundNumber}</span>
         </div>
 
         <CardHeader className="pb-4 border-b-4 border-black bg-gray-50 group-hover:bg-yellow-100 transition-colors">

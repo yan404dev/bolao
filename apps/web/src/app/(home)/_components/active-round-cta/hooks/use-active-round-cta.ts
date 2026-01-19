@@ -1,5 +1,5 @@
 import { useActiveRoundQuery } from "./use-active-round-query";
-import { formatCurrency } from "@/shared/lib/utils";
+import { formatCurrency, extractRoundNumber } from "@/shared/lib/utils";
 
 export function useActiveRoundCta() {
   const { data: activeRound, isLoading } = useActiveRoundQuery();
@@ -10,7 +10,7 @@ export function useActiveRoundCta() {
 
   const totalTickets = activeRound?.totalTickets ?? 0;
   const title = activeRound
-    ? `${activeRound.championshipTitle} - Rodada #${activeRound.id}`
+    ? `${activeRound.championshipTitle} - Rodada ${extractRoundNumber(activeRound.externalRoundId)}`
     : "";
   const hasActiveRound = !!activeRound;
 

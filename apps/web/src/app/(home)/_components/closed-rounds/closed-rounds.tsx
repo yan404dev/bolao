@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/shared/components/ui
 import Link from "next/link";
 import { MoveRight } from "lucide-react";
 import { useClosedRounds } from "./hooks/use-closed-rounds";
-import { formatDate, formatCurrency } from "@/shared/lib/utils";
+import { formatDate, formatCurrency, extractRoundNumber, cn } from "@/shared/lib/utils";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 
 function ClosedRoundsLoading() {
@@ -54,8 +54,16 @@ export function ClosedRounds() {
               <Card className="h-full brutalist-card overflow-hidden group-hover:shadow-[12px_12px_0px_0px_rgba(251,191,36,1)] transition-all">
                 <div className="bg-black text-white px-5 py-3 flex justify-between items-center">
                   <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-yellow-400">Inscrições Abertas</span>
+                    <div className={cn(
+                      "w-2 h-2 rounded-full",
+                      round.status === 'OPEN' ? "bg-yellow-400 animate-pulse" : "bg-gray-500"
+                    )} />
+                    <span className={cn(
+                      "text-[10px] font-black uppercase tracking-widest",
+                      round.status === 'OPEN' ? "text-yellow-400" : "text-gray-400"
+                    )}>
+                      {round.status === 'OPEN' ? 'Inscrições Abertas' : 'Em Breve'}
+                    </span>
                   </div>
                   <span className="text-[10px] font-bold text-white/40 italic">Início: {formatDate(round.startDate)}</span>
                 </div>
@@ -63,7 +71,7 @@ export function ClosedRounds() {
                 <CardHeader className="pb-4 pt-8">
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-[10px] font-black uppercase tracking-widest text-black/30 border-l-2 border-yellow-400 pl-2">
-                      {round.championshipTitle || "BRASILEIRÃO"}
+                      {round.championshipTitle} - Rodada {extractRoundNumber(round.externalRoundId)}
                     </span>
                   </div>
                   <CardTitle className="text-3xl font-black uppercase italic tracking-tighter text-gray-900 leading-[1.1] group-hover:text-yellow-600 transition-colors">

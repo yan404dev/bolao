@@ -1,9 +1,10 @@
 import { z } from "zod";
 
-export const roundStatusSchema = z.enum(["OPEN", "LIVE", "CLOSED", "CANCELLED"]);
+export const roundStatusSchema = z.enum(["OPEN", "LIVE", "CLOSED", "CANCELLED", "SCHEDULED", "CALCULATED"]);
 
 export const roundFiltersSchema = z.object({
   status: roundStatusSchema.optional(),
+  limit: z.number().optional(),
 });
 
 export const rankingFiltersSchema = z.object({

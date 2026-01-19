@@ -75,7 +75,7 @@ export function RoundRanking({ roundId }: RoundRankingProps) {
       <div className="brutalist-card bg-white overflow-hidden">
         <div className="p-4 bg-black flex justify-between items-center px-6">
           <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-white">Ranking da Rodada</h2>
-          <Link href={`/ranking/${roundId}`} className="text-[10px] font-black uppercase tracking-widest text-yellow-500 hover:underline">Ver Mais</Link>
+          <Link href={`/ranking/${round?.externalRoundId || roundId}`} className="text-[10px] font-black uppercase tracking-widest text-yellow-500 hover:underline">Ver Mais</Link>
         </div>
 
         {topRanking.length === 0 ? (

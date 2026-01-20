@@ -12,6 +12,13 @@ const getMedal = (position: number) => {
   }
 };
 
+const formatTicketCode = (code: string): string => {
+  // Remove any non-numeric characters and pad to 6 digits
+  const numericCode = code.replace(/\D/g, '').padStart(6, '0');
+  // Format as "000 000"
+  return `${numericCode.slice(0, 3)} ${numericCode.slice(3, 6)}`;
+};
+
 export const columns: ColumnDef<BettorEntity>[] = [
   {
     accessorKey: "position",
@@ -46,7 +53,7 @@ export const columns: ColumnDef<BettorEntity>[] = [
       return (
         <div className="text-center">
           <span className="text-[10px] font-black uppercase tracking-widest text-[#FFF] bg-[#000] px-3 py-1 rounded-none border border-black">
-            {row.original.ticketCode}
+            {formatTicketCode(row.original.ticketCode)}
           </span>
         </div>
       );

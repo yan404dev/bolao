@@ -65,6 +65,7 @@ export const metadata: Metadata = {
   },
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -79,6 +80,13 @@ export default function RootLayout({
           <QueryProvider>
             <BettingModalProvider>
               <Toaster richColors position="top-right" />
+              {process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID && (
+                <script
+                  async
+                  src="https://cloud.umami.is/script.js"
+                  data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
+                />
+              )}
               <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
@@ -107,6 +115,6 @@ export default function RootLayout({
           </QueryProvider>
         </NuqsAdapter>
       </body>
-    </html>
+    </html >
   );
 }

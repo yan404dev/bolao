@@ -20,6 +20,7 @@ public interface JpaBetRepository extends JpaRepository<BetEntity, Long>, JpaSpe
   Optional<BetEntity> findByTicketCode(String ticketCode);
 
   @Query("SELECT b FROM BetEntity b WHERE b.roundId = :roundId " +
+      "AND b.status = 'PAID' " +
       "AND (:search IS NULL OR :search = '' OR " +
       "LOWER(CAST(b.name AS string)) LIKE LOWER(CONCAT('%', CAST(:search AS string), '%')) OR " +
       "LOWER(CAST(b.ticketCode AS string)) LIKE LOWER(CONCAT('%', CAST(:search AS string), '%'))) " +

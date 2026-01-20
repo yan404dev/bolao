@@ -126,13 +126,23 @@ export function BettingModalSuccess({
               <div className="space-y-2">
                 <p className="text-xs font-black text-green-700 uppercase tracking-widest">SEU CÓDIGO OFICIAL</p>
                 <div className="flex flex-col items-center justify-center gap-4">
-                  <span className="text-7xl font-black text-black tracking-tighter bg-white border-2 border-black px-8 py-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                    {formatTicketCode(betResult.bet.ticketCode)}
-                  </span>
+                  <div className="relative group">
+                    <span className="text-7xl font-black text-black tracking-tighter bg-white border-2 border-black px-8 py-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                      {formatTicketCode(betResult.bet.ticketCode)}
+                    </span>
+                    {copiedTicket && (
+                      <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-black text-white px-4 py-2 text-xs font-black uppercase tracking-widest animate-bounce border-2 border-white shadow-[4px_4px_0px_0px_rgba(34,197,94,1)]">
+                        COPIADO! ✅
+                      </div>
+                    )}
+                  </div>
                   <Button
-                    onClick={onCopyTicket}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onCopyTicket();
+                    }}
                     variant="outline"
-                    className="border-black hover:bg-black hover:text-white rounded-none font-bold uppercase tracking-widest text-xs"
+                    className="border-black hover:bg-black hover:text-white rounded-none font-bold uppercase tracking-widest text-xs relative"
                   >
                     {copiedTicket ? <CheckCircle className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
                     {copiedTicket ? "COPIADO!" : "COPIAR CÓDIGO"}
@@ -159,8 +169,8 @@ export function BettingModalSuccess({
         <Button
           onClick={onClose}
           className={`w-full h-auto py-6 text-2xl sm:text-3xl font-black uppercase italic tracking-tighter transition-all rounded-none shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-none translate-y-[-6px] hover:translate-y-0 ${isPaid
-              ? "bg-green-500 text-white hover:bg-black"
-              : "bg-black text-white hover:bg-yellow-400 hover:text-black"
+            ? "bg-green-500 text-white hover:bg-black"
+            : "bg-black text-white hover:bg-yellow-400 hover:text-black"
             }`}
         >
           {isPaid ? "IR PARA O RANKING" : "CONCLUÍDO"}

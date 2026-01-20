@@ -59,22 +59,22 @@ export function useBettingModal(onClose: () => void) {
   });
 
   const handleCopyTicket = useCallback(async () => {
-    const ticketCode = createBetMutation.data?.bet?.ticketCode;
+    const ticketCode = betResult?.bet?.ticketCode;
     if (ticketCode) {
       await navigator.clipboard.writeText(ticketCode);
       setCopiedTicket(true);
       setTimeout(() => setCopiedTicket(false), 2000);
     }
-  }, [createBetMutation.data?.bet?.ticketCode]);
+  }, [betResult?.bet?.ticketCode]);
 
   const handleCopyPix = useCallback(async () => {
-    const pixCode = createBetMutation.data?.payment?.pixCopyPaste;
+    const pixCode = betResult?.payment?.pixCopyPaste;
     if (pixCode) {
       await navigator.clipboard.writeText(pixCode);
       setCopiedPix(true);
       setTimeout(() => setCopiedPix(false), 2000);
     }
-  }, [createBetMutation.data?.payment?.pixCopyPaste]);
+  }, [betResult?.payment?.pixCopyPaste]);
 
   const handleClose = useCallback(() => {
     setCopiedTicket(false);

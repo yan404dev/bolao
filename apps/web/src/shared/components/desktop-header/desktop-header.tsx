@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Trophy, Calendar, FileText, LayoutDashboard, Home } from "lucide-react";
+import { Trophy, Calendar, FileText, Home, Users } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 
 const NAV_ITEMS = [
@@ -11,6 +11,8 @@ const NAV_ITEMS = [
   { label: "Calendário", href: "/calendario", icon: Calendar },
   { label: "Regulamento", href: "/regulamento", icon: FileText },
 ];
+
+const COMMUNITY_LINK = "https://chat.whatsapp.com/K6Ni8HK72Bw2us79Erk0t6";
 
 export function DesktopHeader() {
   const pathname = usePathname();
@@ -56,10 +58,15 @@ export function DesktopHeader() {
 
           <div className="flex items-center gap-4">
             <div className="h-10 w-[2px] bg-black/10 mx-2" />
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-black/40">Sessão Ativa</span>
-            </div>
+            <a
+              href={COMMUNITY_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white border-2 border-black font-black uppercase italic text-[10px] tracking-widest hover:bg-green-600 transition-all shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px]"
+            >
+              <Users className="w-4 h-4" />
+              Comunidade
+            </a>
           </div>
         </div>
       </div>

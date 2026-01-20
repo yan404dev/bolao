@@ -22,12 +22,12 @@ export const Footer = () => {
               Ranking
             </Link>
             <a
-              href="https://wa.me/5500000000000"
+              href="https://chat.whatsapp.com/K6Ni8HK72Bw2us79Erk0t6"
               target="_blank"
               rel="noopener noreferrer"
               className="px-6 py-3 bg-yellow-400 text-black border border-black font-black uppercase italic text-xs tracking-widest hover:bg-white transition-all rounded-none"
             >
-              WhatsApp
+              Comunidade
             </a>
           </div>
         </div>

@@ -1,86 +1,90 @@
-# Bolao API
+# Arena de Elite - API 🚀
 
-API REST Spring Boot para a aplicacao de bolao.
+API REST Spring Boot para a plataforma Arena de Elite.
 
-## Arquitetura
+> 📚 Para documentação geral do projeto, veja o [README principal](../../README.md).
+>
+> 💬 [Entre na comunidade no WhatsApp](https://chat.whatsapp.com/K6Ni8HK72Bw2us79Erk0t6)
 
-O projeto segue principios de Clean Architecture com estrutura modular organizada por dominio.
+## 🏗️ Arquitetura
+
+O projeto segue princípios de Clean Architecture com estrutura modular organizada por domínio.
 
 ```
 src/main/java/com/bolao/
-├── bet/                    # Dominio de palpites
-│   ├── entities/           # Entidades de dominio (Bet, Prediction)
+├── bet/                    # Domínio de palpites
+│   ├── entities/           # Entidades de domínio (Bet, Prediction)
 │   ├── repositories/       # Camada de acesso a dados
-│   ├── usecases/           # Logica de negocio
+│   ├── usecases/           # Lógica de negócio
 │   ├── listeners/          # Handlers de eventos
 │   ├── schedulers/         # Jobs em background
 │   └── BetController.java  # Endpoints HTTP
-├── payment/                # Dominio de pagamentos
+├── payment/                # Domínio de pagamentos
 │   ├── entities/           # Payment, PaymentStatus
 │   ├── repositories/       # Acesso a dados
 │   ├── usecases/           # GeneratePayment, HandleWebhook
-│   ├── events/             # Eventos de dominio
+│   ├── events/             # Eventos de domínio
 │   └── PaymentController.java
-├── round/                  # Dominio de rodadas
+├── round/                  # Domínio de rodadas
 │   ├── entities/           # Round, Match
 │   ├── repositories/       # Acesso a dados
 │   ├── usecases/           # ProcessResults, SyncRounds
 │   ├── services/           # RoundPricing, RoundStats
 │   └── RoundController.java
-├── fixture/                # Integracao com API externa
+├── fixture/                # Integração com API externa
 │   ├── services/           # Cliente API-Football
 │   └── dtos/               # DTOs da API externa
 ├── shared/                 # Recursos compartilhados
 │   ├── entities/           # FailedEventEntity (DLQ)
-│   ├── repositories/       # Repositorios compartilhados
+│   ├── repositories/       # Repositórios compartilhados
 │   ├── services/           # FailedEventService
-│   ├── config/             # Configuracao Spring
-│   └── exceptions/         # Tratamento global de excecoes
+│   ├── config/             # Configuração Spring
+│   └── exceptions/         # Tratamento global de exceções
 └── BolaoApiApplication.java
 ```
 
-## Modulos de Dominio
+## 📦 Módulos de Domínio
 
 ### Bet (Palpites)
 
-Gerencia submissao de palpites, confirmacao de pagamento e pontuacao.
+Gerencia submissão de palpites, confirmação de pagamento e pontuação.
 
 | Componente | Responsabilidade |
 |------------|------------------|
-| `SubmitBetUseCase` | Cria novo palpite com previsoes |
-| `ConfirmBetPaymentUseCase` | Atualiza status do palpite apos pagamento |
-| `CancelLatePendingBetsUseCase` | Cancela palpites nao pagos apos inicio da rodada |
+| `SubmitBetUseCase` | Cria novo palpite com previsões |
+| `ConfirmBetPaymentUseCase` | Atualiza status do palpite após pagamento |
+| `CancelLatePendingBetsUseCase` | Cancela palpites não pagos após início da rodada |
 | `BetPaymentListener` | Reage ao PaymentApprovedEvent |
-| `PaymentRetryScheduler` | Retenta confirmacoes de pagamento falhas |
+| `PaymentRetryScheduler` | Retenta confirmações de pagamento falhas |
 
 ### Payment (Pagamentos)
 
-Gerencia geracao de pagamento PIX e processamento de webhooks.
+Gerencia geração de pagamento PIX e processamento de webhooks.
 
 | Componente | Responsabilidade |
 |------------|------------------|
 | `GeneratePaymentUseCase` | Cria pagamento PIX via Mercado Pago |
-| `HandlePaymentWebhookUseCase` | Processa atualizacoes de status de pagamento |
+| `HandlePaymentWebhookUseCase` | Processa atualizações de status de pagamento |
 | `PaymentProvider` | Interface para gateways de pagamento |
-| `MercadoPagoPaymentProvider` | Implementacao Mercado Pago |
+| `MercadoPagoPaymentProvider` | Implementação Mercado Pago |
 | `MockPaymentProvider` | Mock para desenvolvimento |
 
 ### Round (Rodadas)
 
-Gerencia rodadas e sincronizacao de dados de partidas.
+Gerencia rodadas e sincronização de dados de partidas.
 
 | Componente | Responsabilidade |
 |------------|------------------|
 | `SyncRoundsUseCase` | Importa rodadas da API-Football |
-| `ProcessRoundResultsUseCase` | Calcula pontos apos partidas |
-| `RoundPricingService` | Precificacao dinamica de bilhetes |
-| `RoundStatsService` | Estatisticas e KPIs da rodada |
+| `ProcessRoundResultsUseCase` | Calcula pontos após partidas |
+| `RoundPricingService` | Precificação dinâmica de bilhetes |
+| `RoundStatsService` | Estatísticas e KPIs da rodada |
 
-## Padroes Principais
+## 🔧 Padrões Principais
 
-### Padrao Use Case
+### Padrão Use Case
 
-Cada operacao de negocio e encapsulada em uma classe de use case dedicada:
+Cada operação de negócio é encapsulada em uma classe de use case dedicada:
 
 ```java
 @Service
@@ -91,14 +95,14 @@ public class SubmitBetUseCase {
 
     @Transactional
     public BetResponseDto execute(CreateBetDto request) {
-        // Logica de negocio aqui
+        // Lógica de negócio aqui
     }
 }
 ```
 
-### Padrao Repository
+### Padrão Repository
 
-Repositorios de dominio abstraem o acesso a dados com interfaces limpas:
+Repositórios de domínio abstraem o acesso a dados com interfaces limpas:
 
 ```java
 public interface BetRepository {
@@ -119,12 +123,12 @@ Scheduler executa a cada 60s -> Busca retries pendentes
                       |
 Retry com exponential backoff (1min, 2min, 4min...)
                       |
-Apos 5 tentativas -> Move para status DEAD
+Após 5 tentativas -> Move para status DEAD
 ```
 
 ### Arquitetura Orientada a Eventos
 
-Eventos de dominio desacoplam modulos:
+Eventos de domínio desacoplam módulos:
 
 ```java
 @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -133,11 +137,11 @@ public void onPaymentApproved(PaymentApprovedEvent event) {
 }
 ```
 
-## Banco de Dados
+## 🗄️ Banco de Dados
 
 ### Migrations
 
-O schema do banco e gerenciado com Flyway:
+O schema do banco é gerenciado com Flyway:
 
 ```
 src/main/resources/db/migration/
@@ -159,28 +163,36 @@ rounds (1) ─── (N) matches
               └──── (1) payments
 ```
 
-## Configuracao
+## ⚙️ Configuração
 
-| Propriedade | Descricao | Padrao |
+| Propriedade | Descrição | Padrão |
 |-------------|-----------|--------|
 | `server.port` | Porta da API | 3001 |
 | `spring.datasource.url` | URL PostgreSQL | localhost:5432/bolao |
 | `spring.jpa.hibernate.ddl-auto` | Gerenciamento de schema | validate |
 | `spring.flyway.enabled` | Habilitar migrations | true |
 
-## Executando
+## 🚀 Executando
 
 ```bash
 # Desenvolvimento
 mvn spring-boot:run
 
-# Build de producao
+# Build de produção
 mvn clean package -DskipTests
 java -jar target/api-0.1.0.jar
 ```
 
-## Testes
+## 🧪 Testes
 
 ```bash
 mvn test
 ```
+
+## 🤝 Contribuindo
+
+Quer contribuir com a API? Veja o [Guia de Contribuição](../../CONTRIBUTING.md) no repositório principal.
+
+---
+
+Feito com ❤️ pela comunidade Arena de Elite

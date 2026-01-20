@@ -1,44 +1,48 @@
-# Bolao Web
+# Arena de Elite - Web 🌐
 
-Frontend Next.js para a aplicacao de bolao.
+Frontend Next.js para a plataforma Arena de Elite.
 
-## Arquitetura
+> 📚 Para documentação geral do projeto, veja o [README principal](../../README.md).
+>
+> 💬 [Entre na comunidade no WhatsApp](https://chat.whatsapp.com/K6Ni8HK72Bw2us79Erk0t6)
 
-O projeto segue uma arquitetura baseada em features com modulos compartilhados.
+## 🏗️ Arquitetura
+
+O projeto segue uma arquitetura baseada em features com módulos compartilhados.
 
 ```
 src/
 ├── app/                    # Next.js App Router
-│   ├── (home)/             # Pagina inicial (route group)
+│   ├── (home)/             # Página inicial (route group)
 │   ├── apostar/            # Fluxo de palpites
-│   ├── calendario/         # Visualizacao de calendario
-│   ├── ranking/            # Classificacao
-│   ├── regulamento/        # Pagina de regras
+│   ├── calendario/         # Visualização de calendário
+│   ├── ranking/            # Classificação
+│   ├── regulamento/        # Página de regras
 │   ├── rodada/             # Detalhes da rodada
 │   ├── layout.tsx          # Layout raiz
 │   └── globals.css         # Estilos globais
-├── shared/                 # Modulos compartilhados
-│   ├── components/         # Componentes reutilizaveis
+├── shared/                 # Módulos compartilhados
+│   ├── components/         # Componentes reutilizáveis
 │   ├── entities/           # Interfaces TypeScript
-│   ├── services/           # Funcoes cliente API
-│   ├── schemas/            # Schemas de validacao Zod
-│   ├── utils/              # Funcoes utilitarias
-│   ├── lib/                # Configuracoes de terceiros
-│   ├── constants/          # Constantes da aplicacao
+│   ├── services/           # Funções cliente API
+│   ├── schemas/            # Schemas de validação Zod
+│   ├── utils/              # Funções utilitárias
+│   ├── lib/                # Configurações de terceiros
+│   ├── constants/          # Constantes da aplicação
 │   └── providers/          # Providers de contexto React
 ```
 
-## Modulos de Feature
+## 📦 Módulos de Feature
 
 ### Apostar
 
-O fluxo de palpites e estruturado com componentes e hooks co-localizados:
+O fluxo de palpites é estruturado com componentes e hooks co-localizados:
 
 ```
 apostar/
-├── page.tsx                       # Componente da pagina
+├── page.tsx                       # Componente da página
 ├── _components/
-│   ├── active-rounds/             # Lista de rodadas disponiveis
+│   ├── active-rounds/             # Lista de rodadas disponíveis
 │   │   ├── active-rounds.tsx
 │   │   └── hooks/
 │   │       └── use-active-rounds.ts
@@ -54,7 +58,7 @@ apostar/
 
 ### Ranking
 
-Classificacao com filtragem, paginacao e busca:
+Classificação com filtragem, paginação e busca:
 
 ```
 ranking/
@@ -69,23 +73,23 @@ ranking/
 │       └── closed-rounds.tsx
 ```
 
-## Modulos Compartilhados
+## 🧩 Módulos Compartilhados
 
 ### Components
 
-Componentes de UI reutilizaveis construidos com shadcn/ui:
+Componentes de UI reutilizáveis construídos com shadcn/ui:
 
-| Componente | Descricao |
+| Componente | Descrição |
 |------------|-----------|
-| `DataTable` | Tabela generica com paginacao e filtragem |
-| `Modal` | Dialog modal acessivel |
+| `DataTable` | Tabela genérica com paginação e filtragem |
+| `Modal` | Dialog modal acessível |
 | `Badge` | Indicadores de status |
-| `Button` | Botoes de acao com variantes |
-| `Card` | Containers de conteudo |
+| `Button` | Botões de ação com variantes |
+| `Card` | Containers de conteúdo |
 
 ### Entities
 
-Interfaces TypeScript correspondentes as respostas da API:
+Interfaces TypeScript correspondentes às respostas da API:
 
 ```typescript
 interface Round {
@@ -134,11 +138,6 @@ export const roundService = {
     const { data } = await api.get<{ data: RoundEntity }>(`/rounds/${roundId}`);
     return data.data;
   },
-
-  getActiveRound: async (): Promise<RoundEntity | null> => {
-    const rounds = await roundService.getAll({ status: "OPEN" });
-    return rounds.length > 0 ? rounds[0] : null;
-  },
 };
 
 // shared/services/bet.service.ts
@@ -157,7 +156,7 @@ export const betService = {
 
 ### Schemas
 
-Schemas Zod para validacao de formularios:
+Schemas Zod para validação de formulários:
 
 ```typescript
 export const bettingFormSchema = z.object({
@@ -167,11 +166,11 @@ export const bettingFormSchema = z.object({
 });
 ```
 
-## Padroes Principais
+## 🔧 Padrões Principais
 
-### Padrao Container/Presenter
+### Padrão Container/Presenter
 
-Logica e separada da apresentacao usando hooks customizados:
+Lógica é separada da apresentação usando hooks customizados:
 
 ```typescript
 // Container (hook)
@@ -189,21 +188,21 @@ function BettingModal() {
 }
 ```
 
-### Co-localizacao de Features
+### Co-localização de Features
 
-Cada feature contem seus proprios componentes, hooks e tipos:
+Cada feature contém seus próprios componentes, hooks e tipos:
 
 ```
 feature/
 ├── page.tsx              # Ponto de entrada da rota
-├── _components/          # Componentes especificos da feature
+├── _components/          # Componentes específicos da feature
 │   └── component/
 │       ├── component.tsx
 │       └── hooks/
 │           └── use-component.ts
 ```
 
-### Integracao com API
+### Integração com API
 
 React Query gerencia o estado do servidor usando os service objects:
 
@@ -225,28 +224,28 @@ function useActiveRound() {
 }
 ```
 
-## Estilizacao
+## 🎨 Estilização
 
-- TailwindCSS para estilizacao utility-first
-- Variaveis CSS para temas
-- shadcn/ui para componentes base
-- Design responsivo com abordagem mobile-first
+- **TailwindCSS** para estilização utility-first
+- **Variáveis CSS** para temas
+- **shadcn/ui** para componentes base
+- **Design responsivo** com abordagem mobile-first
 
-## Configuracao
+## ⚙️ Configuração
 
-| Arquivo | Proposito |
+| Arquivo | Propósito |
 |---------|-----------|
-| `tailwind.config.ts` | Customizacao do Tailwind |
-| `next.config.ts` | Configuracao do Next.js |
-| `tsconfig.json` | Configuracoes TypeScript |
+| `tailwind.config.ts` | Customização do Tailwind |
+| `next.config.ts` | Configuração do Next.js |
+| `tsconfig.json` | Configurações TypeScript |
 
-## Executando
+## 🚀 Executando
 
 ```bash
 # Desenvolvimento
 pnpm dev
 
-# Build de producao
+# Build de produção
 pnpm build
 pnpm start
 
@@ -254,8 +253,16 @@ pnpm start
 pnpm lint
 ```
 
-## Variaveis de Ambiente
+## 🔐 Variáveis de Ambiente
 
-| Variavel | Descricao |
+| Variável | Descrição |
 |----------|-----------|
 | `NEXT_PUBLIC_API_URL` | URL da API backend |
+
+## 🤝 Contribuindo
+
+Quer contribuir com o frontend? Veja o [Guia de Contribuição](../../CONTRIBUTING.md) no repositório principal.
+
+---
+
+Feito com ❤️ pela comunidade Arena de Elite

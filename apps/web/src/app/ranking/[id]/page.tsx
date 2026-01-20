@@ -33,7 +33,6 @@ export default async function RankingRoundPage({ params }: RankingRoundPageProps
   try {
     round = await roundService.getByExternalId(id);
   } catch (error) {
-    // Fallback for legacy database IDs
     if (!isNaN(parseInt(id))) {
       round = await roundService.getById(parseInt(id));
     } else {

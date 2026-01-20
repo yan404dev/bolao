@@ -5,6 +5,8 @@ import lombok.Data;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RankingDto {
   private String name;
   private String ticketCode;

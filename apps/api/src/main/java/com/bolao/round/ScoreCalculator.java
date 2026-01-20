@@ -15,12 +15,20 @@ public class ScoreCalculator {
   }
 
   public int calculate(Prediction prediction, Match match) {
-    int predHome = prediction.getHomeScore();
-    int predAway = prediction.getAwayScore();
-    int realHome = match.getHomeScore();
-    int realAway = match.getAwayScore();
+    if (prediction == null || match == null) {
+      return 0;
+    }
 
-    if (predHome == realHome && predAway == realAway) {
+    Integer predHome = prediction.getHomeScore();
+    Integer predAway = prediction.getAwayScore();
+    Integer realHome = match.getHomeScore();
+    Integer realAway = match.getAwayScore();
+
+    if (predHome == null || predAway == null || realHome == null || realAway == null) {
+      return 0;
+    }
+
+    if (predHome.equals(realHome) && predAway.equals(realAway)) {
       return EXACT_SCORE_POINTS;
     }
 
@@ -31,7 +39,7 @@ public class ScoreCalculator {
     return 0;
   }
 
-  private MatchResult getResult(int home, int away) {
+  private MatchResult getResult(Integer home, Integer away) {
     if (home > away)
       return MatchResult.HOME_WIN;
     if (home < away)

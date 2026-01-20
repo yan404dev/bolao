@@ -15,8 +15,10 @@ export function useRankingFilterState() {
     size: 20
   }), [search, minPoints, page]);
   useEffect(() => {
-    setPage(0);
-  }, [search, minPoints, setPage]);
+    if (page !== 0) {
+      setPage(0);
+    }
+  }, [search, minPoints, page, setPage]);
 
   return {
     search,

@@ -12,6 +12,7 @@ import com.bolao.round.entities.Match;
 import com.bolao.round.entities.Round;
 import com.bolao.round.repositories.MatchRepository;
 import com.bolao.round.repositories.RoundRepository;
+import com.bolao.round.services.RoundPricingService;
 import com.bolao.round.services.RoundStatsService;
 import com.bolao.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -60,9 +61,12 @@ public class SubmitBetUseCase {
 
     Bet savedBet = betRepository.save(bet);
 
+    double price = round.getTicketPrice() != null ? round.getTicketPrice()
+        : (round.isAccumulated() ? RoundPricingService.ACCUMULATED_PRICE : RoundPricingService.STANDARD_PRICE);
+
     Payment payment = generatePaymentUseCase.execute(
         savedBet.getId(),
-        round.getTicketPrice() != null ? round.getTicketPrice() : 10.0,
+        price,
         "Bolão JC: " + savedBet.getTicketCode());
 
     statsService.updateRoundStats(savedBet.getRoundId());

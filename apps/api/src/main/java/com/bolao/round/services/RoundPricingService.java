@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class RoundPricingService {
 
-  private static final double STANDARD_PRICE = 12.0;
-  private static final double ACCUMULATED_PRICE = 25.0;
+  public static final double STANDARD_PRICE = 12.0;
+  public static final double ACCUMULATED_PRICE = 25.0;
   private static final int WINNING_SCORE_THRESHOLD = 15;
 
   private final RoundRepository roundRepository;

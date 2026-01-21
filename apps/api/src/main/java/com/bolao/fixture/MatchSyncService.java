@@ -114,6 +114,11 @@ public class MatchSyncService {
     round.setStartDate(findEarliestKickoff(roundMatches));
     round.setEndDate(calculateRoundEndDate(roundMatches, details));
 
+    // Migrate old ticket price (10.0) to new standard (12.0)
+    if (round.getTicketPrice() == null || round.getTicketPrice() == 10.0) {
+      round.setTicketPrice(RoundPricingService.STANDARD_PRICE);
+    }
+
     if (round.getStatus() != Round.Status.CALCULATED && round.getStatus() != Round.Status.CANCELLED) {
       round.setStatus(determineRoundStatus(roundMatches));
     }

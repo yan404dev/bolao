@@ -4,6 +4,7 @@ import com.bolao.bet.entities.Bet;
 import com.bolao.bet.repositories.BetRepository;
 import com.bolao.round.entities.Round;
 import com.bolao.round.repositories.RoundRepository;
+import com.bolao.round.services.RoundPricingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ public class RoundStatsService {
 
     long paidCount = betRepository.findByRoundIdAndStatus(roundId, Bet.PaymentStatus.PAID).size();
 
-    double ticketPrice = round.getTicketPrice() != null ? round.getTicketPrice() : 10.0;
+    double ticketPrice = round.getTicketPrice() != null ? round.getTicketPrice() : RoundPricingService.STANDARD_PRICE;
 
     round.setTotalTickets((int) paidCount);
     round.setPrizePool(paidCount * ticketPrice);

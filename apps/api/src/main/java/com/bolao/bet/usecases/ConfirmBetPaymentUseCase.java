@@ -4,6 +4,7 @@ import com.bolao.bet.entities.Bet;
 import com.bolao.bet.repositories.BetRepository;
 import com.bolao.round.entities.Round;
 import com.bolao.round.repositories.RoundRepository;
+import com.bolao.round.services.RoundPricingService;
 import com.bolao.shared.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -33,7 +34,7 @@ public class ConfirmBetPaymentUseCase {
     Round round = roundRepository.findById(bet.getRoundId())
         .orElseThrow(() -> new NotFoundException("Round not found: " + bet.getRoundId()));
 
-    Double ticketPrice = round.getTicketPrice() != null ? round.getTicketPrice() : 10.0;
+    Double ticketPrice = round.getTicketPrice() != null ? round.getTicketPrice() : RoundPricingService.STANDARD_PRICE;
     Double currentPrize = round.getPrizePool() != null ? round.getPrizePool() : 0.0;
     round.setPrizePool(currentPrize + ticketPrice);
     roundRepository.save(round);

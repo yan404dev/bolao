@@ -35,8 +35,10 @@ public class ConfirmBetPaymentUseCase {
         .orElseThrow(() -> new NotFoundException("Round not found: " + bet.getRoundId()));
 
     Double ticketPrice = round.getTicketPrice() != null ? round.getTicketPrice() : RoundPricingService.STANDARD_PRICE;
+    Double prizeContribution = RoundPricingService.getPrizeContribution(ticketPrice);
+
     Double currentPrize = round.getPrizePool() != null ? round.getPrizePool() : 0.0;
-    round.setPrizePool(currentPrize + ticketPrice);
+    round.setPrizePool(currentPrize + prizeContribution);
     roundRepository.save(round);
   }
 }

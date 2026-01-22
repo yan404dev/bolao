@@ -25,9 +25,10 @@ public class RoundStatsService {
     long paidCount = betRepository.findByRoundIdAndStatus(roundId, Bet.PaymentStatus.PAID).size();
 
     double ticketPrice = round.getTicketPrice() != null ? round.getTicketPrice() : RoundPricingService.STANDARD_PRICE;
+    double prizeContribution = RoundPricingService.getPrizeContribution(ticketPrice);
 
     round.setTotalTickets((int) paidCount);
-    round.setPrizePool(paidCount * ticketPrice);
+    round.setPrizePool(paidCount * prizeContribution);
 
     roundRepository.save(round);
   }

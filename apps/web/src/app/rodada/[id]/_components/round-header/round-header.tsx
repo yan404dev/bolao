@@ -64,7 +64,7 @@ export function RoundHeader({ roundId }: RoundHeaderProps) {
         <div className="flex flex-col items-start md:items-end mt-2 sm:mt-0">
           <div className="flex flex-col items-start md:items-end gap-1 mb-2">
             <span className="text-[10px] font-black uppercase tracking-widest text-black/50 mb-0.5">
-              {round.ticketPrice && round.ticketPrice > 10 ? "Prêmio Acumulado" : "Prêmio da Rodada"}
+              {round.ticketPrice && round.ticketPrice > 12 ? "Prêmio Acumulado" : "Prêmio da Rodada"}
             </span>
             <p className="text-2xl sm:text-3xl font-black text-yellow-500 italic tracking-tighter whitespace-nowrap leading-none">
               {formatCurrency(round.prizePool || 0)}
@@ -72,7 +72,7 @@ export function RoundHeader({ roundId }: RoundHeaderProps) {
           </div>
 
           <div className="flex flex-wrap items-center justify-end gap-2 mt-2">
-            {round.ticketPrice && round.ticketPrice > 10 && (
+            {round.ticketPrice && round.ticketPrice > 12 && (
               <div className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-white bg-black px-2 py-0.5 sm:px-3 sm:py-1 border border-black italic">
                 ★ DOBRADO
               </div>

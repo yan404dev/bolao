@@ -15,11 +15,21 @@ import java.time.LocalDateTime;
 public class RoundPricingService {
 
   public static final double STANDARD_PRICE = 12.0;
+  public static final double STANDARD_PRIZE = 10.0;
   public static final double ACCUMULATED_PRICE = 25.0;
+  public static final double ACCUMULATED_PRIZE = 20.0;
+
   private static final int WINNING_SCORE_THRESHOLD = 15;
 
   private final RoundRepository roundRepository;
   private final RoundRankingService rankingService;
+
+  public static double getPrizeContribution(double ticketPrice) {
+    if (ticketPrice >= ACCUMULATED_PRICE) {
+      return ACCUMULATED_PRIZE;
+    }
+    return STANDARD_PRIZE;
+  }
 
   public double calculateInitialTicketPrice(LocalDateTime currentRoundDate) {
     if (currentRoundDate == null) {

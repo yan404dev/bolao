@@ -120,4 +120,16 @@ public class MatchRepositoryImpl implements MatchRepository {
     return jpaRepository.findByExternalMatchId(externalMatchId)
         .map(roundMapper::toMatchDomain);
   }
+
+  @Override
+  @Transactional
+  public int consolidatePredictions(Long roundId) {
+    return jpaRepository.consolidatePredictions(roundId);
+  }
+
+  @Override
+  @Transactional
+  public int deleteDuplicateMatches(Long roundId) {
+    return jpaRepository.deleteDuplicateMatches(roundId);
+  }
 }

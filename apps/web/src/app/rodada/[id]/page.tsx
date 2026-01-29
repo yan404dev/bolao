@@ -80,7 +80,7 @@ export default async function RoundPage({ params }: RoundPageProps) {
             </div>
             <div className="lg:col-span-4 space-y-12">
               <div className="sticky top-24">
-                <StandingsTable roundId={roundId} />
+                {/* <StandingsTable roundId={roundId} /> */}
                 <div className="mt-12 space-y-12">
                   <RoundKpis roundId={roundId} />
                   <RoundRanking roundId={roundId} />

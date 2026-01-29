@@ -66,7 +66,7 @@ export default async function RoundPage({ params }: RoundPageProps) {
                 <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" />
                 <span className="text-[10px] font-black uppercase tracking-widest text-black/50">Insights Táticos</span>
               </div>
-              <RoundPlayButton />
+              <RoundPlayButton status={round.status} />
             </div>
           }
         />

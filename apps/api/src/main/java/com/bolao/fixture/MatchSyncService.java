@@ -124,7 +124,7 @@ public class MatchSyncService {
 
     Round savedRound = roundRepository.save(round);
 
-    updateMatches(roundMatches);
+    updateMatches(roundMatches, savedRound.getId());
     return savedRound;
   }
 
@@ -136,11 +136,14 @@ public class MatchSyncService {
     }
   }
 
-  private void updateMatches(List<Match> roundMatches) {
+  private void updateMatches(List<Match> roundMatches, Long roundId) {
     for (Match externalMatch : roundMatches) {
       Match existingMatch = matchRepository.findByExternalMatchId(externalMatch.getExternalMatchId()).orElse(null);
 
       if (existingMatch == null) {
+        externalMatch.setRoundId(roundId);
+        externalMatch.setEstimatedEndTime(
+            externalMatch.getKickoffTime() != null ? externalMatch.getKickoffTime().plusMinutes(105) : null);
         matchRepository.save(externalMatch);
         continue;
       }
@@ -209,6 +212,10 @@ public class MatchSyncService {
 
     if (earliestKickoff != null) {
       LocalDateTime now = LocalDateTime.now();
+      // If we are after kickoff, the round is LIVE (for betting purposes)
+      if (now.isAfter(earliestKickoff)) {
+        return Round.Status.LIVE;
+      }
       // If we are within 2 days of kickoff, open the round
       if (now.isAfter(earliestKickoff.minusDays(2))) {
         return Round.Status.OPEN;

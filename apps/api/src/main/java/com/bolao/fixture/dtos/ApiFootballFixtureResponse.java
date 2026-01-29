@@ -91,7 +91,7 @@ public class ApiFootballFixtureResponse extends ApiFootballResponse<ApiFootballF
       }
 
       return Match.builder()
-          .id(item.getFixture() != null ? (long) item.getFixture().getId() : null)
+          .externalMatchId(item.getFixture() != null ? String.valueOf(item.getFixture().getId()) : null)
           .homeTeam(item.getTeams() != null && item.getTeams().getHome() != null ? item.getTeams().getHome().getName()
               : "TBD")
           .homeTeamLogo(

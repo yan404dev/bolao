@@ -1,5 +1,7 @@
 import { useRoundManagementTable } from "./hooks/use-round-management-table";
 import { getStatusConfig } from "@/app/admin/admin.utils";
+import { roundStatusLabels } from "@/shared/constants";
+import { RoundStatus } from "@/shared/entities/round.entity";
 import { Card, CardHeader, CardTitle, CardContent } from "@/shared/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/components/ui/table";
 import { Button } from "@/shared/components/ui/button";
@@ -119,33 +121,23 @@ export function RoundManagementTable() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        {round.status === "CLOSED" && (
-                          <Button
-                            size="sm"
-                            onClick={() => updateStatus({ roundId: round.id, status: "OPEN" })}
-                            disabled={isUpdatingStatus}
-                            className="h-8 px-3 rounded-none border-2 border-green-600 bg-green-50 text-green-600 font-black uppercase italic text-[9px] hover:bg-green-600 hover:text-white transition-all"
-                          >
-                            Abrir Apostas
-                          </Button>
-                        )}
-                        {round.status === "OPEN" && (
-                          <Button
-                            size="sm"
-                            onClick={() => updateStatus({ roundId: round.id, status: "CLOSED" })}
-                            disabled={isUpdatingStatus}
-                            className="h-8 px-3 rounded-none border-2 border-red-600 bg-red-50 text-red-600 font-black uppercase italic text-[9px] hover:bg-red-600 hover:text-white transition-all"
-                          >
-                            Fechar Apostas
-                          </Button>
-                        )}
+                        <select
+                          value={round.status}
+                          onChange={(e) => updateStatus({ roundId: round.id, status: e.target.value as RoundStatus })}
+                          disabled={isUpdatingStatus}
+                          className="h-8 px-2 border-2 border-black bg-white font-black uppercase italic text-[9px] hover:bg-gray-50 transition-all focus:outline-none"
+                        >
+                          {Object.entries(roundStatusLabels).map(([value, label]) => (
+                            <option key={value} value={value}>{label}</option>
+                          ))}
+                        </select>
                         <Button
                           size="sm"
                           onClick={() => calculate(round.id)}
                           disabled={round.status === "OPEN" || round.status === "CALCULATED" || isCalculating}
                           className={`
                             h-8 px-4 rounded-none border-2 font-black uppercase italic text-[9px] transition-all
-                            ${round.status === "CLOSED" ? "border-black bg-yellow-400 text-black hover:bg-black hover:text-white" : "border-gray-200 bg-gray-50 text-gray-300 cursor-not-allowed"}
+                            ${(round.status === "CLOSED" || round.status === "LIVE") ? "border-black bg-yellow-400 text-black hover:bg-black hover:text-white" : "border-gray-200 bg-gray-50 text-gray-300 cursor-not-allowed"}
                           `}
                         >
                           {round.status === "CALCULATED" ? "Calculado" : "Calcular Pontos"}

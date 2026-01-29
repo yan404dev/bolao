@@ -65,10 +65,10 @@ export function ActiveRoundCTA() {
             >
               <div className="flex flex-col items-center">
                 <span className="text-2xl sm:text-4xl font-black uppercase italic tracking-tighter text-black group-hover:text-yellow-400 transition-colors">
-                  {activeRound?.status === 'LIVE' ? 'RODADA AO VIVO' : activeRound?.status === 'SCHEDULED' ? 'EM BREVE' : 'JOGAR AGORA'}
+                  {activeRound?.status === 'LIVE' ? 'ACOMPANHAR' : activeRound?.status === 'SCHEDULED' ? 'EM BREVE' : 'JOGAR AGORA'}
                 </span>
                 <span className="flex items-center gap-2 text-[9px] sm:text-[12px] font-bold text-black group-hover:text-yellow-400 tracking-widest uppercase">
-                  {activeRound?.status === 'OPEN' ? 'ENTRAR NA ARENA' : 'APOSTAS ENCERRADAS'}
+                  {activeRound?.status === 'LIVE' ? 'ACOMPANHE AO VIVO' : activeRound?.status === 'OPEN' ? 'ENTRAR NA ARENA' : 'APOSTAS ENCERRADAS'}
                   <MoveRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1.5 transition-transform" />
                 </span>
               </div>

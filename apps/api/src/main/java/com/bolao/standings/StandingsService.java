@@ -45,10 +45,10 @@ public class StandingsService {
               .goalDifference(stats.goalsFor - stats.goalsAgainst)
               .build();
         })
-        .sorted(Comparator.comparing(StandingDto::getPoints).reversed()
-            .thenComparing(StandingDto::getWon).reversed()
-            .thenComparing(StandingDto::getGoalDifference).reversed()
-            .thenComparing(StandingDto::getGoalsFor).reversed())
+        .sorted(Comparator.comparing(StandingDto::getPoints, Comparator.reverseOrder())
+            .thenComparing(StandingDto::getWon, Comparator.reverseOrder())
+            .thenComparing(StandingDto::getGoalDifference, Comparator.reverseOrder())
+            .thenComparing(StandingDto::getGoalsFor, Comparator.reverseOrder()))
         .collect(Collectors.toList());
 
     for (int i = 0; i < standings.size(); i++) {

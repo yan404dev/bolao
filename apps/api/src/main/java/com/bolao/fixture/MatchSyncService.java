@@ -7,6 +7,7 @@ import com.bolao.round.repositories.MatchRepository;
 import com.bolao.round.repositories.RoundRepository;
 import com.bolao.round.services.RoundPricingService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MatchSyncService {
 
@@ -138,15 +140,24 @@ public class MatchSyncService {
 
   private void updateMatches(List<Match> roundMatches, Long roundId) {
     for (Match externalMatch : roundMatches) {
+      log.info("Processing match from external API: ID={}, HomeScore={}, AwayScore={}, Status={}",
+          externalMatch.getExternalMatchId(), externalMatch.getHomeScore(), externalMatch.getAwayScore(),
+          externalMatch.getStatus());
+
       Match existingMatch = matchRepository.findByExternalMatchId(externalMatch.getExternalMatchId()).orElse(null);
 
       if (existingMatch == null) {
+        log.info("New match found, saving: {}", externalMatch.getExternalMatchId());
         externalMatch.setRoundId(roundId);
         externalMatch.setEstimatedEndTime(
             externalMatch.getKickoffTime() != null ? externalMatch.getKickoffTime().plusMinutes(105) : null);
         matchRepository.save(externalMatch);
         continue;
       }
+
+      log.info("Existing match found, updating: {}. Old Score: {}x{}, New Score: {}x{}",
+          existingMatch.getExternalMatchId(), existingMatch.getHomeScore(), existingMatch.getAwayScore(),
+          externalMatch.getHomeScore(), externalMatch.getAwayScore());
 
       existingMatch.setHomeScore(externalMatch.getHomeScore());
       existingMatch.setAwayScore(externalMatch.getAwayScore());

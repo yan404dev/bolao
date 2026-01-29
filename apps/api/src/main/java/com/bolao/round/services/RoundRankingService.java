@@ -45,6 +45,7 @@ public class RoundRankingService {
                   .points(bet.getPoints() != null ? bet.getPoints() : 0)
                   .exactScores(breakdown.exactScores())
                   .winnerScores(breakdown.winnerScores())
+                  .wrongScores(breakdown.wrongScores())
                   .build();
             } catch (Exception e) {
               log.error("Failed to calculate breakdown for betId: " + (bet != null ? bet.getId() : "null"), e);

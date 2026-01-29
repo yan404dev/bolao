@@ -33,6 +33,7 @@ public class RoundScoringService {
     int totalPoints = 0;
     int exact = 0;
     int winner = 0;
+    int wrong = 0;
 
     for (Match match : matches) {
       if (!match.isFinished()) {
@@ -41,6 +42,7 @@ public class RoundScoringService {
 
       Prediction prediction = bet.getPredictions().get(match.getId());
       if (prediction == null) {
+        wrong++;
         continue;
       }
 
@@ -51,9 +53,11 @@ public class RoundScoringService {
         exact++;
       } else if (points == 1) {
         winner++;
+      } else {
+        wrong++;
       }
     }
 
-    return new BetScoreBreakdown(totalPoints, exact, winner);
+    return new BetScoreBreakdown(totalPoints, exact, winner, wrong);
   }
 }

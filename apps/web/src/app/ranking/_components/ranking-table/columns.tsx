@@ -52,7 +52,7 @@ export const columns: ColumnDef<BettorEntity>[] = [
     cell: ({ row }) => {
       return (
         <div className="text-center">
-          <span className="text-[10px] font-black uppercase tracking-widest text-[#FFF] bg-[#000] px-3 py-1 rounded-none border border-black">
+          <span className="text-[10px] font-black uppercase tracking-widest text-black bg-gray-100 px-3 py-1 rounded-none border border-black">
             {formatTicketCode(row.original.ticketCode)}
           </span>
         </div>
@@ -74,6 +74,15 @@ export const columns: ColumnDef<BettorEntity>[] = [
     cell: ({ row }) => (
       <div className="text-center">
         <span className="text-sm font-black text-gray-400">{row.original.winnerScores}</span>
+      </div>
+    ),
+  },
+  {
+    accessorKey: "wrongScores",
+    header: () => <div className="text-center text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-gray-500">ERROS</div>,
+    cell: ({ row }) => (
+      <div className="text-center">
+        <span className="text-sm font-black text-red-500">{row.original.wrongScores}</span>
       </div>
     ),
   },

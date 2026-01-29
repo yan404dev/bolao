@@ -5,4 +5,5 @@ export interface BettorEntity {
   points: number;
   exactScores: number;
   winnerScores: number;
+  wrongScores: number;
 }

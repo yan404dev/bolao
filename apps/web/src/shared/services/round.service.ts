@@ -28,8 +28,11 @@ export const roundService = {
   },
 
   getActiveRound: async (): Promise<RoundEntity | null> => {
-    const rounds = await roundService.getAll({ status: "OPEN" });
-    return rounds.length > 0 ? rounds[0] : null;
+    const openRounds = await roundService.getAll({ status: "OPEN" });
+    if (openRounds.length > 0) return openRounds[0];
+
+    const liveRounds = await roundService.getAll({ status: "LIVE" });
+    return liveRounds.length > 0 ? liveRounds[0] : null;
   },
 
   getClosedRounds: async (limit: number = 4): Promise<RoundEntity[]> => {

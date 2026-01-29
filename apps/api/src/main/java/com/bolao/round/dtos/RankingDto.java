@@ -16,4 +16,5 @@ public class RankingDto {
   private int position;
   private int exactScores;
   private int winnerScores;
+  private int wrongScores;
 }

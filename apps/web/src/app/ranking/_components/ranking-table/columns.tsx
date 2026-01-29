@@ -73,7 +73,7 @@ export const columns: ColumnDef<RankingItemEntity>[] = [
     header: () => <div className="text-center text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-gray-500">VENCEDOR</div>,
     cell: ({ row }) => (
       <div className="text-center">
-        <span className="text-sm font-black text-gray-400">{row.original.winnerScores}</span>
+        <span className="text-sm font-black text-emerald-600">{row.original.winnerScores}</span>
       </div>
     ),
   },

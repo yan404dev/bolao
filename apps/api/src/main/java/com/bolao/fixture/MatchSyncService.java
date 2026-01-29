@@ -32,13 +32,12 @@ public class MatchSyncService {
     List<Match> externalMatches = matchProvider.fetchMatchesByRound(leagueId, season, externalRoundId);
 
     if (roundId != null && !externalMatches.isEmpty()) {
-      for (Match match : externalMatches) {
-        match.setRoundId(roundId);
-        matchRepository.save(match);
-      }
+      // Use reconcileMatches to prevent duplicates
+      reconcileMatches(externalMatches, roundId);
     }
 
-    return externalMatches;
+    // Return the matches from DB (with correct IDs) instead of API matches
+    return matchRepository.findByRoundId(roundId);
   }
 
   @Transactional

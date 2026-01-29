@@ -103,7 +103,7 @@ public class MatchSyncService {
         .build();
 
     round = roundRepository.save(round);
-    saveMatches(roundMatches, round.getId());
+    reconcileMatches(roundMatches, round.getId());
     return round;
   }
 
@@ -126,46 +126,53 @@ public class MatchSyncService {
 
     Round savedRound = roundRepository.save(round);
 
-    updateMatches(roundMatches, savedRound.getId());
+    reconcileMatches(roundMatches, savedRound.getId());
     return savedRound;
   }
 
-  private void saveMatches(List<Match> matches, Long roundId) {
-    for (Match match : matches) {
-      match.setRoundId(roundId);
-      match.setEstimatedEndTime(match.getKickoffTime() != null ? match.getKickoffTime().plusMinutes(105) : null);
-      matchRepository.save(match);
-    }
-  }
+  private void reconcileMatches(List<Match> apiMatches, Long roundId) {
+    List<Match> dbMatches = matchRepository.findByRoundId(roundId);
+    java.util.Map<String, List<Match>> dbMatchesByExtId = dbMatches.stream()
+        .filter(m -> m.getExternalMatchId() != null)
+        .collect(java.util.stream.Collectors.groupingBy(Match::getExternalMatchId));
 
-  private void updateMatches(List<Match> roundMatches, Long roundId) {
-    for (Match externalMatch : roundMatches) {
-      log.info("Processing match from external API: ID={}, HomeScore={}, AwayScore={}, Status={}",
-          externalMatch.getExternalMatchId(), externalMatch.getHomeScore(), externalMatch.getAwayScore(),
-          externalMatch.getStatus());
-
-      Match existingMatch = matchRepository.findByExternalMatchId(externalMatch.getExternalMatchId()).orElse(null);
-
-      if (existingMatch == null) {
-        log.info("New match found, saving: {}", externalMatch.getExternalMatchId());
-        externalMatch.setRoundId(roundId);
-        externalMatch.setEstimatedEndTime(
-            externalMatch.getKickoffTime() != null ? externalMatch.getKickoffTime().plusMinutes(105) : null);
-        matchRepository.save(externalMatch);
+    for (Match apiMatch : apiMatches) {
+      String extId = apiMatch.getExternalMatchId();
+      if (extId == null)
         continue;
+
+      List<Match> existing = dbMatchesByExtId.get(extId);
+
+      if (existing == null || existing.isEmpty()) {
+        log.info("Saving new match: {}", extId);
+        apiMatch.setRoundId(roundId);
+        apiMatch
+            .setEstimatedEndTime(apiMatch.getKickoffTime() != null ? apiMatch.getKickoffTime().plusMinutes(105) : null);
+        matchRepository.save(apiMatch);
+      } else {
+        // Update the first one found
+        Match toUpdate = existing.get(0);
+        log.info("Updating existing match: {}. Old Score: {}x{}, New Score: {}x{}",
+            extId, toUpdate.getHomeScore(), toUpdate.getAwayScore(),
+            apiMatch.getHomeScore(), apiMatch.getAwayScore());
+
+        toUpdate.setHomeScore(apiMatch.getHomeScore());
+        toUpdate.setAwayScore(apiMatch.getAwayScore());
+        toUpdate.setStatus(apiMatch.getStatus());
+        toUpdate.setKickoffTime(apiMatch.getKickoffTime());
+        toUpdate
+            .setEstimatedEndTime(apiMatch.getKickoffTime() != null ? apiMatch.getKickoffTime().plusMinutes(105) : null);
+        matchRepository.save(toUpdate);
+
+        // CLEANUP DUPLICATES: If there are more matches in DB with this external ID,
+        // delete them!
+        if (existing.size() > 1) {
+          log.warn("Found {} duplicate matches for external ID {}. Cleaning up...", existing.size(), extId);
+          for (int i = 1; i < existing.size(); i++) {
+            matchRepository.delete(existing.get(i));
+          }
+        }
       }
-
-      log.info("Existing match found, updating: {}. Old Score: {}x{}, New Score: {}x{}",
-          existingMatch.getExternalMatchId(), existingMatch.getHomeScore(), existingMatch.getAwayScore(),
-          externalMatch.getHomeScore(), externalMatch.getAwayScore());
-
-      existingMatch.setHomeScore(externalMatch.getHomeScore());
-      existingMatch.setAwayScore(externalMatch.getAwayScore());
-      existingMatch.setStatus(externalMatch.getStatus());
-      existingMatch.setKickoffTime(externalMatch.getKickoffTime());
-      existingMatch.setEstimatedEndTime(
-          externalMatch.getKickoffTime() != null ? externalMatch.getKickoffTime().plusMinutes(105) : null);
-      matchRepository.save(existingMatch);
     }
   }
 

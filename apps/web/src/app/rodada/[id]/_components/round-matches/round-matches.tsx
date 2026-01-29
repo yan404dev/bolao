@@ -68,11 +68,11 @@ function MatchCard({ match }: MatchCardProps) {
 
         <div className="flex flex-col items-center gap-2 sm:gap-3 shrink-0 py-2">
           <div className="flex items-center gap-2 sm:gap-3">
-            <span className={`brutalist-score-box w-10 h-12 text-xl sm:w-14 sm:h-16 sm:text-2xl ${scoreBoxStyle}`}>
+            <span className={`brutalist-score-box w-10 h-12 text-xl sm:w-14 sm:h-16 text-black sm:text-2xl ${scoreBoxStyle}`}>
               {match.homeScore ?? "-"}
             </span>
             <span className="text-gray-900 font-black italic text-xs sm:text-base">X</span>
-            <span className={`brutalist-score-box w-10 h-12 text-xl sm:w-14 sm:h-16 sm:text-2xl ${scoreBoxStyle}`}>
+            <span className={`brutalist-score-box w-10 h-12 text-xl sm:w-14 sm:h-16 text-black sm:text-2xl ${scoreBoxStyle}`}>
               {match.awayScore ?? "-"}
             </span>
           </div>

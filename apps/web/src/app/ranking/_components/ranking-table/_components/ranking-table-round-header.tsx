@@ -1,11 +1,13 @@
 "use client";
 
 import { Trophy } from "lucide-react";
+import { RoundStatus } from "@/shared/entities/round.entity";
+import { roundStatusLabels, roundStatusStyles } from "@/shared/constants";
 
 export interface RoundInfo {
   id: number;
   title: string;
-  status: "open" | "closed";
+  status: RoundStatus;
   startTime: string;
 }
 
@@ -23,9 +25,8 @@ export function RankingTableRoundHeader({ round }: RankingTableRoundHeaderProps)
           </div>
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <span className={`px-4 py-1 text-[10px] font-black uppercase tracking-[0.2em] border border-black ${round.status === "open" ? "bg-red-600 text-white animate-pulse" : "bg-gray-900 text-white"
-                }`}>
-                {round.status === "open" ? "🔴 AO VIVO" : "ENCERRADA"}
+              <span className={`px-4 py-1 text-[10px] font-black uppercase tracking-[0.2em] border border-black ${roundStatusStyles[round.status]}`}>
+                {round.status === "LIVE" ? "🔴 AO VIVO" : roundStatusLabels[round.status]}
               </span>
             </div>
             <h2 className="text-4xl font-black uppercase italic tracking-tighter text-black leading-none">{round.title}</h2>

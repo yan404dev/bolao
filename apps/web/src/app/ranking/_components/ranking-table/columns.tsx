@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { BettorEntity } from "@/shared/entities";
+import { RankingItemEntity } from "@/shared/entities";
 
 const getMedal = (position: number) => {
   switch (position) {
@@ -19,7 +19,7 @@ const formatTicketCode = (code: string): string => {
   return `${numericCode.slice(0, 3)} ${numericCode.slice(3, 6)}`;
 };
 
-export const columns: ColumnDef<BettorEntity>[] = [
+export const columns: ColumnDef<RankingItemEntity>[] = [
   {
     accessorKey: "position",
     header: () => <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">POS</span>,

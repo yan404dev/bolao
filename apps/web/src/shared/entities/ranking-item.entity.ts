@@ -5,4 +5,5 @@ export interface RankingItemEntity {
   points: number;
   exactScores: number;
   winnerScores: number;
+  wrongScores: number;
 }

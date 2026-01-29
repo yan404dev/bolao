@@ -63,7 +63,7 @@ export function ActiveRoundCTA() {
                 if (activeRound?.status === 'OPEN') {
                   openModal();
                 } else if (activeRound?.status === 'LIVE') {
-                  window.location.href = `/rodada/${activeRound.id}`;
+                  window.location.href = `/rodada/${activeRound.externalRoundId}`;
                 }
               }}
               disabled={activeRound?.status !== 'OPEN' && activeRound?.status !== 'LIVE'}

@@ -261,31 +261,16 @@ public class MatchSyncService {
 
   @Transactional
   public void deleteMatchesByRoundId(Long roundId) {
-    List<Match> matches = matchRepository.findByRoundId(roundId);
-    log.info("Found {} matches in round {}. Starting smart cleanup...", matches.size(), roundId);
+    log.info("Starting cleanup for round {}...", roundId);
 
-    // Group matches by homeTeam + awayTeam to find duplicates
-    java.util.Map<String, List<Match>> matchesByTeams = matches.stream()
-        .collect(java.util.stream.Collectors.groupingBy(
-            m -> m.getHomeTeam() + " vs " + m.getAwayTeam()));
+    // Step 1: Consolidate predictions to point to canonical match IDs
+    int consolidatedPredictions = matchRepository.consolidatePredictions(roundId);
+    log.info("Consolidated {} predictions to canonical match IDs", consolidatedPredictions);
 
-    int deleted = 0;
-    for (java.util.Map.Entry<String, List<Match>> entry : matchesByTeams.entrySet()) {
-      List<Match> duplicates = entry.getValue();
-      if (duplicates.size() > 1) {
-        log.warn("Found {} duplicates for game: {}", duplicates.size(), entry.getKey());
-        // Keep the first one (likely has predictions), delete the rest
-        for (int i = 1; i < duplicates.size(); i++) {
-          try {
-            matchRepository.delete(duplicates.get(i));
-            deleted++;
-            log.info("Deleted duplicate match ID: {}", duplicates.get(i).getId());
-          } catch (Exception e) {
-            log.warn("Could not delete match {}: {}", duplicates.get(i).getId(), e.getMessage());
-          }
-        }
-      }
-    }
-    log.info("Cleanup complete. Deleted {} duplicate matches.", deleted);
+    // Step 2: Delete duplicate matches (keeping only the earliest ID per game)
+    int deletedMatches = matchRepository.deleteDuplicateMatches(roundId);
+    log.info("Deleted {} duplicate matches", deletedMatches);
+
+    log.info("Cleanup complete for round {}", roundId);
   }
 }

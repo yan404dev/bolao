@@ -132,28 +132,43 @@ public class MatchSyncService {
 
   private void reconcileMatches(List<Match> apiMatches, Long roundId) {
     List<Match> dbMatches = matchRepository.findByRoundId(roundId);
+
+    // Group by externalMatchId (for matches that have it)
     java.util.Map<String, List<Match>> dbMatchesByExtId = dbMatches.stream()
         .filter(m -> m.getExternalMatchId() != null)
         .collect(java.util.stream.Collectors.groupingBy(Match::getExternalMatchId));
 
+    // Also group by homeTeam+awayTeam (fallback for matches without
+    // externalMatchId)
+    java.util.Map<String, Match> dbMatchesByTeams = dbMatches.stream()
+        .collect(java.util.stream.Collectors.toMap(
+            m -> m.getHomeTeam() + " vs " + m.getAwayTeam(),
+            m -> m,
+            (existing, replacement) -> existing // keep first if duplicate
+        ));
+
     for (Match apiMatch : apiMatches) {
       String extId = apiMatch.getExternalMatchId();
-      if (extId == null)
-        continue;
+      String teamKey = apiMatch.getHomeTeam() + " vs " + apiMatch.getAwayTeam();
 
-      List<Match> existing = dbMatchesByExtId.get(extId);
+      // First try to find by externalMatchId
+      List<Match> existingByExtId = extId != null ? dbMatchesByExtId.get(extId) : null;
+      // Then try by team names
+      Match existingByTeams = dbMatchesByTeams.get(teamKey);
 
-      if (existing == null || existing.isEmpty()) {
-        log.info("Saving new match: {}", extId);
+      if ((existingByExtId == null || existingByExtId.isEmpty()) && existingByTeams == null) {
+        // No existing match found - create new
+        log.info("Saving new match: {} ({})", extId, teamKey);
         apiMatch.setRoundId(roundId);
         apiMatch
             .setEstimatedEndTime(apiMatch.getKickoffTime() != null ? apiMatch.getKickoffTime().plusMinutes(105) : null);
         matchRepository.save(apiMatch);
       } else {
-        // Update the first one found
-        Match toUpdate = existing.get(0);
-        log.info("Updating existing match: {}. Old Score: {}x{}, New Score: {}x{}",
-            extId, toUpdate.getHomeScore(), toUpdate.getAwayScore(),
+        // Found existing match - update it
+        Match toUpdate = (existingByExtId != null && !existingByExtId.isEmpty()) ? existingByExtId.get(0)
+            : existingByTeams;
+        log.info("Updating existing match: {} ({}). Old Score: {}x{}, New Score: {}x{}",
+            extId, teamKey, toUpdate.getHomeScore(), toUpdate.getAwayScore(),
             apiMatch.getHomeScore(), apiMatch.getAwayScore());
 
         toUpdate.setHomeScore(apiMatch.getHomeScore());
@@ -162,16 +177,11 @@ public class MatchSyncService {
         toUpdate.setKickoffTime(apiMatch.getKickoffTime());
         toUpdate
             .setEstimatedEndTime(apiMatch.getKickoffTime() != null ? apiMatch.getKickoffTime().plusMinutes(105) : null);
-        matchRepository.save(toUpdate);
-
-        // CLEANUP DUPLICATES: If there are more matches in DB with this external ID,
-        // delete them!
-        if (existing.size() > 1) {
-          log.warn("Found {} duplicate matches for external ID {}. Cleaning up...", existing.size(), extId);
-          for (int i = 1; i < existing.size(); i++) {
-            matchRepository.delete(existing.get(i));
-          }
+        // Also update externalMatchId if it was null before
+        if (toUpdate.getExternalMatchId() == null && extId != null) {
+          toUpdate.setExternalMatchId(extId);
         }
+        matchRepository.save(toUpdate);
       }
     }
   }

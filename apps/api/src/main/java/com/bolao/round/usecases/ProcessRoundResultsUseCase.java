@@ -43,4 +43,9 @@ public class ProcessRoundResultsUseCase {
       roundRepository.save(round);
     }
   }
+
+  @Transactional
+  public void deleteAllMatches(Long roundId) {
+    matchSyncService.deleteMatchesByRoundId(roundId);
+  }
 }

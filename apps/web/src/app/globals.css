@@ -116,7 +116,7 @@
 
   .brutalist-score-box {
     @apply w-12 h-14 flex items-center justify-center text-3xl font-black border border-black;
-    @apply flex items-center justify-center border-2 border-black font-black italic bg-white transition-colors duration-300 text-3xl sm:text-4xl md:text-5xl whitespace-nowrap;
+    @apply flex items-center justify-center border-2 border-black font-black italic transition-colors duration-300 text-3xl sm:text-4xl md:text-5xl whitespace-nowrap;
   }
 
   .brutalist-position-badge {

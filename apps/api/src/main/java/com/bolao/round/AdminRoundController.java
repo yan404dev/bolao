@@ -82,4 +82,10 @@ public class AdminRoundController {
     batchRoundActionUseCase.execute(dto.getIds(), dto.getAction());
     return ResponseEntity.ok(ApiResponse.ok(null));
   }
+
+  @DeleteMapping("/{id}/matches")
+  public ResponseEntity<ApiResponse<Void>> deleteMatches(@PathVariable Long id) {
+    processRoundResultsUseCase.deleteAllMatches(id);
+    return ResponseEntity.ok(ApiResponse.ok(null));
+  }
 }

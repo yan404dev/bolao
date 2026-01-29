@@ -258,4 +258,13 @@ public class MatchSyncService {
         .min(LocalDateTime::compareTo)
         .orElse(null);
   }
+
+  @Transactional
+  public void deleteMatchesByRoundId(Long roundId) {
+    List<Match> matches = matchRepository.findByRoundId(roundId);
+    log.info("Deleting {} matches from round {}", matches.size(), roundId);
+    for (Match match : matches) {
+      matchRepository.delete(match);
+    }
+  }
 }
